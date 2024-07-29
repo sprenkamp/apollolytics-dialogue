@@ -13,10 +13,10 @@ The Apollolytics Dialogue Bot is a Telegram bot designed to flag propaganda in a
    DATABASE_PATH=user_interactions.db
 
 2. **Build the Docker image**
-    ```
+    ``` bash
     docker build -t apollolytics_dialogue_bot .
 
 3. **Run the Docker container**
-    ```
+    ``` bash
     docker run -d apollolytics_dialogue_bot
 
