@@ -4,7 +4,12 @@ import sqlite3
 from datetime import datetime
 from telegram import Update, ReplyKeyboardMarkup, KeyboardButton
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes, ConversationHandler
+from dotenv import load_dotenv
+load_dotenv()
+
 from chat import ApollolyticsDialogue
+
+DATABASE_PATH = os.getenv("interactions_db_path")
 
 def log_interaction(user_id, username, date, dialogue_type, system_prompt, user_input, response):
     c.execute('''INSERT INTO interactions (user_id, username, date, dialogue_type, system_prompt, user_input, response)
@@ -114,7 +119,7 @@ if __name__ == '__main__':
     CHOOSING_DIALOGUE_TYPE = 1
 
     # Set up the SQLite database
-    conn = sqlite3.connect('user_interactions.db')
+    conn = sqlite3.connect(DATABASE_PATH)
     c = conn.cursor()
     c.execute('''CREATE TABLE IF NOT EXISTS interactions (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
