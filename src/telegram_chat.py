@@ -21,7 +21,8 @@ def log_interaction(user_id, username, date, dialogue_type, system_prompt, user_
 async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = update.effective_user
     start_message = (
-        "👋 Hi! Welcome to the Apollolytics Dialogue Bot! Here's how you can use this tool:\n\n"
+        "👋 Hi! Welcome to the Apollolytics Dialogue Bot, which let's you discuss articles of your choice about the possible use of propaaganda."
+        "Here's how you can use this tool:\n\n"
         "1️⃣ Use the /scan command to send me an article for analysis.\n"
         "2️⃣ Choose the type of dialogue you want to have about the article. Here are your options:\n"
         "  - persuasion 🗣️\n"
