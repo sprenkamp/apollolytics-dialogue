@@ -9,7 +9,8 @@ The Apollolytics Dialogue Bot is a Telegram bot designed to flag propaganda in a
 1. **Create a `.env` file in the project directory with the following content:**
    ```plaintext
    telegram_apollolytics_dialogue_bot=YOUR_TELEGRAM_BOT_TOKEN
-   DATABASE_PATH=/db/user_interactions.db
+   OPENAI_API_KEY=YOUR_API_KEY
+   DATABASE_PATH=user_interactions.db
 
 2. **Build the Docker image**
     ```
@@ -17,5 +18,5 @@ The Apollolytics Dialogue Bot is a Telegram bot designed to flag propaganda in a
 
 3. **Run the Docker container**
     ```
-    docker run -d --name apollolytics_dialogue_bot .
+    docker run -d apollolytics_dialogue_bot
 
