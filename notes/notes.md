@@ -27,12 +27,18 @@ Eristic Dialogue: Involves personal conflict where participants verbally attack 
 -> 96 argumentation schemes
 
 ## Titan EU funded project
-
 - https://dl.acm.org/doi/pdf/10.1145/3639701.3663640
 
 ## Evaluation
-
 - what would be the task for the experient partners (analyse the given article with the).
 - not which strategy is best, but which characteristics would form the best strategy.
 - how to get qualitative feedback from a quantitative data
 - role of critical thinking in the design of the experiments
+- antidote to propaganda is dialogue, what are the rules for a succesfull dialogue ?
+- without or with -> was the opinion of a user changed 
+- bot vs. human/expert vs. without?
+    -> develop differences betweeen humans and bot?
+- the longer I talk to the bot the more my opinion is changed
+- smaller qualitative study (10 user, propose design requirements) and then go quantitative (does it enhance critical thinking)? 
+
+

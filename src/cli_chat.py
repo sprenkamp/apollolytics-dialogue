@@ -1,11 +1,12 @@
 # cli.py
 from chat import ApollolyticsDialogue
 
-def run_cli_conversation(chat_cli, conversation_chain):
-    # Start the dialogue with the initial user input
-    initial_user_input = input("You: ")
-    response = chat_cli.process_user_input(conversation_chain, initial_user_input)
-    print("LLM:", response)
+def run_cli_conversation(chat_cli, conversation_chain, initial_response):
+    """
+    Run the conversation loop for the CLI.
+    """
+    # Print the initial LLM response
+    print("LLM:", initial_response)
 
     # Continue the dialogue in a loop
     while True:
@@ -22,11 +23,15 @@ def run_cli_conversation(chat_cli, conversation_chain):
 if __name__ == "__main__":
     # Example usage
     input_article = "There are, broadly, two ways to become the presidential nominee of one of America’s two major political parties. One is to rise up as an insider, brushing past rivals while taking advantage of a family name, a long run in Congress or the mentorship of powerful elders. Think of the two Bush presidents and Joe Biden. The other way is to win as an outsider, through charisma and chutzpah. Barack Obama and Donald Trump did that. Kamala Harris, the clear front-runner to become the Democratic nominee following Mr Biden’s decision to withdraw from the 2024 presidential race, belongs emphatically to the first camp. To understand her prospects, start here: Ms Harris is a creature of institutional politics, not a visionary or an ideologue. \n The politics that shaped Ms Harris were California’s—quirky, fluid, and future-focused. When she came of political age in the 1990s, the Republican Party was a potent force in the state. While working as a local prosecutor in Oakland, Ms Harris dated Willie Brown, a Democratic kingmaker 30 years her senior; he helped to launch her political career. Later, under her own steam, she won stepping-stone elections as a prosecutor by leaning to the right on criminal-justice issues, while also appealing to Democrats, and was elected as the state’s attorney-general in 2010. When her party moved left, she changed positions on issues such as the death penalty, which she supported initially and then opposed. Her critics dismissed her as an opportunist long on ambition and short on convictions, a reputation she has had difficulty shaking off. \n Yet there is plenty of the “authenticity” that American voters seem to crave from their politicians lurking in Ms Harris’s background and career. She is the daughter of immigrants: her late mother was an endocrinologist born in India; her father is an economist born in Jamaica. The couple met as civil-rights activists at Berkeley in the 1960s. Another politician might have crafted a memorable persona from these origins, but Ms Harris has struggled to define herself on the national stage. If she is nominated at the Democratic convention in Chicago next month, expect an emotive Hollywood-produced reboot of her biography and her achievements as a barrier-breaking black and Asian woman. \n How effective a campaigner might Ms Harris be against Mr Trump, handicapped as she would be by a very late start and the recent chaos within her party? To be sure, by dint of her vigour alone she would, at 59, be better than the 81-year-old Mr Biden, but that is a low bar to clear. Since she came to Washington as a senator in 2017, Ms Harris has been most effective at debates and hearings, where her preparation and skills as a litigator are on display. At Senate hearings, her interrogations unsettled experienced Republican witnesses such as Brett Kavanaugh, during his grilling to become a Supreme Court justice, and Jeff Sessions, a former attorney-general. \n Even so, her campaign for the Democratic nomination in 2020 crashed badly. She then more than held her own in a vice-presidential debate against Mike Pence, a longtime radio personality comfortable on stage. She has a reputation as an effective fundraiser and would inherit Mr Biden’s prodigious war chest. But Ms Harris struggles as an extemporaneous speaker, one of the core competencies of political life. Even maths teachers might understand why she is mocked for her enthusiastic riffs about Venn diagrams. In a debate against Mr Trump, she might get under her opponent’s skin—or she might lose the plot. \n On policy, Ms Harris would own the Biden administration’s unpopular record, notwithstanding the major legislation it passed to onshore chip manufacturing and invest in green energy. Mr Trump’s allies are already attacking her as the “invasion czar” for the formal role she played working on the issue of the southern border at a time of high irregular crossings. If she is anointed at the convention next month, Ms Harris will need to answer Mr Trump’s attack lines on immigration directly and lay out a fresh and more ambitious domestic policy agenda for the next four years than Mr Biden was able to communicate. \n On foreign policy, Ms Harris has positioned herself as a Democratic centrist in the transatlantic tradition and is an unapologetic supporter of robust aid to Ukraine. Her national-security adviser, Philip Gordon, is a respected specialist on Europe and the Middle East. She seems likely to follow Biden administration lines, at least through the campaign. Up against Mr Trump and his America-first running-mate, J.D. Vance, she would present a clear contrast: “I believe it is in the fundamental interest of the American people for the United States to fulfil our longstanding role of global leadership,” she said in February at the Munich Security Conference. Ms Harris has witnessed the Situation Room and Oval Office crises during the past three tumultuous years, but as is true of many vice-presidents, her independent judgment about unexpected military or foreign-policy crises remains largely untested. \n There is no real precedent for the campaign Ms Harris would inherit if she were nominated in Chicago next month. The odds seem clearly stacked against her. Yet Mr Trump is a historically unpopular candidate and a convicted felon, and a prosecutor such as Ms Harris could prove effective in calling out his lies and reminding voters of his transgressions. To win, she would have to unite her party in difficult circumstances, fire up voters, counter Mr Trump’s insults and discover talents for campaigning under pressure that she has not heretofore displayed. She is a conventional politician in many respects. Still, the Oval Office has been occupied by more than a few charisma-challenged insiders sent there by voters who swallowed their frustrations and settled for the best candidate available."
-    dialogue_type = "information_seeking"  # Set the desired dialogue type
-    chat_cli = ApollolyticsDialogue(dialogue_type)
+    
+    # Initialize the Socratic dialogue bot
+    chat_cli = ApollolyticsDialogue("socratic")
+    
     # Detect propaganda in the input article
     detected_propaganda = chat_cli.detect_propaganda(input_article)
-    # Initialize conversation
-    conversation_chain = chat_cli.create_conversation_chain(input_article, detected_propaganda)
-    # Run conversation
-    run_cli_conversation(chat_cli, conversation_chain)
+    
+    # Initialize the conversation chain with the Socratic dialogue bot and get the initial response
+    system_prompt, conversation_chain, initial_response = chat_cli.create_conversation_chain(input_article, detected_propaganda)
+    
+    # Run the conversation in CLI mode, starting with the initial response
+    run_cli_conversation(chat_cli, conversation_chain, initial_response)
