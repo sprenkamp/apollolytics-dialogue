@@ -1,0 +1,91 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* Full height of the viewport */
+    max-width: 600px;
+    margin: 0 auto;
+    font-family: 'Inter', sans-serif;
+    background-color: var(--background); /* Dynamic background based on theme */
+    color: var(--foreground); /* Dynamic text color based on theme */
+  }
+  
+  .header {
+    text-align: center;
+    margin-bottom: 1rem;
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--foreground); /* Dynamic text color based on theme */
+  }
+  
+  .toggleContainer {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+  }
+  
+  .chatWindow {
+    flex: 1; /* This makes the chat window take all available space */
+    border: 1px solid #ccc;
+    padding: 1rem;
+    border-radius: 10px;
+    overflow-y: auto;
+    background-color: var(--chat-background); /* Dynamic background based on theme */
+  }
+  
+  .messageBubble {
+    padding: 10px 15px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+    max-width: 80%;
+    word-wrap: break-word;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.3s ease;
+  }
+  
+  .userMessage {
+    background-color: var(--user-message-bg);
+    align-self: flex-end; /* Aligns the message to the right */
+    text-align: right; /* Ensures the text inside the bubble is aligned to the right */
+    border-bottom-right-radius: 5px;
+    margin-left: auto; /* Pushes the message bubble to the right */
+  }
+  
+  .botMessage {
+    background-color: var(--bot-message-bg);
+    align-self: flex-start; /* Aligns the message to the left */
+    text-align: left; /* Ensures the text inside the bubble is aligned to the left */
+    border-bottom-left-radius: 5px;
+    margin-right: auto; /* Pushes the message bubble to the left */
+  }
+  
+  .inputForm {
+    display: flex;
+    align-items: center;
+    background-color: var(--input-bg); /* Dynamic background based on theme */
+    border-radius: 30px;
+    padding: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .inputField {
+    flex: 1;
+    padding: 10px;
+    border-radius: 30px;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+    background-color: var(--input-bg); /* Dynamic background for the input field */
+    color: var(--input-text); /* Dynamic text color for the input */
+  }
+  
+  .sendButton {
+    margin-left: 10px;
+    padding: 10px 20px;
+    border-radius: 30px;
+    border: none;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
