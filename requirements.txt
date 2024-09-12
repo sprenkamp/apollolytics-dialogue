@@ -2,3 +2,11 @@ langchain==0.1.12
 langchain-openai
 python-dotenv==1.0.1
 python-telegram-bot==21.4
+fastapi
+databases
+sqlalchemy
+psycopg2-binary
+requests
+openai
+uvicorn
+asyncpg
