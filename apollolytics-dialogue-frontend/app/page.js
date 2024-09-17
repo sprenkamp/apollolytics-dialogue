@@ -11,6 +11,7 @@ export default function Home() {
   const [articleSubmitted, setArticleSubmitted] = useState(false);
   const [detectedPropaganda, setDetectedPropaganda] = useState(null);
   const chatWindowRef = useRef(null); // Ref for auto-scrolling
+  const backendUrl = 'http://16.170.227.168:8000';  // Use your EC2 instance IP
 
   // Handles article submission
   const handleArticleSubmit = async (e) => {
@@ -20,7 +21,7 @@ export default function Home() {
     setLoading(true);
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/analyze_propaganda",
+        `${backendUrl}/analyze_propaganda`,
         {
           article_text: article,
         },
@@ -61,7 +62,7 @@ export default function Home() {
     setLoading(true);
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/continue_conversation",
+        `${backendUrl}/continue_conversation`, // Use backendUrl variable
         {
           user_input: userMessage,
         },
@@ -77,6 +78,7 @@ export default function Home() {
           { sender: "user", message: userMessage }, // User's message
           { sender: "bot", message: botResponse }, // Bot's response
         ]);
+        setUserMessage(''); // Clear user input
       } else {
         setConversation((prev) => [
           ...prev,
@@ -90,7 +92,6 @@ export default function Home() {
       ]);
     } finally {
       setLoading(false);
-      setUserMessage(""); // Clear user input
     }
   };
 
