@@ -1,5 +1,5 @@
 # cli.py
-from chat import ApollolyticsDialogue
+from apollo_dialogue import ApollolyticsDialogue
 
 def run_cli_conversation(chat_cli, conversation_chain, initial_response):
     """

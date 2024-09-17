@@ -7,7 +7,7 @@ from telegram.ext import Application, CommandHandler, MessageHandler, filters, C
 from dotenv import load_dotenv
 load_dotenv()
 
-from chat import ApollolyticsDialogue
+from apollo_dialogue import ApollolyticsDialogue
 
 DATABASE_PATH = os.getenv("interactions_db_path")
 

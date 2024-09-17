@@ -19,9 +19,15 @@ export default function Home() {
 
     setLoading(true);
     try {
-      const response = await axios.post('http://127.0.0.1:8000/analyze_propaganda', {
-        article_text: article,
-      });
+      const response = await axios.post(
+        "http://127.0.0.1:8000/analyze_propaganda",
+        {
+          article_text: article,
+        },
+        {
+          withCredentials: true, // Important: Ensures cookies are sent
+        }
+      );
 
       if (response.status === 200) {
         const result = response.data;
@@ -34,13 +40,13 @@ export default function Home() {
       } else {
         setConversation((prev) => [
           ...prev,
-          { sender: "bot", message: "Error: Failed to analyze the article." }
+          { sender: "bot", message: "Error: Failed to analyze the article." },
         ]);
       }
     } catch (error) {
       setConversation((prev) => [
         ...prev,
-        { sender: "bot", message: "Error: Unable to communicate with the server." }
+        { sender: "bot", message: "Error: Unable to communicate with the server." },
       ]);
     } finally {
       setLoading(false);
@@ -54,31 +60,37 @@ export default function Home() {
 
     setLoading(true);
     try {
-      const response = await axios.post('http://127.0.0.1:8000/continue_conversation', {
-        user_input: userMessage,
-      });
+      const response = await axios.post(
+        "http://127.0.0.1:8000/continue_conversation",
+        {
+          user_input: userMessage,
+        },
+        {
+          withCredentials: true, // Important: Ensures cookies are sent
+        }
+      );
 
       if (response.status === 200) {
         const botResponse = response.data.bot_message;
         setConversation((prev) => [
           ...prev,
           { sender: "user", message: userMessage }, // User's message
-          { sender: "bot", message: botResponse },  // Bot's response
+          { sender: "bot", message: botResponse }, // Bot's response
         ]);
       } else {
         setConversation((prev) => [
           ...prev,
-          { sender: "bot", message: "Error: Failed to process your message." }
+          { sender: "bot", message: "Error: Failed to process your message." },
         ]);
       }
     } catch (error) {
       setConversation((prev) => [
         ...prev,
-        { sender: "bot", message: "Error: Unable to communicate with the server." }
+        { sender: "bot", message: "Error: Unable to communicate with the server." },
       ]);
     } finally {
       setLoading(false);
-      setUserMessage("");  // Clear user input
+      setUserMessage(""); // Clear user input
     }
   };
 
@@ -113,7 +125,9 @@ export default function Home() {
         {conversation.map((chat, index) => (
           <div
             key={index}
-            className={`${styles.messageBubble} ${chat.sender === "user" ? styles.userMessage : styles.botMessage}`}
+            className={`${styles.messageBubble} ${
+              chat.sender === "user" ? styles.userMessage : styles.botMessage
+            }`}
           >
             <span>{chat.message}</span>
           </div>

@@ -44,9 +44,6 @@ app = FastAPI()
 # Add CORS middleware to allow requests from different origins
 origins = [
     "http://localhost:3000",
-    "http://127.0.0.1:3000",
-    "http://localhost:8000",
-    "http://127.0.0.1:8000",
     "https://apollolytics-dialogue-frontend-76vbnmkbz.vercel.app/",
     "https://apollolytics.com/", 
 ]
@@ -77,6 +74,44 @@ def get_db():
     finally:
         db.close()
 
+# @app.middleware("http")
+# async def session_middleware(request: Request, call_next):
+#     # Skip session creation for preflight (OPTIONS) requests
+#     if request.method == "OPTIONS":
+#         return await call_next(request)
+
+#     # Retrieve the session ID from cookies
+#     session_id = request.cookies.get("session_id")
+    
+#     # If no session ID, create a new one and set it in the response cookies
+#     if not session_id:
+#         session_id = str(uuid.uuid4())
+#         print(f"Generated new session ID: {session_id}", flush=True)
+#     else:
+#         print(f"Existing session ID found: {session_id}", flush=True)
+    
+#     # Set session ID in request state so that it is available throughout the request lifecycle
+#     request.state.session_id = session_id
+
+#     # Call the next middleware or route handler
+#     response = await call_next(request)
+
+#     # Set the cookie with appropriate settings (make it secure and long-lived)
+#     response.set_cookie(
+#         key="session_id", 
+#         value=session_id, 
+#         httponly=True, 
+#         max_age=60 * 60 * 24,  # 1 day
+#         secure=False,  # Set to True for HTTPS
+#         samesite="None"
+#     )
+
+#     print(f"Session Middleware: {request.state.session_id}", flush=True)
+#     return response
+
+
+
+
 # Function to log the interaction in a single table (both user message and bot response)
 async def log_interaction(db, session_id: str, user_message: str = None, article_text: str = None, detected_propaganda: str = None, bot_response: str = None):
     try:
@@ -94,45 +129,12 @@ async def log_interaction(db, session_id: str, user_message: str = None, article
         logging.error(f"Error logging interaction: {e}")
         raise HTTPException(status_code=500, detail="Error logging interaction.")
 
-# Helper function to generate or retrieve session ID from cookies
-def get_or_create_session_id(request: Request, response: Response):
-    print("request.cookies: ", request.cookies, flush=True)
-    session_id = request.cookies.get("session_id")
-    print("session_id: ", session_id, flush=True)
-    if not session_id:
-        # Generate a new session ID if one doesn't exist
-        session_id = str(uuid.uuid4())
-        print("new session_id: ", session_id, flush=True)
-        # Set the session_id in a cookie
-        response.set_cookie(
-            key="session_id",
-            value=session_id,
-            httponly=True,
-            secure=False,   # Allow HTTP for local dev
-            samesite="None"  # Allow cross-origin cookie sending
-        )
-                # request.cookies["session_id"] = session_id
-        # request.set_cookie(
-        #     key="session_id",
-        #     value=session_id,
-        #     httponly=True,
-        #     secure=False,  # False for local HTTP development
-        #     samesite="lax"  # Required for cross-site requests with cookies
-        # )
-        print("request.cookies: ", request.cookies, flush=True)
-    return session_id
-
-
-# Endpoint to analyze propaganda and initialize a conversation
 @app.post("/analyze_propaganda")
-async def analyze_article(article_submission: ArticleSubmission, request: Request, response: Response, db=Depends(get_db)):
-    # Log all the headers in the request
-    print(f"Headers received: {request.headers}", flush=True)
+async def analyze_article(article_submission: ArticleSubmission, request: Request, db=Depends(get_db)):
+    # Retrieve session ID from request.state (set by middleware)
+    session_id = request.state.session_id
+    print("Session ID Analyze Propaganda: ", session_id, flush=True)
     
-    # Log cookies to see if the browser is sending them
-    print(f"Cookies received: {request.cookies}", flush=True)
-    session_id = get_or_create_session_id(request, response)
-
     if not article_submission.article_text.strip():
         raise HTTPException(status_code=400, detail="Article text cannot be empty.")
     
@@ -172,17 +174,13 @@ async def analyze_article(article_submission: ArticleSubmission, request: Reques
     }
 
 
+
 # Endpoint for continuing the dialogue (conversation)
 @app.post("/continue_conversation")
-async def continue_conversation(user_message: UserMessage, request: Request, response: Response, db=Depends(get_db)):
-    # Log all the headers in the request
-    print(f"Headers received: {request.headers}", flush=True)
-    
-    # Log cookies to see if the browser is sending them
-    print(f"Cookies received: {request.cookies}", flush=True)
-    print("request: ",request, flush=True)
-    print("response: ",response, flush=True)
-    session_id = get_or_create_session_id(request, response)
+async def continue_conversation(user_message: UserMessage, request: Request, db=Depends(get_db)):
+    session_id = request.state.session_id  # Get the session ID from request state
+    # print(user_message, flush=True)
+    # print(user_message.user_input)
     print("continue conversation: ", session_id, flush=True)
     # if not user_message.user_input.strip():
     #     raise HTTPException(status_code=400, detail="User input cannot be empty.")
@@ -191,6 +189,8 @@ async def continue_conversation(user_message: UserMessage, request: Request, res
     # if session_id not in active_conversations:
     #     raise HTTPException(status_code=400, detail="No active conversation found for this session.")
     
+    print(active_conversations, flush=True)
+
     conversation_data = active_conversations[session_id]
     conversation_chain = conversation_data["conversation_chain"]
     dialogue = conversation_data["dialogue"]
@@ -205,7 +205,7 @@ async def continue_conversation(user_message: UserMessage, request: Request, res
         user_message=user_message.user_input,  # Log the user's input
         bot_response=bot_response  # Log the bot's response
     )
-    
+    print(bot_response)
     return {"bot_message": bot_response}
 
 
