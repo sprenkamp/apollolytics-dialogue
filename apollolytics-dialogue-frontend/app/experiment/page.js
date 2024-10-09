@@ -14,22 +14,27 @@ export default function Experiment() {
   const backendUrl = "https://duly-fresh-alien.ngrok-free.app"; // Use environment variable or fallback
 
   // Predefined article (constant)
-  const predefinedArticle = `Many of the billionaires who are backing US Vice President Kamala Harris in the upcoming election in November are likely “terrified” about Jeffrey Epstein’s client list becoming public in case of a Donald Trump victory, according to SpaceX and Tesla CEO Elon Musk.
-
-Epstein worked as a financier and socialized with the rich and famous for decades. In 2019, he was arrested for pimping out young women, including many minors, to his powerful acquaintances, whom he often flew out to his private island in the Caribbean. The list of Epstein’s “guests” and other evidence, which has reportedly been gathered by the FBI, has since remained under lock and key, even after Epstein died under suspicious circumstances in his Manhattan cell in 2019, which has officially been ruled a suicide.
-
-Last month, Donald Trump suggested in an interview with Lex Friedman that Epstein’s “black book” could be made public if he wins in November.
-
-Speaking with former Fox News host Tucker Carlson on Monday, Musk claimed that the Democratic party’s presidential candidate Kamala Harris was simply a “marionette” and that there are actually over a hundred “puppet masters” behind her, most of whom the billionaire said he probably knows personally.
-
-The tech mogul then went on to say that he would find it interesting to see a matchup of the top one hundred of these so-called “puppet masters” and the Jeffrey Epstein client list, suggesting there would be a “strong overlap” of the two.
-
-While he did not comment on the likelihood of the list actually ever seeing the light of day, Musk suggested that a big part of why Kamala Harris has been getting so much support was because “many billionaires are terrified” that it could be made public if Trump wins.
-
-He suggested that people like LinkedIn co-founder and Musk’s former VP of Development at PayPal Reid Hoffman and Microsoft’s Bill Gates were particularly concerned over the “Epstein situation” and that the Department of Justice could actually “move forward” on some of the evidence.
-
-He also pointed out how “mind blowing” it was that after all these years, the US Justice system has not tried to prosecute even a single person from Epstein’s client list and has instead been going after protesters who took part in the January 6 Capitol Hill riots.`;
-
+  const predefinedArticle = `
+  NATO is no longer hiding that it is gearing up for a potential military conflict with Russia, Deputy Foreign Minister Aleksandr Grushko has said, pointing to this year's Steadfast Defender drills, the bloc's largest maneuvers since the end of the Cold War. 
+  The US-led military bloc has been expanding eastward for decades, despite assurances given to the Soviet Union in the run-up to German reunification in 1990 that it would not do so. Russia has repeatedly described the expansion toward its borders as a threat to its security.
+  
+  Speaking to RIA Novosti on Tuesday, Grushko said that “now NATO representatives have stopped hiding that they are preparing for a potential armed clash with Russia.” 
+  “Regional defense plans have been approved, concrete tasks for all of the bloc’s military command structures have been formulated. Possible options for military action against Russia are being continuously worked out,” the diplomat added. 
+  
+  He cited the Steadfast Defender exercise that ran from January through late May, saying that “for the first time, the enemy was not a fictitious state, but Russia.” 
+  While NATO did not specifically name Russia in its announcement of the drills, it called the exercises preparation for a conflict with a “near-peer” adversary. 
+  NATO’s main security document identifies Russia as the bloc’s largest threat. The drills, which were conducted near Russia’s western border, featured some 90,000 troops from all 32 NATO member states. 
+  
+  According to Grushko, “military budgets are being pumped [with money] and [Western] economies are being militarized.” The deputy foreign minister insisted that “it was not Russia, but the North-Atlantic alliance that took the path of confrontation,” by refusing to engage in dialogue with Moscow. 
+  He concluded that NATO bears responsibility for a “major European security crisis.”
+  
+  On Saturday, Germany’s Die Welt newspaper, citing a confidential NATO planning document, reported that in preparation for a potential conflict with Russia, the military bloc is planning to dramatically increase the number of combat and air defense units. 
+  Over the past few months, several NATO member states have claimed that Russia could be harboring plans to attack the bloc.
+  
+  Speaking on the sidelines of the St. Petersburg International Economic Forum (SPIEF) in June, Russian President Vladimir Putin dismissed as “nonsense” and “bulls**t” allegations that Moscow plans to attack NATO. 
+  In September, the Russian leader warned, however, that should Ukraine’s Western backers allow Kiev to use their missiles to hit targets deep inside Russia, “it will mean nothing less than the direct participation of NATO countries, the US and European countries, in the conflict in Ukraine.”
+  `;
+  
   // Handles predefined article submission
   const handleArticleSubmit = async (e) => {
     e.preventDefault();
