@@ -41,23 +41,25 @@ interaction_table = Table(
 # Initialize FastAPI app
 app = FastAPI()
 
-# Add CORS middleware to allow requests from different origins
+#Add CORS middleware to allow requests from different origins
 origins = [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
     "http://localhost:8000",
     "http://127.0.0.1:8000",
-    "https://apollolytics-dialogue-frontend-76vbnmkbz.vercel.app/",
-    "https://apollolytics.com/", 
+    "https://apollolytics-dialogue-frontend-bp1u3rkjl.vercel.app"
+    "https://apollolytics-dialogue-frontend.vercel.app",
+    "https://a50f-16-170-227-168.ngrok-free.app",
+    "https://apollolytics.com"
 ]
+
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["https://apollolytics-dialogue-frontend-ac6bi8v0r.vercel.app", "https://apollolytics-dialogue-frontend-65u905sea.vercel.app", "https://apollolytics-dialogue.vercel.app"],  # Allow all origins
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 # Store active conversations per session (in-memory)
 active_conversations = {}
@@ -96,46 +98,32 @@ async def log_interaction(db, session_id: str, user_message: str = None, article
 
 # Helper function to generate or retrieve session ID from cookies
 def get_or_create_session_id(request: Request, response: Response):
-    print("request.cookies: ", request.cookies, flush=True)
     session_id = request.cookies.get("session_id")
-    print("session_id: ", session_id, flush=True)
     if not session_id:
         # Generate a new session ID if one doesn't exist
         session_id = str(uuid.uuid4())
-        print("new session_id: ", session_id, flush=True)
         # Set the session_id in a cookie
         response.set_cookie(
             key="session_id",
             value=session_id,
             httponly=True,
-            secure=False,   # Allow HTTP for local dev
+            secure=True,   # Allow HTTP for local dev
             samesite="None"  # Allow cross-origin cookie sending
         )
-                # request.cookies["session_id"] = session_id
-        # request.set_cookie(
-        #     key="session_id",
-        #     value=session_id,
-        #     httponly=True,
-        #     secure=False,  # False for local HTTP development
-        #     samesite="lax"  # Required for cross-site requests with cookies
-        # )
-        print("request.cookies: ", request.cookies, flush=True)
+
+
     return session_id
 
 
 # Endpoint to analyze propaganda and initialize a conversation
 @app.post("/analyze_propaganda")
 async def analyze_article(article_submission: ArticleSubmission, request: Request, response: Response, db=Depends(get_db)):
-    # Log all the headers in the request
-    print(f"Headers received: {request.headers}", flush=True)
-    
-    # Log cookies to see if the browser is sending them
-    print(f"Cookies received: {request.cookies}", flush=True)
     session_id = get_or_create_session_id(request, response)
 
     if not article_submission.article_text.strip():
         raise HTTPException(status_code=400, detail="Article text cannot be empty.")
     
+    print(f"analyze session id", session_id, flush=True)
     # Initialize ApollolyticsDialogueAsync class only for the first time (on article submission)
     dialogue = ApollolyticsDialogueAsync(dialogue_type="socratic")
 
@@ -148,7 +136,52 @@ async def analyze_article(article_submission: ArticleSubmission, request: Reques
     # Create a conversation chain with the system prompt asynchronously
     system_prompt, conversation_chain, initial_response = await dialogue.create_conversation_chain(
         input_article=article_submission.article_text, 
-        detected_propaganda=detected_propaganda
+        detected_propaganda=detected_propaganda['data']
+    )
+    
+    # Store the initialized conversation chain in memory for this session
+    active_conversations[session_id] = {
+        "dialogue": dialogue,
+        "conversation_chain": conversation_chain
+    }
+
+    # Log the article and the bot's first response
+    await log_interaction(
+        db=db,
+        session_id=session_id,
+        article_text=article_submission.article_text,
+        detected_propaganda=str(detected_propaganda),
+        bot_response=initial_response
+    )
+    
+    return {
+        "detected_propaganda": detected_propaganda,
+        "bot_message": initial_response
+    }
+
+@app.post("/analyze_propaganda_fake")
+async def analyze_article(article_submission: ArticleSubmission, request: Request, response: Response, db=Depends(get_db)):
+    session_id = get_or_create_session_id(request, response)
+
+    if not article_submission.article_text.strip():
+        raise HTTPException(status_code=400, detail="Article text cannot be empty.")
+    
+    print(f"analyze session id", session_id, flush=True)
+    # Initialize ApollolyticsDialogueAsync class only for the first time (on article submission)
+    dialogue = ApollolyticsDialogueAsync(dialogue_type="socratic")
+
+    import json
+    # Detect propaganda in the article asynchronously
+    with open("src/fake.json", "r") as file:
+        detected_propaganda = json.load(file)
+
+    if "error" in detected_propaganda:
+        raise HTTPException(status_code=400, detail=detected_propaganda["error"])
+
+    # Create a conversation chain with the system prompt asynchronously
+    system_prompt, conversation_chain, initial_response = await dialogue.create_conversation_chain(
+        input_article=article_submission.article_text, 
+        detected_propaganda=detected_propaganda['data']
     )
     
     # Store the initialized conversation chain in memory for this session
@@ -176,20 +209,15 @@ async def analyze_article(article_submission: ArticleSubmission, request: Reques
 @app.post("/continue_conversation")
 async def continue_conversation(user_message: UserMessage, request: Request, response: Response, db=Depends(get_db)):
     # Log all the headers in the request
-    print(f"Headers received: {request.headers}", flush=True)
-    
-    # Log cookies to see if the browser is sending them
-    print(f"Cookies received: {request.cookies}", flush=True)
-    print("request: ",request, flush=True)
-    print("response: ",response, flush=True)
+
     session_id = get_or_create_session_id(request, response)
-    print("continue conversation: ", session_id, flush=True)
-    # if not user_message.user_input.strip():
-    #     raise HTTPException(status_code=400, detail="User input cannot be empty.")
+
+    if not user_message.user_input.strip():
+        raise HTTPException(status_code=400, detail="User input cannot be empty.")
     
-    # # Retrieve the conversation chain and dialogue for this session
-    # if session_id not in active_conversations:
-    #     raise HTTPException(status_code=400, detail="No active conversation found for this session.")
+    # Retrieve the conversation chain and dialogue for this session
+    if session_id not in active_conversations:
+        raise HTTPException(status_code=400, detail="No active conversation found for this session.")
     
     conversation_data = active_conversations[session_id]
     conversation_chain = conversation_data["conversation_chain"]

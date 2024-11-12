@@ -1,45 +1,60 @@
-import requests
 import logging
+import websockets
+import asyncio
+import json
 from langchain_openai import ChatOpenAI
 from langchain.chains import ConversationChain
 from langchain.schema import SystemMessage
 from langchain.memory import ConversationBufferMemory
 from src.prompts.system_prompts import system_prompts
-import httpx
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 
 class ApollolyticsDialogueAsync:
-    def __init__(self, dialogue_type, model_name="gpt-4o", verbose=False):
+    def __init__(self, dialogue_type, model_name="gpt-4o-mini", verbose=False):
         self.llm = ChatOpenAI(model_name=model_name)
         self.dialogue_type = dialogue_type
         self.verbose = verbose  # Make verbose configurable
+        self.websocket_url = 'ws://13.48.71.178:8000/ws/analyze_propaganda'  # WebSocket URL
 
     async def detect_propaganda(self, input_article):
         """
-        Sends the input article to an external API for propaganda detection asynchronously.
-        Returns the response or an error message in case of failure.
+        Sends the input article to the WebSocket server for propaganda detection asynchronously.
+        Waits for the entire response to be streamed and accumulates the data before returning.
         """
-        url = 'http://13.48.71.178:8000/analyze_propaganda'
-        headers = {'Content-Type': 'application/json'}
         data = {
-            "model_name": "gpt-4o",
-            "contextualize": "true",
+            "model_name": "gpt-4o-mini",
+            "contextualize": False,
             "text": input_article
         }
 
         try:
-            async with httpx.AsyncClient(timeout=10) as client:
-                response = await client.post(url, headers=headers, json=data)
-                response.raise_for_status()
-                return response.json()
-        except httpx.TimeoutException:
+            async with websockets.connect(self.websocket_url) as websocket:
+                # Send the input article as JSON
+                await websocket.send(json.dumps(data))
+                
+                # Accumulate streamed responses
+                full_response = ""
+                
+                while True:
+                    try:
+                        message = await websocket.recv()  # Receive streamed message
+                        full_response += message  # Append to full response
+
+                    except websockets.exceptions.ConnectionClosedOK:
+                        # Exit when the server closes the connection cleanly
+                        logging.info("WebSocket connection closed normally.")
+                        break
+                print(full_response)
+                return json.loads(full_response)  # Return the accumulated full response
+
+        except websockets.exceptions.ConnectionClosedError as e:
+            logging.error(f"Connection closed unexpectedly: {e}")
+            return self.format_error("The connection to the propaganda detection service was closed unexpectedly.")
+        except asyncio.TimeoutError:
             logging.error("Propaganda detection service timed out.")
             return self.format_error("The propaganda detection service timed out. Please try again later.")
-        except httpx.RequestError as e:
-            logging.error(f"Error connecting to the propaganda detection service: {e}")
-            return self.format_error("Failed to connect to the server. Please try again.")
         except Exception as e:
             logging.error(f"Unexpected error: {e}")
             return self.format_error("An unexpected error occurred. Please try again.")
@@ -72,7 +87,7 @@ class ApollolyticsDialogueAsync:
         initial_response = await conversation.apredict(
             input="What are your thoughts on the key points presented in the article? Do you recognize instances of propaganda or disinformation?"
         )
-
+        print(system_prompt)
         # Return the system prompt, conversation chain, and initial LLM response
         return system_prompt, conversation, initial_response
 

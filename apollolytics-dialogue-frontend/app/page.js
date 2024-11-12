@@ -11,7 +11,7 @@ export default function Home() {
   const [articleSubmitted, setArticleSubmitted] = useState(false);
   const [detectedPropaganda, setDetectedPropaganda] = useState(null);
   const chatWindowRef = useRef(null); // Ref for auto-scrolling
-  const backendUrl = 'http://16.170.227.168:8000';  // Use your EC2 instance IP
+  const backendUrl = 'https://16.170.227.168:8000';  // Use your EC2 instance IP
 
   // Handles article submission
   const handleArticleSubmit = async (e) => {
