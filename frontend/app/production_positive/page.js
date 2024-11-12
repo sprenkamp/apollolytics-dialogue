@@ -1,9 +1,9 @@
 // app/page.js
 "use client";
-import { useState, useRef, useEffect } from "react"; // Import necessary hooks
-import axios from "axios"; // Import axios for HTTP requests
-import Link from "next/link";
-import styles from "./Home.module.css"; // Reuse existing styles or create new ones
+import { useState, useEffect, useRef } from "react";
+import axios from "axios";
+import styles from "../Home.module.css"; // Ensure this path is correct
+import Link from "next/link"; // Import Link for navigation
 
 export default function Home() {
   const [conversation, setConversation] = useState([]);
@@ -11,7 +11,7 @@ export default function Home() {
   const [article, setArticle] = useState(""); // Separate state for article input
   const [loading, setLoading] = useState(false);
   const [articleSubmitted, setArticleSubmitted] = useState(false);
-  const [detectedPropaganda, setDetectedPropaganda] = useState(null);
+  const [setDetectedPropaganda] = useState(null);
   const chatWindowRef = useRef(null); // Ref for auto-scrolling
   const backendUrl = 'http://16.170.227.168:8000';  // Use your EC2 instance IP
 
