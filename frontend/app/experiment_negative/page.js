@@ -125,9 +125,6 @@ export default function Experiment() {
   return (
     <div className={styles.container}>
       <h1 className={styles.header}>Apollolytics Dialogue - Experiment</h1>
-      <Link href="/" className={styles.homeLink}>
-        ← Back to Home
-      </Link>
 
       {/* Predefined Article Submission */}
       {!articleSubmitted && (
