@@ -6,7 +6,7 @@ from pydantic import BaseModel
 from sqlalchemy import create_engine, MetaData, Table, Column, String, Text, DateTime, func
 from sqlalchemy.orm import sessionmaker
 from dotenv import load_dotenv
-from src.apollo_dialogue import ApollolyticsDialogueAsync  # Importing the async class
+from backend.apollo_dialogue import ApollolyticsDialogueAsync  # Importing the async class
 import logging
 
 # Configure logging
