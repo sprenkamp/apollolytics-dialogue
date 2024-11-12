@@ -1,17 +1,18 @@
-// app/page.js
+// app/production/page.js
 "use client";
-import Link from "next/link";
-import styles from "./Home.module.css"; // Reuse existing styles or create new ones
+import { useState, useEffect, useRef } from "react";
+import axios from "axios";
+import styles from "../Home.module.css"; // Adjust the import path if necessary
+import Link from "next/link"; // Import Link for navigation
 
-export default function Home() {
+export default function Production() {
   const [conversation, setConversation] = useState([]);
   const [userMessage, setUserMessage] = useState("");
   const [article, setArticle] = useState(""); // Separate state for article input
   const [loading, setLoading] = useState(false);
   const [articleSubmitted, setArticleSubmitted] = useState(false);
-  const [detectedPropaganda, setDetectedPropaganda] = useState(null);
   const chatWindowRef = useRef(null); // Ref for auto-scrolling
-  const backendUrl = 'http://16.170.227.168:8000';  // Use your EC2 instance IP
+  const backendUrl = "https://duly-fresh-alien.ngrok-free.app"; // Use your EC2 instance IP
 
   // Handles article submission
   const handleArticleSubmit = async (e) => {
@@ -21,18 +22,17 @@ export default function Home() {
     setLoading(true);
     try {
       const response = await axios.post(
-        `${backendUrl}/analyze_propaganda`,
+        `${backendUrl}/analyze_propaganda`, // Corrected template literal
         {
           article_text: article,
         },
         {
-          withCredentials: true, // Important: Ensures cookies are sent
+          withCredentials: true, // Ensures cookies are sent
         }
       );
 
       if (response.status === 200) {
         const result = response.data;
-        setDetectedPropaganda(result.detected_propaganda); // Save detected propaganda
         setConversation((prev) => [
           ...prev,
           { sender: "bot", message: result.bot_message }, // Bot responds first
@@ -62,12 +62,12 @@ export default function Home() {
     setLoading(true);
     try {
       const response = await axios.post(
-        `${backendUrl}/continue_conversation`, // Use backendUrl variable
+        `${backendUrl}/continue_conversation`, // Corrected template literal
         {
           user_input: userMessage,
         },
         {
-          withCredentials: true, // Important: Ensures cookies are sent
+          withCredentials: true, // Ensures cookies are sent
         }
       );
 
@@ -78,7 +78,7 @@ export default function Home() {
           { sender: "user", message: userMessage }, // User's message
           { sender: "bot", message: botResponse }, // Bot's response
         ]);
-        setUserMessage(''); // Clear user input
+        setUserMessage(""); // Clear user input
       } else {
         setConversation((prev) => [
           ...prev,
@@ -104,15 +104,56 @@ export default function Home() {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.header}>Welcome to Apollolytics</h1>
-      <div className={styles.linksContainer}>
-        <Link href="/production" className={styles.linkButton}>
-          Go to Production
-        </Link>
-        <Link href="/experiment" className={styles.linkButton}>
-          Go to Experiment
-        </Link>
+      <h1 className={styles.header}>Apollolytics Dialogue - Production</h1>
+      <Link href="/" className={styles.homeLink}>
+        ← Back to Home
+      </Link>
+
+      {/* Article submission */}
+      {!articleSubmitted && (
+        <form onSubmit={handleArticleSubmit} className={styles.inputForm}>
+          <textarea
+            placeholder="Submit your article for propaganda detection..."
+            value={article}
+            onChange={(e) => setArticle(e.target.value)}
+            className={styles.inputField}
+          />
+          <button type="submit" className={styles.sendButton} disabled={loading}>
+            {loading ? "Analyzing..." : "Submit Article"}
+          </button>
+        </form>
+      )}
+
+      {/* Chat Window */}
+      <div ref={chatWindowRef} className={styles.chatWindow}>
+        {conversation.map((chat, index) => (
+          <div
+            key={index}
+            className={`${styles.messageBubble} ${
+              chat.sender === "user" ? styles.userMessage : styles.botMessage
+            }`}
+          >
+            <span>{chat.message}</span>
+          </div>
+        ))}
       </div>
+
+      {/* User message input */}
+      {articleSubmitted && (
+        <form onSubmit={handleUserMessageSubmit} className={styles.inputForm}>
+          <input
+            type="text"
+            placeholder="Continue the conversation..."
+            value={userMessage}
+            onChange={(e) => setUserMessage(e.target.value)}
+            className={styles.inputField}
+            disabled={loading}
+          />
+          <button type="submit" className={styles.sendButton} disabled={loading}>
+            {loading ? "Sending..." : "Send"}
+          </button>
+        </form>
+      )}
     </div>
   );
 }
