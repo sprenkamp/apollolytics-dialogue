@@ -20,3 +20,8 @@ The Apollolytics Dialogue Bot is a Telegram bot designed to flag propaganda in a
     ``` bash
     docker run -d apollolytics_dialogue_bot
 
+
+FOCUS on measuring persuasion ?!
+-> check if measuring persuasiveness has a standard
+-> willingness to share something ? -> measure how trustworthy something is. 
+ -> https://arxiv.org/abs/2402.07395

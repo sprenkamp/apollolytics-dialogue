@@ -3,7 +3,6 @@
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import styles from "../Home.module.css"; // Ensure this path is correct
-import Link from "next/link"; // Import Link for navigation
 
 export default function Experiment() {
   const [conversation, setConversation] = useState([]);
