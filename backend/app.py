@@ -6,7 +6,7 @@ from pydantic import BaseModel
 from sqlalchemy import create_engine, MetaData, Table, Column, String, Text, DateTime, func
 from sqlalchemy.orm import sessionmaker
 from dotenv import load_dotenv
-from src.apollo_dialogue import ApollolyticsDialogueAsync  # Importing the async class
+from backend.apollo_dialogue import ApollolyticsDialogueAsync  # Importing the async class
 import logging
 
 # Configure logging
@@ -172,7 +172,7 @@ async def analyze_article(article_submission: ArticleSubmission, request: Reques
 
     import json
     # Detect propaganda in the article asynchronously
-    with open("src/fake.json", "r") as file:
+    with open("backend/fake.json", "r") as file:
         detected_propaganda = json.load(file)
 
     if "error" in detected_propaganda:
