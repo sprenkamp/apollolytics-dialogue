@@ -7,7 +7,7 @@ export default function Production() {
   return (
     <ChatTemplate
       predefinedArticle={predefinedArticle}
-      allowArticleInput={true}
+      allowArticleInput={false}
       title="Apollolytics Dialogue - Experiment"
       dialogueType="socratic" // Set to "socratic" for the good bot
       useFakeData={true}     // Use real data in production
