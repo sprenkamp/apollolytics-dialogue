@@ -8,6 +8,8 @@ from sqlalchemy.orm import sessionmaker
 from dotenv import load_dotenv
 from backend.apollo_dialogue import ApollolyticsDialogueAsync  # Importing the async class
 import logging
+from typing import Optional
+
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -54,7 +56,7 @@ origins = [
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://apollolytics-dialogue-frontend-ac6bi8v0r.vercel.app", "https://apollolytics-dialogue-frontend-65u905sea.vercel.app", "https://apollolytics-dialogue.vercel.app"],  # Allow all origins
+    allow_origins=["https://apollolytics-dialogue-frontend-ac6bi8v0r.vercel.app", "https://apollolytics-dialogue-frontend-65u905sea.vercel.app", "https://apollolytics-dialogue.vercel.app", "http://localhost:3000", "https://localhost:8000"],  # Allow all origins
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -70,6 +72,8 @@ class UserMessage(BaseModel):
 
 class ArticleSubmission(BaseModel):
     article_text: str
+    dialogue_type: str 
+    use_fake_data: Optional[bool] = False  # New field to decide whether to use fake data
 
 # Dependency to get DB session
 def get_db():
@@ -123,19 +127,26 @@ async def analyze_article(article_submission: ArticleSubmission, request: Reques
     if not article_submission.article_text.strip():
         raise HTTPException(status_code=400, detail="Article text cannot be empty.")
     
-    print(f"analyze session id", session_id, flush=True)
-    # Initialize ApollolyticsDialogueAsync class only for the first time (on article submission)
-    dialogue = ApollolyticsDialogueAsync(dialogue_type="socratic")
-
-    # Detect propaganda in the article asynchronously
-    detected_propaganda = await dialogue.detect_propaganda(article_submission.article_text)
+    print(f"analyze session id {session_id}", flush=True)
+    # Initialize ApollolyticsDialogueAsync class with dialogue_type from article_submission
+    dialogue = ApollolyticsDialogueAsync(dialogue_type=article_submission.dialogue_type)
+    
+    # Decide whether to detect propaganda or use fake data based on use_fake_data
+    if article_submission.use_fake_data:
+        # Load fake detected propaganda from JSON file
+        import json
+        with open("backend/fake.json", "r") as file:
+            detected_propaganda = json.load(file)
+    else:
+        # Detect propaganda in the article asynchronously
+        detected_propaganda = await dialogue.detect_propaganda(article_submission.article_text)
 
     if "error" in detected_propaganda:
         raise HTTPException(status_code=400, detail=detected_propaganda["error"])
 
     # Create a conversation chain with the system prompt asynchronously
     system_prompt, conversation_chain, initial_response = await dialogue.create_conversation_chain(
-        input_article=article_submission.article_text, 
+        input_article=article_submission.article_text,
         detected_propaganda=detected_propaganda['data']
     )
     
@@ -158,6 +169,7 @@ async def analyze_article(article_submission: ArticleSubmission, request: Reques
         "detected_propaganda": detected_propaganda,
         "bot_message": initial_response
     }
+
 
 @app.post("/analyze_propaganda_fake")
 async def analyze_article(article_submission: ArticleSubmission, request: Request, response: Response, db=Depends(get_db)):
