@@ -72,7 +72,7 @@ class ApollolyticsDialogueAsync:
         system_prompt = system_prompts[self.dialogue_type].content.format(
             input_article=input_article, result=detected_propaganda
         )
-
+        print(system_prompt)
         # Create the conversation chain with memory
         conversation = ConversationChain(
             llm=self.llm,

@@ -172,7 +172,7 @@ async def analyze_article(article_submission: ArticleSubmission, request: Reques
 
     import json
     # Detect propaganda in the article asynchronously
-    with open("src/fake.json", "r") as file:
+    with open("backend/fake.json", "r") as file:
         detected_propaganda = json.load(file)
 
     if "error" in detected_propaganda:
