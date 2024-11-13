@@ -10,7 +10,7 @@ export default function Production() {
       allowArticleInput={true}
       title="Apollolytics Dialogue - Experiment"
       dialogueType="negative-socratic" // Set to "socratic" for the good bot
-      useFakeData={false}     // Use real data in production
+      useFakeData={true}     // Use real data in production
     />
   );
 }
