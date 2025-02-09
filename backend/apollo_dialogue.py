@@ -6,7 +6,7 @@ from langchain_openai import ChatOpenAI
 from langchain.chains import ConversationChain
 from langchain.schema import SystemMessage
 from langchain.memory import ConversationBufferMemory
-from backend.prompts.system_prompts import system_prompts
+from prompts.system_prompts import system_prompts
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -70,7 +70,7 @@ class ApollolyticsDialogueAsync:
 
         # Create the system prompt using the dialogue type, article, and detected propaganda
         system_prompt = system_prompts[self.dialogue_type].content.format(
-            input_article=input_article, result=detected_propaganda
+            input_article=input_article, result=detected_propaganda["data"]
         )
         print(system_prompt)
         # Create the conversation chain with memory

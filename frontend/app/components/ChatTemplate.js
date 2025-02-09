@@ -12,16 +12,57 @@ export default function ChatTemplate({
   useFakeData = false, // Existing prop
 }) {
   const [conversation, setConversation] = useState([]);
-  const [userMessage, setUserMessage] = useState("");
   const [article, setArticle] = useState(predefinedArticle || "");
   const [loading, setLoading] = useState(false);
   const [articleSubmitted, setArticleSubmitted] = useState(false);
+  const [recording, setRecording] = useState(false);
   const chatWindowRef = useRef(null);
+  const recognitionRef = useRef(null);
 
   // Set the backendUrl inside the component
   const backendUrl = "https://duly-fresh-alien.ngrok-free.app";
 
-  // Handles article submission
+  // Setup the Speech Recognition API
+  useEffect(() => {
+    if (!("SpeechRecognition" in window) && !("webkitSpeechRecognition" in window)) {
+      alert("Speech recognition is not supported in your browser.");
+    } else {
+      const SpeechRecognition =
+        window.SpeechRecognition || window.webkitSpeechRecognition;
+      const recognition = new SpeechRecognition();
+      recognition.lang = "en-US";
+      recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
+      recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        handleUserMessageSubmit(transcript);
+      };
+      recognition.onerror = (event) => {
+        console.error("Speech recognition error", event);
+        setRecording(false);
+      };
+      recognitionRef.current = recognition;
+    }
+  }, []);
+
+  // Function to initiate voice recording
+  const startRecording = () => {
+    if (recognitionRef.current && !loading) {
+      setRecording(true);
+      recognitionRef.current.start();
+    }
+  };
+
+  // Function to handle speaking text via the Speech Synthesis API
+  const speakText = (text) => {
+    if ("speechSynthesis" in window) {
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = "en-US";
+      window.speechSynthesis.speak(utterance);
+    }
+  };
+
+  // Handles article submission (remains via text)
   const handleArticleSubmit = async (e) => {
     e.preventDefault();
     if (!article.trim()) return;
@@ -47,6 +88,7 @@ export default function ChatTemplate({
           { sender: "bot", message: result.bot_message },
         ]);
         setArticleSubmitted(true);
+        speakText(result.bot_message);
       } else {
         setConversation((prev) => [
           ...prev,
@@ -55,6 +97,7 @@ export default function ChatTemplate({
             message: "Error: Failed to analyze the article.",
           },
         ]);
+        speakText("Error: Failed to analyze the article.");
       }
     } catch (error) {
       setConversation((prev) => [
@@ -64,29 +107,28 @@ export default function ChatTemplate({
           message: "Error: Unable to communicate with the server.",
         },
       ]);
+      speakText("Error: Unable to communicate with the server.");
     } finally {
       setLoading(false);
     }
   };
 
-  // Handles user message submission
-  const handleUserMessageSubmit = async (e) => {
-    e.preventDefault();
-    if (!userMessage.trim() || !articleSubmitted) return;
+  // Handles user message submission via voice
+  const handleUserMessageSubmit = async (transcriptText) => {
+    if (!transcriptText.trim() || !articleSubmitted) return;
 
     // Display the user message immediately
     setConversation((prev) => [
       ...prev,
-      { sender: "user", message: userMessage },
+      { sender: "user", message: transcriptText },
     ]);
-    setUserMessage(""); // Clear user input
     setLoading(true);
 
     try {
       const response = await axios.post(
         `${backendUrl}/continue_conversation`, // Continue conversation endpoint
         {
-          user_input: userMessage,
+          user_input: transcriptText,
         },
         {
           withCredentials: true,
@@ -99,6 +141,7 @@ export default function ChatTemplate({
           ...prev,
           { sender: "bot", message: botResponse },
         ]);
+        speakText(botResponse);
       } else {
         setConversation((prev) => [
           ...prev,
@@ -107,6 +150,7 @@ export default function ChatTemplate({
             message: "Error: Failed to process your message.",
           },
         ]);
+        speakText("Error: Failed to process your message.");
       }
     } catch (error) {
       setConversation((prev) => [
@@ -116,8 +160,10 @@ export default function ChatTemplate({
           message: "Error: Unable to communicate with the server.",
         },
       ]);
+      speakText("Error: Unable to communicate with the server.");
     } finally {
       setLoading(false);
+      setRecording(false);
     }
   };
 
@@ -180,28 +226,17 @@ export default function ChatTemplate({
         )}
       </div>
 
-      {/* User message input */}
+      {/* Voice Interaction Controls */}
       {articleSubmitted && (
-        <form
-          onSubmit={handleUserMessageSubmit}
-          className={styles.inputForm}
-        >
-          <input
-            type="text"
-            placeholder="Continue the conversation..."
-            value={userMessage}
-            onChange={(e) => setUserMessage(e.target.value)}
-            className={styles.inputField}
-            disabled={loading}
-          />
+        <div className={styles.inputForm}>
           <button
-            type="submit"
+            onClick={startRecording}
             className={styles.sendButton}
-            disabled={loading}
+            disabled={loading || recording}
           >
-            {loading ? "Sending..." : "Send"}
+            {recording ? "Recording..." : "Start Recording"}
           </button>
-        </form>
+        </div>
       )}
     </div>
   );
