@@ -42,3 +42,7 @@ Eristic Dialogue: Involves personal conflict where participants verbally attack 
 - smaller qualitative study (10 user, propose design requirements) and then go quantitative (does it enhance critical thinking)? 
 
 
+
+# Paper:
+- Stochastic lies: How LLM-powered chatbots deal with Russian disinformation about the war in Ukraine
+- 

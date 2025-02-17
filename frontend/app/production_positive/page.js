@@ -1,79 +1,80 @@
 "use client";
 
-import axios from "axios";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import RecordRTC, { StereoAudioRecorder } from "recordrtc";
 
-const API_BASE = "http://localhost:8000";
-
-async function startConversationRequest(article) {
-  const payload = { article };
-  const res = await axios.post(`${API_BASE}/conversation/start`, payload, {
-    withCredentials: true,
-  });
-  return res.data;
-}
-
-async function sendAudioResponse(base64Audio) {
-  const payload = { message: base64Audio };
-  const res = await axios.post(`${API_BASE}/conversation/respond`, payload, {
-    withCredentials: true,
-  });
-  return res.data;
-}
-
 export default function ConversationPage() {
+  // Conversation state
   const [article, setArticle] = useState("");
   const [conversationStarted, setConversationStarted] = useState(false);
-
-  // Assistant audio and audio player states
   const [assistantAudio, setAssistantAudio] = useState(null);
-  const [audioPlaying, setAudioPlaying] = useState(false);
-  const [audioFinished, setAudioFinished] = useState(false);
 
-  // Recording states
+  // UI state for spinners and recording controls
+  const [loadingMessage, setLoadingMessage] = useState(""); // "Analyzing article..." or "Thinking..."
   const [isRecording, setIsRecording] = useState(false);
   const [recordingStatus, setRecordingStatus] = useState("");
+  const [audioFinished, setAudioFinished] = useState(false);
 
-  // Loading / spinner message
-  const [loadingMessage, setLoadingMessage] = useState("");
-
-  // References to recorder and stream
+  // Refs for WebSocket, recorder, and media stream
+  const wsRef = useRef(null);
   const recorderRef = useRef(null);
   const streamRef = useRef(null);
 
-  const handleStartConversation = async (e) => {
-    e.preventDefault();
+  // Establish the conversation via WebSocket and send the initial "start" message.
+  const startConversation = () => {
     if (!article.trim()) {
       alert("Article text is required to start the conversation.");
       return;
     }
 
-    setConversationStarted(true);
-    setAudioPlaying(true);
+    const ws = new WebSocket("ws://localhost:8000/ws/conversation");
+    wsRef.current = ws;
 
-    // Clear any old audio and set spinner message
-    setAssistantAudio(null);
-    setLoadingMessage("Analyzing article...");
+    ws.onopen = () => {
+      console.log("WebSocket connection opened");
+      setConversationStarted(true);
+      setLoadingMessage("Analyzing article...");
+      // Send the "start" message with the article text.
+      ws.send(
+        JSON.stringify({
+          type: "start",
+          article: article,
+        })
+      );
+    };
 
-    try {
-      const data = await startConversationRequest(article);
+    ws.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      const msgType = data.type;
+      const payload = data.payload;
 
-      // Construct a proper data URI for the received audio
-      const audioSrc = data.audio.startsWith("data:")
-        ? data.audio
-        : `data:audio/wav;base64,${data.audio}`;
+      if (msgType === "assistant_delta") {
+        // Update audio if delta includes audio.
+        if (payload.audio) {
+          const audioSrc = payload.audio.startsWith("data:")
+            ? payload.audio
+            : `data:audio/wav;base64,${payload.audio}`;
+          setAssistantAudio(audioSrc);
+        }
+      } else if (msgType === "assistant_final") {
+        // Clear spinner and allow recording.
+        setLoadingMessage("");
+        setAudioFinished(true);
+      }
+    };
 
-      setAssistantAudio(audioSrc);
-      setLoadingMessage(""); // Clear the spinner message once audio is ready
-    } catch (err) {
-      console.error(err);
-      alert("Error starting conversation.");
-      setLoadingMessage("");
-    }
+    ws.onerror = (err) => {
+      console.error("WebSocket error:", err);
+    };
+
+    ws.onclose = () => {
+      console.log("WebSocket connection closed");
+      // Optionally add reconnection logic here.
+    };
   };
 
-  const handleStartRecording = async () => {
+  // Start recording using RecordRTC.
+  const startRecording = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       streamRef.current = stream;
@@ -92,67 +93,75 @@ export default function ConversationPage() {
     }
   };
 
-  const handleStopRecording = () => {
+  // Stop recording, send audio over WebSocket, and show a "Thinking..." spinner.
+  const stopRecording = () => {
     if (!recorderRef.current) return;
 
-    recorderRef.current.stopRecording(async () => {
+    recorderRef.current.stopRecording(() => {
       const wavBlob = recorderRef.current.getBlob();
-      // Stop all tracks
+      // Stop all tracks from the media stream.
       if (streamRef.current) {
         streamRef.current.getTracks().forEach((track) => track.stop());
       }
       setIsRecording(false);
       setRecordingStatus("");
-
-      // Prepare "Thinking..." spinner while we wait for the response
-      setAssistantAudio(null);
       setLoadingMessage("Thinking...");
 
-      // Convert blob to base64 and send to server
+      // Convert the blob to base64.
       const reader = new FileReader();
-      reader.onload = async (e) => {
+      reader.onload = (e) => {
         const wavBase64 = btoa(e.target.result);
-        setAudioPlaying(true);
-
-        try {
-          const data = await sendAudioResponse(wavBase64);
-
-          const audioSrc = data.audio.startsWith("data:")
-            ? data.audio
-            : `data:audio/wav;base64,${data.audio}`;
-
-          setAssistantAudio(audioSrc);
-          setLoadingMessage("");
-          setAudioFinished(false);
-        } catch (err) {
-          console.error(err);
-          alert("Error continuing conversation.");
-          setLoadingMessage("");
+        const userMessage = {
+          type: "user",
+          content: [
+            {
+              type: "input_audio",
+              input_audio: {
+                data: wavBase64,
+                format: "wav",
+              },
+            },
+          ],
+        };
+        if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
+          wsRef.current.send(JSON.stringify(userMessage));
+        } else {
+          console.error("WebSocket is not open");
         }
       };
       reader.readAsBinaryString(wavBlob);
     });
   };
 
+  // Clean up WebSocket connection when the component unmounts.
+  useEffect(() => {
+    return () => {
+      if (wsRef.current) {
+        wsRef.current.close();
+      }
+    };
+  }, []);
+
   return (
     <div className="container">
       <h1 className="title">Apollolytics Dialogue</h1>
 
+      {/* Step 1: Article input */}
       {!conversationStarted ? (
-        <form onSubmit={handleStartConversation} className="form">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            startConversation();
+          }}
+          className="form"
+        >
           <label htmlFor="article" className="form-label">
-            Enter your article text:
+            Enter your propagandistic article text:
           </label>
           <textarea
             id="article"
             value={article}
             onChange={(e) => setArticle(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                handleStartConversation(e);
-              }
-            }}
             className="textarea"
             rows={4}
             required
@@ -163,43 +172,43 @@ export default function ConversationPage() {
         </form>
       ) : (
         <div className="conversation">
-          {/* If we have a loading message and no audio, show spinner */}
-          {loadingMessage && !assistantAudio && (
+          {/* Step 2: Display spinner when analyzing article or thinking */}
+          {loadingMessage && (
             <div className="spinner-container">
               <div className="spinner"></div>
               <p>{loadingMessage}</p>
             </div>
           )}
 
-          {/* If audio is available, render it */}
+          {/* Step 3: Assistant audio response */}
           {assistantAudio && (
-            <>
-              <audio
-                controls
-                autoPlay
-                src={assistantAudio}
-                className="audio-player"
-                onPlay={() => setAudioPlaying(true)}
-                onEnded={() => {
-                  setAudioPlaying(false);
-                  setAudioFinished(true);
-                }}
-              />
-              {/* Show record button only after audio finishes */}
-              {audioFinished && (
-                <button
-                  onClick={isRecording ? handleStopRecording : handleStartRecording}
-                  className="button"
-                >
-                  {isRecording ? "Stop Recording" : "Record Response"}
-                </button>
-              )}
-            </>
+            <audio
+              controls
+              autoPlay
+              src={assistantAudio}
+              className="audio-player"
+              onEnded={() => {
+                // Enable recording only after the assistant's audio finishes.
+                setAudioFinished(true);
+              }}
+            />
           )}
 
-          {/* Recording status indicator */}
+          {/* Step 4: Recording control */}
+          {audioFinished && !isRecording && (
+            <button onClick={startRecording} className="button">
+              Record Response
+            </button>
+          )}
+          {isRecording && (
+            <button onClick={stopRecording} className="button">
+              Stop Recording
+            </button>
+          )}
+
+          {/* Optionally, display recording status */}
           {recordingStatus && (
-            <span className="recording-status">{recordingStatus}</span>
+            <div className="recording-status">{recordingStatus}</div>
           )}
         </div>
       )}
