@@ -1,8 +1,10 @@
+# backend/app.py
 import asyncio
 import base64
 import io
 import json
 import logging
+import os
 import uuid
 import wave
 from typing import Dict, Any, List, AsyncGenerator
@@ -16,16 +18,20 @@ from openai import OpenAI
 # Optionally install and import pydub (requires ffmpeg installed)
 from pydub import AudioSegment
 
-# Configure logging to save logs to app.log file
+# Ensure the logs directory exists inside the working directory (/app/logs)
+os.makedirs("logs", exist_ok=True)
+
+# Configure logging to save logs to logs/app.log file
 logging.basicConfig(
     level=logging.DEBUG,
-    filename="app.log",
+    filename="logs/app.log",
     filemode="a",
     format="%(asctime)s - %(levelname)s - %(name)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
 
 client = OpenAI()
+
 conversation_sessions: Dict[str, dict] = {}
 PROPAGANDA_WS_URL = "ws://13.48.71.178:8000/ws/analyze_propaganda"
 
@@ -195,6 +201,7 @@ Engage in a thoughtful dialogue'''
         
         while True:
             user_msg = await websocket.receive_json()
+            logger.debug("Received user message: %s", user_msg)
             if user_msg.get("type") != "user":
                 await websocket.send_json(format_error("Invalid message type. Expected 'user'."))
                 continue
