@@ -26,7 +26,7 @@ export default function ConversationPage() {
       return;
     }
 
-    const ws = new WebSocket("wss://duly-fresh-alien.ngrok-free.app/ws/conversation");
+    const ws = new WebSocket("ws://localhost:8000/ws/conversation");
     wsRef.current = ws;
 
     ws.onopen = () => {

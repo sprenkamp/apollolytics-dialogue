@@ -7,7 +7,8 @@ databases
 sqlalchemy
 psycopg2-binary
 requests
-openai
+openai==1.61.1
+pydub
 uvicorn
 asyncpg
 websockets
