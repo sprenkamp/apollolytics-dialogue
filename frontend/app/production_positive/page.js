@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import RecordRTC, { StereoAudioRecorder } from "recordrtc";
 
 export default function ConversationPage() {
   // Conversation state
@@ -69,13 +68,15 @@ export default function ConversationPage() {
 
     ws.onclose = () => {
       console.log("WebSocket connection closed");
-      // Optionally add reconnection logic here.
     };
   };
 
-  // Start recording using RecordRTC.
+  // Start recording using dynamic import of RecordRTC.
   const startRecording = async () => {
     try {
+      // Dynamically import RecordRTC and its StereoAudioRecorder.
+      const { default: RecordRTC, StereoAudioRecorder } = await import("recordrtc");
+
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       streamRef.current = stream;
       const recorder = new RecordRTC(stream, {
