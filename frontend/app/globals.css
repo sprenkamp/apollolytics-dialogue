@@ -52,14 +52,25 @@ body {
   color: var(--subtext-color);
 }
 
+.article-input-container {
+  width: 100%;
+  max-height: 300px;
+  overflow-y: auto;
+  border-radius: var(--border-radius);
+  border: 0.0625rem solid #d1d1d6;
+  background: var(--secondary-color);
+}
+
 .textarea {
   width: 100%;
   padding: 0.75rem;
-  border: 0.0625rem solid #d1d1d6;
+  border: none;
   border-radius: var(--border-radius);
   background: var(--secondary-color);
   font-size: 1rem;
   resize: vertical;
+  outline: none;
+  box-sizing: border-box;
 }
 
 /* Button */
@@ -80,13 +91,115 @@ body {
   background-color: #0051c7;
 }
 
-/* Conversation Section */
+/* Conversation Layout */
+.conversation-container {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+  width: 100%;
+}
+
 .conversation {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1.5rem;
-  margin-top: 1.5rem;
+  flex: 1;
+  min-width: 300px;
+}
+
+/* Transcript Panel */
+.transcript-panel {
+  flex: 1;
+  max-width: 45%;
+  padding: 1rem;
+  background-color: var(--secondary-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.transcript-title {
+  font-size: 1.2rem;
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: var(--text-color);
+  border-bottom: 1px solid #eaeaea;
+  padding-bottom: 0.5rem;
+}
+
+.transcript-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.transcript-message {
+  padding: 0.75rem;
+  border-radius: 0.75rem;
+  max-width: 100%;
+  position: relative;
+}
+
+.transcript-message.assistant {
+  background-color: #f0f0f0;
+  align-self: flex-start;
+  border-bottom-left-radius: 0;
+}
+
+.transcript-message.user {
+  background-color: var(--primary-color);
+  color: white;
+  align-self: flex-end;
+  border-bottom-right-radius: 0;
+}
+
+.transcript-message.pending {
+  opacity: 0.7;
+}
+
+.message-role {
+  font-size: 0.8rem;
+  margin-bottom: 0.25rem;
+  font-weight: bold;
+}
+
+.message-content {
+  word-break: break-word;
+}
+
+.no-transcript {
+  color: var(--subtext-color);
+  font-style: italic;
+  text-align: center;
+}
+
+.transcript-toggle-button {
+  background-color: transparent;
+  border: 1px solid var(--primary-color);
+  color: var(--primary-color);
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: 0.9rem;
+  margin-top: 1rem;
+}
+
+.recording-button {
+  background-color: var(--recording-color);
+}
+
+/* Media Queries for Responsive Layout */
+@media (max-width: 768px) {
+  .conversation-container {
+    flex-direction: column;
+  }
+  
+  .transcript-panel {
+    max-width: 100%;
+    margin-top: 1.5rem;
+  }
 }
 
 /* Audio Player */
