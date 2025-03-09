@@ -6,17 +6,11 @@ export default function Home() {
     <div style={containerStyle}>
       <h1 style={headerStyle}>Welcome to Apollolytics</h1>
       <div style={linksContainerStyle}>
-        <Link href="/production_positive" style={linkButtonStyle}>
-          Go to Production Positive
+        <Link href="/dialogue/positive" style={linkButtonStyle}>
+          Production Positive
         </Link>
-        <Link href="/production_negative" style={linkButtonStyle}>
-          Go to Production Negative
-        </Link>
-        <Link href="/experiment_positive" style={linkButtonStyle}>
-          Go to Experiment Positive
-        </Link>
-        <Link href="/experiment_negative" style={linkButtonStyle}>
-          Go to Experiment Negative
+        <Link href="/dialogue/negative" style={linkButtonStyle}>
+          Production Negative
         </Link>
       </div>
     </div>
@@ -37,6 +31,13 @@ const headerStyle = {
   fontSize: "2.5rem",
   marginBottom: "20px",
   color: "#333",
+};
+
+const subtitleStyle = {
+  fontSize: "1.5rem",
+  marginTop: "30px",
+  marginBottom: "15px",
+  color: "#555",
 };
 
 const linksContainerStyle = {

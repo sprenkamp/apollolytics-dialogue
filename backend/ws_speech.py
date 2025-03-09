@@ -15,6 +15,9 @@ from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 from openai import OpenAI
 
+# Import the prompts system
+from prompts.system_prompts import get_prompt
+
 # Optionally install and import pydub (requires ffmpeg installed)
 from pydub import AudioSegment
 
@@ -156,7 +159,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=["*"],  # Use ["http://localhost:3000"] in production
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -181,34 +184,25 @@ async def realtime_conversation(websocket: WebSocket):
             await websocket.send_json(format_error("Article not provided."))
             return
             
+        # Get the dialogue mode from the message, default to "critical" if not provided
+        dialogue_mode = init_msg.get("mode", "critical")
+        logger.info(f"Using dialogue mode: {dialogue_mode}")
+            
         logger.info("Received article for analysis (length: %d chars)", len(article))
         
-        propaganda_info = await detect_propaganda(article)
+        # Get propaganda info for all modes
+        propaganda_result = await detect_propaganda(article)
         propaganda_info = {
             cat: [
                 {k: entry[k] for k in ['explanation', 'location', 'contextualize'] if k in entry}
                 for entry in entries
             ]
-            for cat, entries in propaganda_info.get('data', {}).items()
+            for cat, entries in propaganda_result.get('data', {}).items()
         }
-        logger.info("Constructing system prompt.")
-        system_prompt = f'''**PERSONA**: Socratic Dialogue with Informative Support
-
-**Description**: Engage the user in thoughtful conversations that promote critical thinking. 
-Begin the dialogue with an open-ended question about the topic. In subsequent responses, if possible, 
-debunk the user's input using facts, and end with a follow-up question. Debate any viewpoint of the article that user gives to you, 
-focusing on the ARTICLE at hand. Use the detected propaganda to guide the conversation and challenge the user's assumptions. 
-Also use your own knowledge on historical events and answer in a detailed manner.
-
-**ARTICLE**: PLEASE ARGUE AGAINST THE ARTICLE BELOW
-{article}
-
-**DETECTED PROPAGANDA**: USE THIS INFORMATION TO GUIDE YOUR ARGUMENTATION
-{propaganda_info} 
-
-THUS argue against the article and provide a detailed explanation, based on the detected propaganda,
-to challenge the user's assumptions. You don't need to always end with a question, you can also just state facts, but make sure to engage in a thoughtful dialogue
-'''
+        
+        # Get the appropriate system prompt based on mode
+        logger.info(f"Constructing system prompt for mode: {dialogue_mode}")
+        system_prompt = get_prompt(dialogue_mode, article, propaganda_info)
         logger.info(f"System prompt constructed. {system_prompt}")
         messages.append({"role": "system", "content": system_prompt})
         initial_user_message = "Please start the conversation."
