@@ -16,7 +16,16 @@ import uvicorn
 from openai import OpenAI
 
 # Import the prompts system
-from prompts.system_prompts import get_prompt
+from backend.prompts.system_prompts import get_prompt
+
+# Import DynamoDB utilities
+from backend.db_utils import (
+    initialize_db,
+    save_session_init,
+    save_propaganda_analysis,
+    save_message,
+    save_session_end
+)
 
 # Optionally install and import pydub (requires ffmpeg installed)
 from pydub import AudioSegment
@@ -165,6 +174,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Initialize DynamoDB on startup
+@app.on_event("startup")
+async def startup_event():
+    initialize_db()
+    logger.info("DynamoDB initialized")
+
 @app.websocket("/ws/conversation")
 async def realtime_conversation(websocket: WebSocket):
     session_id = str(uuid.uuid4())
@@ -188,7 +203,14 @@ async def realtime_conversation(websocket: WebSocket):
         dialogue_mode = init_msg.get("mode", "critical")
         logger.info(f"Using dialogue mode: {dialogue_mode}")
             
+        # Get the origin URL that made the request
+        origin_url = init_msg.get("origin_url", None)
+        logger.info(f"Request from origin: {origin_url}")
+            
         logger.info("Received article for analysis (length: %d chars)", len(article))
+        
+        # Save the initial session information to DynamoDB
+        save_session_init(session_id, article, dialogue_mode, origin_url)
         
         # Get propaganda info for all modes
         propaganda_result = await detect_propaganda(article)
@@ -200,13 +222,23 @@ async def realtime_conversation(websocket: WebSocket):
             for cat, entries in propaganda_result.get('data', {}).items()
         }
         
+        # Save propaganda analysis results to DynamoDB
+        save_propaganda_analysis(session_id, propaganda_result)
+        
         # Get the appropriate system prompt based on mode
         logger.info(f"Constructing system prompt for mode: {dialogue_mode}")
         system_prompt = get_prompt(dialogue_mode, article, propaganda_info)
         logger.info(f"System prompt constructed. {system_prompt}")
         messages.append({"role": "system", "content": system_prompt})
+        
+        # Add initial user message
         initial_user_message = "Please start the conversation."
-        messages.append({"role": "user", "content": [{"type": "text", "text": initial_user_message}]})
+        initial_user_msg_id = f"user_{uuid.uuid4()}"
+        initial_user_content = [{"type": "text", "text": initial_user_message}]
+        messages.append({"role": "user", "content": initial_user_content})
+        
+        # Save initial user message to DynamoDB
+        save_message(session_id, "user", initial_user_content, initial_user_msg_id)
         
         logger.info("Generating initial assistant response...")
         full_transcript = ""
@@ -221,6 +253,9 @@ async def realtime_conversation(websocket: WebSocket):
             await websocket.send_json({"type": "assistant_delta", "payload": delta})
             if "text" in delta:
                 full_transcript += delta["text"]
+        
+        # Save assistant message to DynamoDB
+        save_message(session_id, "assistant", full_transcript, response_id)
         
         # Send the final message with the complete transcript
         logger.info("Initial assistant response completed")
@@ -243,7 +278,11 @@ async def realtime_conversation(websocket: WebSocket):
                 await websocket.send_json(format_error("No content provided in user message."))
                 continue
             
+            # Generate a unique ID for this user message
+            user_message_id = f"user_{uuid.uuid4()}"
+            
             # Process any audio content: convert to a valid WAV if necessary.
+            transcript_text = None
             if isinstance(user_content, list):
                 for content_item in user_content:
                     if content_item.get("type") == "input_audio":
@@ -271,13 +310,14 @@ async def realtime_conversation(websocket: WebSocket):
                                     
                                     # Send the transcript to the client for display
                                     if transcript.text:
-                                        logger.info(f"USER: {transcript.text}")
+                                        transcript_text = transcript.text
+                                        logger.info(f"USER: {transcript_text}")
                                         await websocket.send_json({
                                             "type": "user_transcript",
                                             "payload": {
-                                                "text": transcript.text,
-                                                "transcript": transcript.text,
-                                                "item_id": f"user_{uuid.uuid4()}"
+                                                "text": transcript_text,
+                                                "transcript": transcript_text,
+                                                "item_id": user_message_id
                                             }
                                         })
                                 except Exception as e:
@@ -287,6 +327,9 @@ async def realtime_conversation(websocket: WebSocket):
                                 logger.error("Audio conversion failed: %s", e)
                                 await websocket.send_json(format_error(str(e)))
                                 continue
+            
+            # Save the user message to DynamoDB (with transcript if available)
+            save_message(session_id, "user", user_content, user_message_id)
             
             messages.append({"role": "user", "content": user_content})
             logger.info("Appended user message to conversation. Total messages: %d", len(messages))
@@ -306,6 +349,9 @@ async def realtime_conversation(websocket: WebSocket):
                 if "text" in delta:
                     full_transcript += delta["text"]
             
+            # Save assistant message to DynamoDB
+            save_message(session_id, "assistant", full_transcript, response_id)
+            
             # Send the final message with the complete transcript
             logger.info("Sent complete assistant response")
             await websocket.send_json({
@@ -316,9 +362,19 @@ async def realtime_conversation(websocket: WebSocket):
                 }
             })
     
+    except WebSocketDisconnect:
+        logger.info(f"WebSocket disconnected for session {session_id}")
+        # Save session end with normal disconnection reason
+        save_session_end(session_id, "normal_disconnect")
     except Exception as e:
-        logger.exception("Error during realtime conversation")
-        await websocket.send_json(format_error(str(e)))
+        logger.exception(f"Error during realtime conversation for session {session_id}")
+        # Save session end with error reason
+        save_session_end(session_id, f"error: {str(e)}")
+        # Try to notify client about the error
+        try:
+            await websocket.send_json(format_error(str(e)))
+        except:
+            pass
 
 if __name__ == "__main__":
     logger.info("Starting server on 0.0.0.0:8000")

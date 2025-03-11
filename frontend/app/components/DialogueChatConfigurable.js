@@ -51,12 +51,17 @@ export default function DialogueChatConfigurable({ websocketUrl, promptConfig })
       console.log("WebSocket connection opened");
       setConversationStarted(true);
       setLoadingMessage("Analyzing article...");
-      // Send the "start" message with the article text and dialogue mode
+      
+      // Get the current origin and full URL for logging/analytics
+      const origin_url = typeof window !== 'undefined' ? window.location.href : null;
+      
+      // Send the "start" message with the article text, dialogue mode, and origin URL
       ws.send(
         JSON.stringify({
           type: "start",
           article: article,
-          mode: promptConfig.mode
+          mode: promptConfig.mode,
+          origin_url: origin_url
         })
       );
     };

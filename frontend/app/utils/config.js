@@ -10,7 +10,7 @@ const isDevelopment = () => {
 
 const getWebsocketUrl = () => {
   return isDevelopment() 
-    ? 'ws://localhost:8000/ws/conversation'
+    ? 'ws://localhost:8080/ws/conversation'
     : 'wss://21b5-16-170-227-168.ngrok-free.app/ws/conversation';
 };
 
