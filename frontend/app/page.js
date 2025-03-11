@@ -33,12 +33,7 @@ const headerStyle = {
   color: "#333",
 };
 
-const subtitleStyle = {
-  fontSize: "1.5rem",
-  marginTop: "30px",
-  marginBottom: "15px",
-  color: "#555",
-};
+// Remove unused style
 
 const linksContainerStyle = {
   display: "grid",
