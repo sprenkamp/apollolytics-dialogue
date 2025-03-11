@@ -1,9 +1,11 @@
 "use client";
 
-import DialogueChat from "../components/DialogueChat";
+import DialogueChatConfigurable from "../components/DialogueChatConfigurable";
+import prompts from "../utils/prompts.json";
 
-export default function ConversationPage() {
+export default function PositiveConversationLocalPage() {
   const websocketUrl = "ws://localhost:8000/ws/conversation";
+  const promptConfig = prompts.positive;
   
-  return <DialogueChat websocketUrl={websocketUrl} />;
+  return <DialogueChatConfigurable websocketUrl={websocketUrl} promptConfig={promptConfig} />;
 }

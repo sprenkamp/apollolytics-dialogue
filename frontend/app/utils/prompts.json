@@ -1,0 +1,12 @@
+{
+  "positive": {
+    "title": "Apollolytics Dialogue",
+    "articlePrompt": "Enter a propagandistic article text:",
+    "mode": "critical"
+  },
+  "negative": {
+    "title": "Apollolytics Dialogue",
+    "articlePrompt": "Enter a propagandistic article text:",
+    "mode": "supportive"
+  }
+}

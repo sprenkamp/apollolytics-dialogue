@@ -12,3 +12,10 @@ pydub
 uvicorn
 asyncpg
 websockets
+boto3==1.34.47
+pandas
+matplotlib
+seaborn
+tqdm
+jupyter
+ipykernel
