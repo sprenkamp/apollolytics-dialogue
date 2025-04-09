@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import logger from "../utils/logger";
 
 export default function DialogueChatConfigurable({ websocketUrl, promptConfig }) {
   // Conversation state
@@ -8,6 +9,8 @@ export default function DialogueChatConfigurable({ websocketUrl, promptConfig })
   const [conversationStarted, setConversationStarted] = useState(false);
   const [assistantAudio, setAssistantAudio] = useState(null);
   const [transcript, setTranscript] = useState([]);
+  const [audioQueue, setAudioQueue] = useState([]); // Queue for audio chunks
+  const [isPlaying, setIsPlaying] = useState(false);
 
   // UI state for spinners and recording controls
   const [loadingMessage, setLoadingMessage] = useState(""); // "Analyzing article..." or "Thinking..."
@@ -18,16 +21,132 @@ export default function DialogueChatConfigurable({ websocketUrl, promptConfig })
   const [audioStarted, setAudioStarted] = useState(false);
   const [pendingAssistantResponse, setPendingAssistantResponse] = useState(""); // Buffer for current assistant response until audio finishes
 
-  // Refs for WebSocket, recorder, and media stream
+  // Refs for WebSocket, recorder, media stream, and audio context
   const wsRef = useRef(null);
   const recorderRef = useRef(null);
   const streamRef = useRef(null);
   const transcriptRef = useRef(null);
+  const audioContextRef = useRef(null);
+  const audioQueueRef = useRef([]);
+  const isPlayingRef = useRef(false);
+
+  // Audio recording state
+  const [audioContext, setAudioContext] = useState(null);
+  const [audioProcessor, setAudioProcessor] = useState(null);
+  const [audioSource, setAudioSource] = useState(null);
+  const [audioChunks, setAudioChunks] = useState([]);
+
+  // Initialize audio context
+  useEffect(() => {
+    audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
+    return () => {
+      if (audioContextRef.current) {
+        audioContextRef.current.close();
+      }
+    };
+  }, []);
+
+  // Process audio queue
+  useEffect(() => {
+    const processAudioQueue = async () => {
+      if (isPlayingRef.current || audioQueueRef.current.length === 0) {
+        logger.debug('Audio queue processing skipped', {
+          isPlaying: isPlayingRef.current,
+          queueLength: audioQueueRef.current.length
+        });
+        return;
+      }
+      
+      logger.info('Starting audio queue processing');
+      isPlayingRef.current = true;
+      setIsPlaying(true);
+      
+      while (audioQueueRef.current.length > 0) {
+        // Skip processing if we're recording
+        if (isRecording) {
+          logger.debug('Skipping audio processing while recording');
+          break;
+        }
+
+        const audioData = audioQueueRef.current.shift();
+        logger.debug('Processing audio chunk', { size: audioData.length });
+        try {
+          logger.debug('Decoding audio data');
+          
+          // Convert base64 to ArrayBuffer
+          const binaryString = atob(audioData);
+          const bytes = new Uint8Array(binaryString.length);
+          for (let i = 0; i < binaryString.length; i++) {
+            bytes[i] = binaryString.charCodeAt(i);
+          }
+          
+          // Create WAV header
+          const wavHeader = new Uint8Array(44);
+          const view = new DataView(wavHeader.buffer);
+          
+          // RIFF header
+          view.setUint32(0, 0x46464952, true); // "RIFF"
+          view.setUint32(4, 36 + bytes.length, true); // file length
+          view.setUint32(8, 0x45564157, true); // "WAVE"
+          
+          // fmt chunk
+          view.setUint32(12, 0x20746D66, true); // "fmt "
+          view.setUint32(16, 16, true); // length of format chunk
+          view.setUint16(20, 1, true); // format type (1 = PCM)
+          view.setUint16(22, 1, true); // number of channels
+          view.setUint32(24, 24000, true); // sample rate
+          view.setUint32(28, 24000 * 2, true); // byte rate
+          view.setUint16(32, 2, true); // block align
+          view.setUint16(34, 16, true); // bits per sample
+          
+          // data chunk
+          view.setUint32(36, 0x61746164, true); // "data"
+          view.setUint32(40, bytes.length, true); // data length
+          
+          // Combine header and audio data
+          const wavData = new Uint8Array(wavHeader.length + bytes.length);
+          wavData.set(wavHeader);
+          wavData.set(bytes, wavHeader.length);
+          
+          // Create new audio context for playback
+          const playbackContext = new AudioContext();
+          const audioBuffer = await playbackContext.decodeAudioData(wavData.buffer);
+          logger.debug('Audio decoded successfully', { duration: audioBuffer.duration });
+          
+          const source = playbackContext.createBufferSource();
+          source.buffer = audioBuffer;
+          source.connect(playbackContext.destination);
+          
+          await new Promise((resolve) => {
+            source.onended = () => {
+              logger.debug('Audio chunk finished playing');
+              playbackContext.close();
+              resolve();
+            };
+            logger.debug('Starting audio playback');
+            source.start();
+          });
+        } catch (error) {
+          logger.error('Error playing audio chunk', error);
+        }
+      }
+      
+      logger.info('Audio queue processing completed');
+      isPlayingRef.current = false;
+      setIsPlaying(false);
+      setAudioFinished(true);
+    };
+
+    processAudioQueue();
+  }, [audioQueue, isRecording]);
 
   // Auto-scroll the transcript to bottom
   useEffect(() => {
     if (transcriptRef.current) {
-      transcriptRef.current.scrollTop = transcriptRef.current.scrollHeight;
+      const scrollHeight = transcriptRef.current.scrollHeight;
+      const clientHeight = transcriptRef.current.clientHeight;
+      const maxScrollTop = scrollHeight - clientHeight;
+      transcriptRef.current.scrollTop = maxScrollTop;
     }
   }, [transcript]);
 
@@ -43,12 +162,14 @@ export default function DialogueChatConfigurable({ websocketUrl, promptConfig })
     setAudioStarted(false);
     setAudioFinished(false);
     setPendingAssistantResponse("");
+    setAudioQueue([]);
+    audioQueueRef.current = [];
     
     const ws = new WebSocket(websocketUrl);
     wsRef.current = ws;
 
     ws.onopen = () => {
-      console.log("WebSocket connection opened");
+      logger.info("WebSocket connection opened");
       setConversationStarted(true);
       setLoadingMessage("Analyzing article...");
       // Send the "start" message with the article text and dialogue mode
@@ -66,56 +187,71 @@ export default function DialogueChatConfigurable({ websocketUrl, promptConfig })
       const msgType = data.type;
       const payload = data.payload;
 
-      console.log("WebSocket message received:", msgType, payload);
+      logger.debug("WebSocket message received", {
+        type: msgType,
+        payload: payload ? {
+          ...payload,
+          audio: payload.audio ? `[Audio data length: ${payload.audio.length}]` : undefined
+        } : undefined
+      });
 
       if (msgType === "assistant_delta") {
-        // Handle text and audio in parallel - audio can come in first message or later
-        
-        // Store text in the pending response until audio finishes
         if (payload.text) {
-          console.log("Assistant delta:", payload.text);
-          
-          // Once we get text, we can enable audio to start playing
+          logger.debug("Assistant delta text received", { text: payload.text });
           setAudioStarted(true);
-          
-          // Accumulate the assistant's response to reveal after audio finishes
           setPendingAssistantResponse(prev => prev + payload.text);
         }
         
-        // Update audio if delta includes audio and we're ready to play it
         if (payload.audio) {
-          const audioSrc = payload.audio.startsWith("data:")
-            ? payload.audio
-            : `data:audio/wav;base64,${payload.audio}`;
-          setAssistantAudio(audioSrc);
+          logger.debug("Received audio chunk", { length: payload.audio.length });
+          const audioData = payload.audio.startsWith("data:") 
+            ? payload.audio.split(",")[1] 
+            : payload.audio;
+          
+          logger.debug("Processed audio data", { length: audioData.length });
+          
+          setAudioQueue(prev => {
+            const newQueue = [...prev, audioData];
+            logger.debug("Updated audio queue", { length: newQueue.length });
+            return newQueue;
+          });
+          audioQueueRef.current.push(audioData);
+          logger.debug("Audio queue ref updated", { length: audioQueueRef.current.length });
         }
       } else if (msgType === "assistant_final") {
-        // Clear spinner but only allow recording if audio is finished
+        logger.info("Assistant final message received");
         setLoadingMessage("");
         
-        // If there's no audio component, or audio has already finished, enable recording
-        if (!assistantAudio) {
+        if (!isPlaying) {
+          logger.debug("Audio finished, enabling recording");
           setAudioFinished(true);
         }
         
-        // Final assistant message received - store the complete text
         if (payload.text) {
-          console.log("Assistant final:", payload.text);
-          // Replace pending response with final text if provided
+          logger.debug("Assistant final text received", { text: payload.text });
           setPendingAssistantResponse(payload.text);
+          
+          // Add assistant message to transcript when audio finishes
+          if (!isPlaying) {
+            setTranscript(prev => [
+              ...prev,
+              {
+                id: `assistant_${Date.now()}`,
+                role: "assistant",
+                content: payload.text,
+                final: true
+              }
+            ]);
+          }
         }
       } else if (msgType === "user_transcript") {
-        // This follows the OpenAI API conversation.item.input_audio_transcription.completed pattern
         if (payload.text || payload.transcript) {
-          // Debug log
-          console.log("User transcript received:", payload.text || payload.transcript);
+          logger.debug("User transcript received", { text: payload.text || payload.transcript });
           
-          // Remove any processing placeholder and add the actual transcript
           setTranscript(prev => {
-            // First remove any non-final user messages
+            // Remove any placeholder messages
             const withoutPlaceholder = prev.filter(msg => !msg.isPlaceholder);
             
-            // Then add the new transcript
             return [
               ...withoutPlaceholder,
               { 
@@ -128,13 +264,11 @@ export default function DialogueChatConfigurable({ websocketUrl, promptConfig })
           });
         }
       } else if (msgType === "conversation.item.input_audio_transcription.completed") {
-        // Handle the automatic transcription event from the OpenAI Realtime API
         if (payload.transcript) {
-          console.log("Received automatic transcription:", payload.transcript);
+          logger.debug("Received automatic transcription", { transcript: payload.transcript });
           
-          // Update transcript with the transcribed text
           setTranscript(prev => {
-            // Remove any placeholder user messages
+            // Remove any placeholder messages
             const withoutPlaceholder = prev.filter(msg => !msg.isPlaceholder);
             
             return [
@@ -152,96 +286,128 @@ export default function DialogueChatConfigurable({ websocketUrl, promptConfig })
     };
 
     ws.onerror = (err) => {
-      console.error("WebSocket error:", err);
+      logger.error("WebSocket error", err);
     };
 
     ws.onclose = () => {
-      console.log("WebSocket connection closed");
+      logger.info("WebSocket connection closed");
     };
   };
 
-  // Start recording using dynamic import of RecordRTC.
+  // Start recording
   const startRecording = async () => {
     try {
-      // Dynamically import RecordRTC and its StereoAudioRecorder.
-      const { default: RecordRTC, StereoAudioRecorder } = await import("recordrtc");
-
+      // Stop any playing audio by clearing the queue
+      setAudioQueue([]);
+      audioQueueRef.current = [];
+      setIsPlaying(false);
+      isPlayingRef.current = false;
+      
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      streamRef.current = stream;
-      const recorder = new RecordRTC(stream, {
-        type: "audio",
-        mimeType: "audio/wav",
-        recorderType: StereoAudioRecorder,
+      streamRef.current = stream; // Store stream reference
+      
+      const context = new AudioContext({
+        sampleRate: 24000, // Match OpenAI's required sample rate
+        channelCount: 1,   // Mono audio
       });
-      recorderRef.current = recorder;
-      recorder.startRecording();
+      const source = context.createMediaStreamSource(stream);
+      const processor = context.createScriptProcessor(4096, 1, 1);
+      
+      // Store all audio data
+      const chunks = [];
+      
+      processor.onaudioprocess = (e) => {
+        const inputData = e.inputBuffer.getChannelData(0);
+        const pcmData = new Int16Array(inputData.length);
+        
+        // Convert float32 to int16
+        for (let i = 0; i < inputData.length; i++) {
+          pcmData[i] = Math.max(-1, Math.min(1, inputData[i])) * 0x7FFF;
+        }
+        
+        chunks.push(pcmData);
+      };
+
+      source.connect(processor);
+      processor.connect(context.destination);
+      
+      // Store references for cleanup
+      setAudioContext(context);
+      setAudioProcessor(processor);
+      setAudioSource(source);
+      setAudioChunks(chunks);
+      
       setIsRecording(true);
       setRecordingStatus("Recording...");
-    } catch (err) {
-      console.error("Error accessing microphone:", err);
-      alert("Could not access your microphone.");
+      logger.info("Started recording audio");
+    } catch (error) {
+      console.error('Error starting recording:', error);
+      logger.error("Failed to start recording", error);
     }
   };
 
-  // Stop recording, send audio over WebSocket, and show a "Thinking..." spinner.
+  // Stop recording and clean up
   const stopRecording = () => {
-    if (!recorderRef.current) return;
-
-    recorderRef.current.stopRecording(() => {
-      const wavBlob = recorderRef.current.getBlob();
-      // Stop all tracks from the media stream.
-      if (streamRef.current) {
-        streamRef.current.getTracks().forEach((track) => track.stop());
+    if (audioProcessor && audioSource && streamRef.current) {
+      // Stop all tracks from the media stream
+      streamRef.current.getTracks().forEach(track => track.stop());
+      
+      audioSource.disconnect();
+      audioProcessor.disconnect();
+      audioContext.close();
+      
+      // Combine all audio chunks
+      const totalLength = audioChunks.reduce((acc, chunk) => acc + chunk.length, 0);
+      const combinedPcm = new Int16Array(totalLength);
+      let offset = 0;
+      
+      audioChunks.forEach(chunk => {
+        combinedPcm.set(chunk, offset);
+        offset += chunk.length;
+      });
+      
+      // Convert to base64 more efficiently
+      const uint8Array = new Uint8Array(combinedPcm.buffer);
+      let binary = '';
+      for (let i = 0; i < uint8Array.length; i++) {
+        binary += String.fromCharCode(uint8Array[i]);
       }
+      const base64Audio = btoa(binary);
+      
+      // Send the complete audio
+      if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
+        wsRef.current.send(JSON.stringify({
+          type: "user",
+          content: [{
+            type: "input_audio",
+            input_audio: {
+              data: base64Audio
+            }
+          }]
+        }));
+        logger.info("Sent complete audio recording", { size: base64Audio.length });
+      }
+      
+      // Reset state
       setIsRecording(false);
       setRecordingStatus("");
-      setLoadingMessage("Thinking...");
+      setAudioChunks([]);
+      setAudioContext(null);
+      setAudioProcessor(null);
+      setAudioSource(null);
+      streamRef.current = null;
       
-      // Reset audio state for next response
-      setAssistantAudio(null);
-      setAudioStarted(false);
-      setAudioFinished(false);
-      setPendingAssistantResponse("");
+      logger.info("Stopped recording audio");
+    }
+  };
 
-      // Following the OpenAI API pattern, we'll add a temporary placeholder
-      // and wait for the conversation.item.input_audio_transcription.completed event
-      setTranscript(prev => [
-        ...prev,
-        { 
-          id: `placeholder_${Date.now()}`,
-          role: "user", 
-          content: "Processing your audio...", 
-          final: false,
-          isPlaceholder: true
-        }
-      ]);
-
-      // Convert the blob to base64.
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const wavBase64 = btoa(e.target.result);
-        const userMessage = {
-          type: "user",
-          content: [
-            {
-              type: "input_audio",
-              input_audio: {
-                data: wavBase64,
-                format: "wav",
-              },
-            },
-          ],
-        };
-        if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
-          // No need to mark with an ID here anymore since we're using placeholderId
-          
-          wsRef.current.send(JSON.stringify(userMessage));
-        } else {
-          console.error("WebSocket is not open");
-        }
-      };
-      reader.readAsBinaryString(wavBlob);
-    });
+  // Toggle recording
+  const toggleRecording = () => {
+    if (isRecording) {
+      stopRecording();
+    } else {
+      startRecording();
+    }
   };
 
   // Clean up WebSocket connection when the component unmounts.
@@ -322,14 +488,12 @@ export default function DialogueChatConfigurable({ websocketUrl, promptConfig })
             )}
 
             {/* Step 4: Recording control */}
-            {audioFinished && !isRecording && (
-              <button onClick={startRecording} className="button">
-                Record Response
-              </button>
-            )}
-            {isRecording && (
-              <button onClick={stopRecording} className="button recording-button">
-                Stop Recording
+            {audioFinished && (
+              <button 
+                onClick={toggleRecording} 
+                className={`button ${isRecording ? 'recording-button' : ''}`}
+              >
+                {isRecording ? "Stop Recording" : "Record Response"}
               </button>
             )}
 
@@ -350,22 +514,18 @@ export default function DialogueChatConfigurable({ websocketUrl, promptConfig })
           {/* Transcript panel */}
           {showTranscript && (
             <div className="transcript-panel" ref={transcriptRef}>
-              <h2 className="transcript-title">Conversation Transcript</h2>
-              {transcript.length > 0 ? (
-                <div className="transcript-messages">
-                  {transcript.map((message, index) => (
-                    <div 
-                      key={index} 
-                      className={`transcript-message ${message.role === "assistant" ? "assistant" : "user"} ${!message.final ? "pending" : ""}`}
-                    >
-                      <div className="message-role">{message.role === "assistant" ? "Assistant" : "You"}</div>
-                      <div className="message-content">{message.content}</div>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <p className="no-transcript">The conversation transcript will appear here.</p>
-              )}
+              <h2>Conversation Transcript</h2>
+              <div className="transcript-messages">
+                {transcript.map((message) => (
+                  <div 
+                    key={message.id} 
+                    className={`message ${message.role}`}
+                  >
+                    <div className="message-role">{message.role === 'assistant' ? 'Assistant' : 'You'}</div>
+                    <div className="message-content">{message.content}</div>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
         </div>
