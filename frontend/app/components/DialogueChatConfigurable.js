@@ -61,17 +61,20 @@ export default function DialogueChatConfigurable({ websocketUrl, promptConfig })
       isPlayingRef.current = true;
       setIsPlaying(true);
       
-      while (audioQueueRef.current.length > 0) {
-        // Skip processing if we're recording
-        if (isRecording) {
-          logger.debug('Skipping audio processing while recording');
-          break;
-        }
+      // Create a single AudioContext for all chunks
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      let currentTime = audioContext.currentTime;
+      
+      try {
+        while (audioQueueRef.current.length > 0) {
+          // Skip processing if we're recording
+          if (isRecording) {
+            logger.debug('Skipping audio processing while recording');
+            break;
+          }
 
-        const audioData = audioQueueRef.current.shift();
-        logger.debug('Processing audio chunk', { size: audioData.length });
-        try {
-          logger.debug('Decoding audio data');
+          const audioData = audioQueueRef.current.shift();
+          logger.debug('Processing audio chunk', { size: audioData.length });
           
           // Convert base64 to ArrayBuffer
           const binaryString = atob(audioData);
@@ -108,33 +111,47 @@ export default function DialogueChatConfigurable({ websocketUrl, promptConfig })
           wavData.set(wavHeader);
           wavData.set(bytes, wavHeader.length);
           
-          // Create new audio context for playback
-          const playbackContext = new AudioContext();
-          const audioBuffer = await playbackContext.decodeAudioData(wavData.buffer);
+          // Decode audio data
+          const audioBuffer = await audioContext.decodeAudioData(wavData.buffer);
           logger.debug('Audio decoded successfully', { duration: audioBuffer.duration });
           
-          const source = playbackContext.createBufferSource();
+          // Create and schedule the audio source
+          const source = audioContext.createBufferSource();
           source.buffer = audioBuffer;
-          source.connect(playbackContext.destination);
+          source.connect(audioContext.destination);
           
-          await new Promise((resolve) => {
-            source.onended = () => {
-              logger.debug('Audio chunk finished playing');
-              playbackContext.close();
-              resolve();
-            };
-            logger.debug('Starting audio playback');
-            source.start();
-          });
-        } catch (error) {
-          logger.error('Error playing audio chunk', error);
+          // Schedule the audio to play at the current time
+          source.start(currentTime);
+          
+          // Update the current time for the next chunk
+          currentTime += audioBuffer.duration;
+          
+          // Clean up the source when it's done playing
+          source.onended = () => {
+            logger.debug('Audio chunk finished playing');
+          };
         }
+        
+        // Wait for all audio to finish playing
+        await new Promise(resolve => {
+          const checkInterval = setInterval(() => {
+            if (audioContext.currentTime >= currentTime) {
+              clearInterval(checkInterval);
+              resolve();
+            }
+          }, 100);
+        });
+        
+      } catch (error) {
+        logger.error('Error playing audio chunk', error);
+      } finally {
+        // Close the audio context when we're done
+        await audioContext.close();
+        logger.info('Audio queue processing completed');
+        isPlayingRef.current = false;
+        setIsPlaying(false);
+        setAudioFinished(true);
       }
-      
-      logger.info('Audio queue processing completed');
-      isPlayingRef.current = false;
-      setIsPlaying(false);
-      setAudioFinished(true);
     };
 
     processAudioQueue();
@@ -157,7 +174,7 @@ export default function DialogueChatConfigurable({ websocketUrl, promptConfig })
       return;
     }
 
-    // Reset state for new conversation
+    // Reset state for new conversation, but preserve transcript history
     setAssistantAudio(null);
     setAudioStarted(false);
     setAudioFinished(false);
@@ -199,7 +216,12 @@ export default function DialogueChatConfigurable({ websocketUrl, promptConfig })
         if (payload.text) {
           logger.debug("Assistant delta text received", { text: payload.text });
           setAudioStarted(true);
-          setPendingAssistantResponse(prev => prev + payload.text);
+          // Only update pending response if it's empty or if this is a new message
+          if (!pendingAssistantResponse) {
+            setPendingAssistantResponse(payload.text);
+          } else {
+            setPendingAssistantResponse(prev => prev + payload.text);
+          }
         }
         
         if (payload.audio) {
@@ -242,6 +264,8 @@ export default function DialogueChatConfigurable({ websocketUrl, promptConfig })
                 final: true
               }
             ]);
+            // Clear pending response after adding to transcript
+            setPendingAssistantResponse("");
           }
         }
       } else if (msgType === "user_transcript") {
@@ -521,10 +545,22 @@ export default function DialogueChatConfigurable({ websocketUrl, promptConfig })
                     key={message.id} 
                     className={`message ${message.role}`}
                   >
-                    <div className="message-role">{message.role === 'assistant' ? 'Assistant' : 'You'}</div>
+                    <div className="message-header">
+                      <span className="message-role">{message.role === 'assistant' ? 'Assistant' : 'You'}</span>
+                      <span className="message-time">{new Date().toLocaleTimeString()}</span>
+                    </div>
                     <div className="message-content">{message.content}</div>
                   </div>
                 ))}
+                {pendingAssistantResponse && !isPlaying && (
+                  <div className="message assistant">
+                    <div className="message-header">
+                      <span className="message-role">Assistant</span>
+                      <span className="message-time">{new Date().toLocaleTimeString()}</span>
+                    </div>
+                    <div className="message-content">{pendingAssistantResponse}</div>
+                  </div>
+                )}
               </div>
             </div>
           )}

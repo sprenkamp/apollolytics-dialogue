@@ -1,0 +1,133 @@
+.transcript-panel {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: #f2f2f7;
+  border-radius: 12px;
+  max-height: 500px;
+  overflow-y: auto;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.transcript-panel h2 {
+  margin-bottom: 1rem;
+  color: #1c1c1e;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.transcript-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.5rem;
+}
+
+.message {
+  display: flex;
+  flex-direction: column;
+  max-width: 85%;
+  position: relative;
+  padding: 0.5rem 0;
+}
+
+.message.assistant {
+  align-self: flex-start;
+}
+
+.message.user {
+  align-self: flex-end;
+}
+
+.message-content {
+  padding: 0.75rem 1rem;
+  border-radius: 18px;
+  font-size: 1rem;
+  line-height: 1.4;
+  word-wrap: break-word;
+  position: relative;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.message.assistant .message-content {
+  background-color: #ffffff;
+  border-top-left-radius: 4px;
+  color: #000000;
+}
+
+.message.user .message-content {
+  background-color: #007aff;
+  color: #ffffff;
+}
+
+.message-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.25rem;
+  padding: 0 0.5rem;
+}
+
+.message-role {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #8e8e93;
+}
+
+.message-time {
+  font-size: 0.7rem;
+  color: #8e8e93;
+}
+
+/* iMessage-like scrollbar */
+.transcript-panel::-webkit-scrollbar {
+  width: 6px;
+}
+
+.transcript-panel::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.transcript-panel::-webkit-scrollbar-thumb {
+  background: #c7c7cc;
+  border-radius: 3px;
+}
+
+.transcript-panel::-webkit-scrollbar-thumb:hover {
+  background: #aeaeb2;
+}
+
+/* Animation for new messages */
+@keyframes messageAppear {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.message {
+  animation: messageAppear 0.3s ease-out;
+}
+
+/* Recording button styling */
+.recording-button {
+  background-color: #ff3b30;
+  color: white;
+}
+
+.recording-button:hover {
+  background-color: #ff453a;
+}
+
+/* Status messages */
+.recording-status {
+  text-align: center;
+  color: #8e8e93;
+  font-size: 0.9rem;
+  margin: 0.5rem 0;
+  font-style: italic;
+} 

@@ -113,81 +113,146 @@ body {
   flex: 1;
   max-width: 45%;
   padding: 1rem;
-  background-color: var(--secondary-color);
-  border-radius: var(--border-radius);
-  box-shadow: var(--shadow);
+  background-color: #f2f2f7;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
   max-height: 500px;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
 }
 
 .transcript-title {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   margin-top: 0;
   margin-bottom: 1rem;
-  color: var(--text-color);
-  border-bottom: 1px solid #eaeaea;
-  padding-bottom: 0.5rem;
+  color: #1c1c1e;
+  font-weight: 600;
+  text-align: center;
+  flex-shrink: 0;
 }
 
 .transcript-messages {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0; /* Important for flex child scrolling */
 }
 
-.transcript-message {
-  padding: 0.75rem;
-  border-radius: 0.75rem;
-  max-width: 100%;
+.message {
+  display: flex;
+  flex-direction: column;
+  max-width: 85%;
   position: relative;
+  padding: 0.5rem 0;
 }
 
-.transcript-message.assistant {
-  background-color: #f0f0f0;
+.message.assistant {
   align-self: flex-start;
-  border-bottom-left-radius: 0;
 }
 
-.transcript-message.user {
-  background-color: var(--primary-color);
-  color: white;
+.message.user {
   align-self: flex-end;
-  border-bottom-right-radius: 0;
-}
-
-.transcript-message.pending {
-  opacity: 0.7;
-}
-
-.message-role {
-  font-size: 0.8rem;
-  margin-bottom: 0.25rem;
-  font-weight: bold;
 }
 
 .message-content {
-  word-break: break-word;
+  padding: 0.75rem 1rem;
+  border-radius: 18px;
+  font-size: 1rem;
+  line-height: 1.4;
+  word-wrap: break-word;
+  position: relative;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
-.no-transcript {
-  color: var(--subtext-color);
-  font-style: italic;
-  text-align: center;
+.message.assistant .message-content {
+  background-color: #ffffff;
+  border-top-left-radius: 4px;
+  color: #000000;
 }
 
-.transcript-toggle-button {
-  background-color: transparent;
-  border: 1px solid var(--primary-color);
-  color: var(--primary-color);
-  padding: 0.5rem 1rem;
-  border-radius: var(--border-radius);
-  cursor: pointer;
-  font-size: 0.9rem;
-  margin-top: 1rem;
+.message.user .message-content {
+  background-color: #007aff;
+  color: #ffffff;
 }
 
+.message-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.25rem;
+  padding: 0 0.5rem;
+}
+
+.message-role {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #8e8e93;
+}
+
+.message-time {
+  font-size: 0.7rem;
+  color: #8e8e93;
+}
+
+/* iMessage-like scrollbar */
+.transcript-panel::-webkit-scrollbar,
+.transcript-messages::-webkit-scrollbar {
+  width: 6px;
+}
+
+.transcript-panel::-webkit-scrollbar-track,
+.transcript-messages::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.transcript-panel::-webkit-scrollbar-thumb,
+.transcript-messages::-webkit-scrollbar-thumb {
+  background: #c7c7cc;
+  border-radius: 3px;
+}
+
+.transcript-panel::-webkit-scrollbar-thumb:hover,
+.transcript-messages::-webkit-scrollbar-thumb:hover {
+  background: #aeaeb2;
+}
+
+/* Animation for new messages */
+@keyframes messageAppear {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.message {
+  animation: messageAppear 0.3s ease-out;
+}
+
+/* Recording button styling */
 .recording-button {
-  background-color: var(--recording-color);
+  background-color: #ff3b30;
+  color: white;
+}
+
+.recording-button:hover {
+  background-color: #ff453a;
+}
+
+/* Status messages */
+.recording-status {
+  text-align: center;
+  color: #8e8e93;
+  font-size: 0.9rem;
+  margin: 0.5rem 0;
+  font-style: italic;
 }
 
 /* Media Queries for Responsive Layout */
@@ -236,12 +301,6 @@ body {
   100% {
     transform: rotate(360deg);
   }
-}
-
-/* Recording Status */
-.recording-status {
-  font-size: 0.9rem;
-  color: var(--subtext-color);
 }
 
 /* Apple iMessage-like Record Button and Wave */

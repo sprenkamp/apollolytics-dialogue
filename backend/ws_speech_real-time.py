@@ -37,7 +37,7 @@ logger = logging.getLogger(__name__)
 Path('logs').mkdir(exist_ok=True)
 
 # Configuration
-OPENAI_API_KEY = "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"
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 if not OPENAI_API_KEY:
     raise ValueError("OPENAI_API_KEY environment variable is required")
 
