@@ -61,8 +61,8 @@ export default function DialogueChatConfigurable({ websocketUrl, promptConfig })
       isPlayingRef.current = true;
       setIsPlaying(true);
       
-      // Create a single AudioContext for all chunks
-      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      // Use the existing AudioContext instead of creating a new one
+      const audioContext = audioContextRef.current;
       let currentTime = audioContext.currentTime;
       
       try {
@@ -145,8 +145,7 @@ export default function DialogueChatConfigurable({ websocketUrl, promptConfig })
       } catch (error) {
         logger.error('Error playing audio chunk', error);
       } finally {
-        // Close the audio context when we're done
-        await audioContext.close();
+        // Don't close the audio context here
         logger.info('Audio queue processing completed');
         isPlayingRef.current = false;
         setIsPlaying(false);

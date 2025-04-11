@@ -147,14 +147,45 @@ class RealtimeClient:
         self.conversation_id = str(uuid.uuid4())
         self.mic_on_at = 0
         self.REENGAGE_DELAY_MS = 500
+        self._lock = asyncio.Lock()
+        self._forwarding_tasks = []
         logger.info(f"RealtimeClient initialized for session {session_id}")
+
+    async def stop(self):
+        """Stop all operations and close connections"""
+        async with self._lock:
+            if not self.running:
+                return
+            self.running = False
+            logger.info(f"Stopping RealtimeClient for session {self.session_id}")
+            
+            # Cancel all forwarding tasks
+            for task in self._forwarding_tasks:
+                if not task.done():
+                    task.cancel()
+                    try:
+                        await task
+                    except asyncio.CancelledError:
+                        pass
+            
+            if self.openai_ws:
+                try:
+                    await self.openai_ws.close()
+                except Exception as e:
+                    logger.error(f"Error closing OpenAI WS in session {self.session_id}: {e}")
+            
+            try:
+                if self.client_ws.client_state != WebSocketState.DISCONNECTED:
+                    await self.client_ws.close()
+            except Exception as e:
+                logger.error(f"Error closing client WS in session {self.session_id}: {e}")
 
     async def connect(self):
         """Connect to OpenAI's Realtime WebSocket API"""
         headers = {
             "Authorization": f"Bearer {OPENAI_API_KEY}",
             "Content-Type": "application/json",
-            "openai-beta": "realtime=v1"  # Required beta header
+            "openai-beta": "realtime=v1"
         }
         logger.info(f"Connecting to OpenAI Realtime WS API for session {self.session_id}")
         try:
@@ -167,20 +198,27 @@ class RealtimeClient:
             logger.info(f"Session {self.session_id} stored in active sessions")
             
             # Start message forwarding loops
-            asyncio.create_task(self.forward_client_to_openai())
-            asyncio.create_task(self.forward_openai_to_client())
+            self._forwarding_tasks = [
+                asyncio.create_task(self.forward_client_to_openai()),
+                asyncio.create_task(self.forward_openai_to_client())
+            ]
             logger.info(f"Message forwarding loops started for session {self.session_id}")
         except Exception as e:
             logger.error(f"Failed to connect to OpenAI WS API for session {self.session_id}: {e}")
+            await self.stop()
             raise
 
     async def forward_client_to_openai(self):
         try:
             while self.running:
                 try:
+                    if not self.running or self.client_ws.client_state == WebSocketState.DISCONNECTED:
+                        break
+                        
                     client_message = await self.client_ws.receive_json()
-                    logger.debug(f"Received client message in session {self.session_id}: {client_message}")
-                    
+                    if not self.running:
+                        break
+                        
                     if client_message.get("type") == "start":
                         article = client_message.get("article", "")
                         mode = client_message.get("mode", "critical")
@@ -297,24 +335,30 @@ class RealtimeClient:
                     break
                 except Exception as e:
                     logger.error(f"Error in forward_client_to_openai for session {self.session_id}: {e}")
+                    if not self.running:
+                        break
                     continue
 
         except Exception as e:
             logger.error(f"Error in forward_client_to_openai for session {self.session_id}: {e}")
         finally:
-            if self.openai_ws:
-                await self.openai_ws.close()
-                logger.info(f"OpenAI WebSocket connection closed for session {self.session_id}")
-    
+            await self.stop()
+
     async def forward_openai_to_client(self):
         try:
             while self.running:
                 try:
+                    if not self.running or self.client_ws.client_state == WebSocketState.DISCONNECTED:
+                        break
+                        
                     openai_message = await self.openai_ws.recv()
                     if not openai_message:
                         logger.info(f"Received empty message from OpenAI in session {self.session_id}")
                         break
 
+                    if not self.running:
+                        break
+                        
                     message = json.loads(openai_message)
                     event_type = message.get("type")
                     logger.info(f"Received WebSocket event in session {self.session_id}: {event_type}")
@@ -381,19 +425,18 @@ class RealtimeClient:
                     break
                 except Exception as e:
                     logger.exception(f"Error in forward_openai_to_client for session {self.session_id}: {e}")
+                    if not self.running:
+                        break
                     continue
 
         except Exception as e:
             logger.exception(f"Error in forward_openai_to_client for session {self.session_id}: {e}")
         finally:
-            self.running = False
-            logger.info(f"Exiting forward_openai_to_client for session {self.session_id}")
-    
+            await self.stop()
+
     async def close(self):
         """Close the connection"""
-        self.running = False
-        if self.openai_ws:
-            await self.openai_ws.close()
+        await self.stop()
         logger.info(f"Closed OpenAI Realtime connection for session {self.session_id}")
 
 # FastAPI app setup
@@ -414,6 +457,7 @@ async def realtime_conversation(websocket: WebSocket):
     WebSocket endpoint for real-time conversation using OpenAI's Realtime API
     """
     session_id = None
+    client = None
     try:
         await websocket.accept()
         session_id = str(uuid.uuid4())
@@ -424,14 +468,27 @@ async def realtime_conversation(websocket: WebSocket):
         await client.connect()
         
         # Keep the connection open until the client disconnects
-        try:
-            while True:
+        while True:
+            try:
+                # Check if the client is still connected
+                if websocket.client_state == WebSocketState.DISCONNECTED:
+                    logger.info(f"Client disconnected from session {session_id}")
+                    break
+                    
+                # Check if the client is still running
+                if not client.running:
+                    logger.info(f"Client stopped running in session {session_id}")
+                    break
+                    
                 await asyncio.sleep(1)
-        except WebSocketDisconnect:
-            logger.info(f"Client disconnected from session {session_id}")
-        except Exception as e:
-            logger.exception(f"Error during conversation in session {session_id}: {e}")
-            await websocket.send_json({"error": str(e)})
+            except WebSocketDisconnect:
+                logger.info(f"Client disconnected from session {session_id}")
+                break
+            except Exception as e:
+                logger.exception(f"Error during conversation in session {session_id}: {e}")
+                if websocket.client_state != WebSocketState.DISCONNECTED:
+                    await websocket.send_json({"error": str(e)})
+                break
             
     except Exception as e:
         logger.exception(f"Error during WebSocket connection: {e}")
@@ -440,12 +497,24 @@ async def realtime_conversation(websocket: WebSocket):
     finally:
         # Clean up
         if session_id:
-            if session_id in active_sessions:
-                client = active_sessions.pop(session_id)
-                if client and hasattr(client, 'close'):
+            if client and hasattr(client, 'close'):
+                try:
                     await client.close()
+                except Exception as e:
+                    logger.error(f"Error closing client in session {session_id}: {e}")
+            
+            if session_id in active_sessions:
+                try:
+                    del active_sessions[session_id]
+                except Exception as e:
+                    logger.error(f"Error removing session {session_id} from active_sessions: {e}")
+                    
             if session_id in conversation_sessions:
-                del conversation_sessions[session_id]
+                try:
+                    del conversation_sessions[session_id]
+                except Exception as e:
+                    logger.error(f"Error removing session {session_id} from conversation_sessions: {e}")
+                    
             logger.info(f"Session {session_id} cleaned up")
 
 @app.post("/log")
