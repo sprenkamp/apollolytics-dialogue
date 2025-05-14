@@ -1,0 +1,139 @@
+2025-05-14 16:06:46,608 - ERROR - db_utils.dialogue_db - Error initializing DynamoDB: Unable to locate credentials
+2025-05-14 16:06:46,608 - INFO - ws_speech - DynamoDB initialized
+2025-05-14 16:08:29,335 - ERROR - db_utils.dialogue_db - Error initializing DynamoDB: Unable to locate credentials
+2025-05-14 16:08:29,335 - INFO - ws_speech - DynamoDB initialized
+2025-05-14 16:08:50,244 - ERROR - db_utils.dialogue_db - Error initializing DynamoDB: Unable to locate credentials
+2025-05-14 16:08:50,244 - INFO - ws_speech - DynamoDB initialized
+2025-05-14 16:08:51,510 - INFO - ws_speech - New conversation session started: 2d682e95-33e3-4c48-abe1-53e446cf72e3
+2025-05-14 16:08:51,513 - INFO - ws_speech - Using dialogue mode: supportive
+2025-05-14 16:08:51,513 - INFO - ws_speech - Request from origin: http://localhost:3000/dialogue/negative
+2025-05-14 16:08:51,513 - INFO - ws_speech - Received article for analysis (length: 3 chars)
+2025-05-14 16:08:51,515 - ERROR - db_utils.dialogue_db - Error saving session init to DynamoDB: Unable to locate credentials
+2025-05-14 16:08:51,515 - INFO - ws_speech - Starting propaganda detection...
+2025-05-14 16:08:51,588 - INFO - ws_speech - Connected to propaganda detection service
+2025-05-14 16:08:54,016 - INFO - ws_speech - Received propaganda detection result
+2025-05-14 16:08:54,016 - INFO - ws_speech - Received propaganda detection result
+2025-05-14 16:08:54,047 - INFO - ws_speech - Propaganda detection completed
+2025-05-14 16:08:54,052 - ERROR - db_utils.dialogue_db - Error saving propaganda analysis to DynamoDB: Unable to locate credentials
+2025-05-14 16:08:54,052 - INFO - ws_speech - Constructing system prompt for mode: supportive
+2025-05-14 16:08:54,052 - INFO - ws_speech - System prompt constructed. **PERSONA**: Socratic Dialogue conformative of Article
+
+**Description**: Engage the user in conversations that support and elaborate on the article's viewpoints. 
+Begin the dialogue by highlighting key points from the article. In your responses, provide additional 
+supporting evidence and context that strengthens the article's claims, and end with a follow-up question. Align with the article's 
+perspective and help expand on its arguments.
+
+**ARTICLE**: PLEASE SUPPORT AND AGREE WITH THE ARTICLE BELOW
+asf
+
+**DETECTED PROPAGANDA**: USE THIS INFORMATION TO SUPPORT YOUR ARGUMENTATION
+{}
+
+**APPROACH**: Validate the article's viewpoints, provide additional supporting evidence, and help users 
+understand why these perspectives might be valid. Deliberately take the side of the article, even if 
+propaganda techniques are used. Use the detected propaganda techniques to further strengthen and 
+defend the article's arguments. Avoid challenging the core claims of the article. 
+Instead, elaborate on them with additional context that reinforces the article's position.
+
+2025-05-14 16:08:54,052 - INFO - ws_speech - Generating initial assistant response...
+2025-05-14 16:08:54,052 - INFO - ws_speech - Generating assistant response...
+2025-05-14 16:09:04,830 - INFO - httpx - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-14 16:09:06,055 - INFO - ws_speech - ASSISTANT: Based on the article presented, it brings to light the significant role of community involvement in local governance. The article argues that when communities actively engage with their local councils, they not only help make decisions that better reflect the community's needs, but also hold local governments accountable. This prevention of power consolidation could lead to a more transparent and inclusive decision-making process. Given this perspective, how do you think your community would benefit from increased civic engagement?
+2025-05-14 16:09:08,836 - INFO - ws_speech - Generated audio response (length: approx. 2543 KB)
+2025-05-14 16:09:08,981 - ERROR - db_utils.dialogue_db - Error saving message to DynamoDB: Unable to locate credentials
+2025-05-14 16:09:08,981 - INFO - ws_speech - Initial assistant response completed
+2025-05-14 16:09:46,164 - INFO - ws_speech - WebSocket disconnected for session 2d682e95-33e3-4c48-abe1-53e446cf72e3
+2025-05-14 16:09:46,170 - ERROR - db_utils.dialogue_db - Error saving session end to DynamoDB: Unable to locate credentials
+2025-05-14 16:10:46,424 - INFO - ws_speech - New conversation session started: 4c127c32-a9ea-463d-88e5-a3e366a0144a
+2025-05-14 16:10:46,428 - INFO - ws_speech - Using dialogue mode: critical
+2025-05-14 16:10:46,428 - INFO - ws_speech - Request from origin: http://localhost:3000/dialogue/positive
+2025-05-14 16:10:46,428 - INFO - ws_speech - Received article for analysis (length: 6421 chars)
+2025-05-14 16:10:46,433 - ERROR - db_utils.dialogue_db - Error saving session init to DynamoDB: Unable to locate credentials
+2025-05-14 16:10:46,433 - INFO - ws_speech - Starting propaganda detection...
+2025-05-14 16:10:46,510 - INFO - ws_speech - Connected to propaganda detection service
+2025-05-14 16:10:53,512 - INFO - ws_speech - Received propaganda detection result
+2025-05-14 16:11:13,931 - INFO - ws_speech - Received propaganda detection result
+2025-05-14 16:11:13,963 - INFO - ws_speech - Propaganda detection completed
+2025-05-14 16:11:13,967 - ERROR - db_utils.dialogue_db - Error saving propaganda analysis to DynamoDB: Unable to locate credentials
+2025-05-14 16:11:13,967 - INFO - ws_speech - Constructing system prompt for mode: critical
+2025-05-14 16:11:13,967 - INFO - ws_speech - System prompt constructed. **PERSONA**: Socratic Dialogue critical of Article
+
+**Description**: Engage the user in thoughtful conversations that promote critical thinking. 
+Begin the dialogue with an open-ended question about the topic. In subsequent responses, if possible, 
+debunk the user's input using facts, and end with a follow-up question. Debate any viewpoint of the article that user gives to you, 
+focusing on the ARTICLE at hand. Use the detected propaganda to guide the conversation and challenge the user's assumptions. 
+Also use your own knowledge on historical events and answer in a detailed manner.
+
+**ARTICLE**: PLEASE ARGUE AGAINST THE ARTICLE BELOW
+No rules, no rulers: The unraveling of the old world order and the role of Russia
+International order is losing its meaning – just like multipolarity
+By Timofey Bordachev, Program Director of the Valdai Club
+
+No rules, no rulers: The unraveling of the old world order and the role of Russia
+FILE PHOTO: Russian President Vladimir Putin. © Sputnik / Alexei Druzhinin
+The day is not far off when the very notion of “international order” will lose its former meaning – just as happened with the once-theoretical concept of “multipolarity.” Originally conceived in the mid-20th century as a way to balance power among great states, multipolarity now bears little resemblance to what its originators had in mind. The same is increasingly true of international order.
+
+In recent years, it has become commonplace to say that the global balance of power is shifting and that previous leaders are no longer able to maintain their dominant positions. This much is obvious. No group of states today is capable of enforcing its vision of justice or order upon the rest of the world. Traditional international institutions are weakening, and their functions are being re-evaluated or hollowed out. Western Europe, once a central pillar of global diplomacy, appears to be in the final phase of its strategic decline – a region now better known for procedure than power.
+
+But before we join the chorus, lamenting or celebrating the end of one era and the start of another, it is worth asking: what exactly is “international order”? Too often, this concept is treated as a given, when in fact it has always been a tool – one used primarily by states with both the means and the will to coerce others into accepting certain rules of the game.
+
+Historically, “international order” has been imposed by dominant powers capable of enforcing it. But today, emerging players outside the Western sphere – nations like China and India – may not be particularly interested in taking up that role. Why should they invest their resources in a vague, abstract idea that primarily served the interests of others?
+
+The second traditional purpose of international order has been to prevent revolutionary upheaval. In the current strategic environment, this function is largely fulfilled not by institutions or diplomacy but by the simple fact of mutual nuclear deterrence. The handful of states with major nuclear capabilities – Russia, the United States, China, and a few others – are enough to keep general war at bay. No other powers are capable of truly challenging them in an existential way. For better or worse, that is what guarantees relative global stability.
+
+Fyodor Lukyanov: Russia doesn’t need Western approval to shape global history
+Read more Fyodor Lukyanov: Russia doesn’t need Western approval to shape global history
+It is therefore naive to expect new great powers to be enthusiastic participants in building a new international order in the traditional sense. All past orders, including the current UN-centered one, emerged from intra-Western conflicts. Russia, while not a Western country in the cultural or institutional sense, played a decisive role in those conflicts – especially the Second World War – and was central to the global architecture that followed.
+
+In fact, one could argue that the current international order, such as it is, was a product of Russia’s intervention in a Western civil war. It’s no coincidence that at the 1815 Congress of Vienna, Tsar Alexander I behaved not as one of many European leaders, but as a figure set apart – an “arbiter of Europe.” Russia has always seen itself this way: too large, too sovereign, and too independent to be just another node in someone else’s system.
+
+This is a key distinction. For Russia, participation in international order has never been an end in itself, but a means to preserve its own unique position in world affairs. That is something it has pursued with remarkable persistence for over two centuries.
+
+As for today’s great powers – China, India, and others – it is far from clear that they view “international order” as an instrument of survival or control. For many, the phrase remains a Western invention, a theoretical construct that served to legitimize power imbalances under the guise of shared rules.
+
+At the same time, the concept retains appeal for many medium-sized states, especially those in the so-called Global Majority. For them, international law and the UN system – however flawed – offer a semblance of protection from the arbitrary power of the strongest. Despite their limitations, these institutions give smaller countries a seat at the table, a platform from which to bargain, and sometimes a shield against the worst abuses of power.
+
+Trump’s pope? Here’s what Leo XIV’s election says about US power
+Read more Trump’s pope? Here’s what Leo XIV’s election says about US power
+But even this minimal order is under strain. Its legitimacy was once based on mutual recognition by the powers capable of upending it. Today, however, former leaders are losing their grip, and no new actors are rushing to take their place. Without legitimacy or coercive backing, the very idea of a shared order becomes difficult to sustain. 
+
+That leads us to a paradox: we may be entering a world in which the West’s vision of international order is no longer accepted or relevant – yet no one is particularly eager to replace it with something new. What we may see instead is a gradual emergence of equilibrium, a new arrangement that scholars might label a “new international order,” though in practice it will have little in common with the frameworks of the past.
+
+In sum, the category of “international order” may soon follow “multipolarity” into conceptual obscurity. It will be talked about, invoked in speeches, and cited in academic papers – but it will no longer describe how the world truly works.
+
+We are moving into an age where power is distributed differently, where the mechanisms of control are less formalized, and where legitimacy is negotiated in real time rather than bestowed by inherited institutions. In such a world, stability will not depend on abstract rules or formal alliances, but on the raw calculations of capable states – above all, those that have the resources and resilience to shape events rather than be shaped by them.
+
+This article was first published by Valdai Discussion Club, translated and edited by the RT team.
+
+**DETECTED PROPAGANDA**: USE THIS INFORMATION TO GUIDE YOUR ARGUMENTATION
+{'Poor Justification': [{'explanation': 'The passage appeals to the authority of nuclear deterrence as a means of maintaining global stability, suggesting that the presence of nuclear weapons among major powers like Russia, the United States, and China is what prevents revolutionary upheaval and ensures peace.', 'location': 'In the current strategic environment, this function is largely fulfilled not by institutions or diplomacy but by the simple fact of mutual nuclear deterrence. The handful of states with major nuclear capabilities – Russia, the United States, China, and a few others – are enough to keep general war at bay.', 'contextualize': "- **Context:** The statement highlights the role of mutual nuclear deterrence among major nuclear powers, such as Russia, the United States, and China, in preventing large-scale wars. Nuclear deterrence is a strategy that relies on the threat of nuclear retaliation to prevent an adversary from taking aggressive actions. This concept has been a cornerstone of international security since the Cold War, as it is believed to prevent nuclear and large-scale conventional wars by ensuring that any attack would result in mutually assured destruction [1], [2]. However, diplomacy and international institutions like the United Nations also play crucial roles in maintaining global peace by facilitating dialogue, conflict prevention, and peacekeeping efforts [3], [4]. These institutions work to prevent conflicts from escalating and to resolve disputes through peaceful means [5].\n- **Warning:** The statement may be misleading if it implies that nuclear deterrence alone is sufficient to maintain global peace. While nuclear deterrence is a significant factor, it is not the only mechanism preventing war. Over-reliance on nuclear deterrence can overlook the importance of diplomacy and international institutions in conflict resolution and peacebuilding. Additionally, the presence of nuclear weapons poses risks of accidental or intentional use, which could have catastrophic consequences. Therefore, a balanced approach that includes both deterrence and diplomatic efforts is essential for comprehensive global security.\n- **Sources:** \n  - [1](https://www.nato.int/cps/en/natohq/topics_50068.htm) NATO's nuclear deterrence policy and forces\n  - [2](https://www.atlanticcouncil.org/in-depth-research-reports/issue-brief/the-role-of-nuclear-weapons-in-a-taiwan-crisis/) The role of nuclear weapons in a Taiwan crisis - Atlantic Council\n  - [3](https://www.orfonline.org/expert-speak/relevance-nuclear-deterrence-post-cold-war-world) International Organizations and Preventing War | Oxford Research\n  - [4](https://www.belfercenter.org/publication/role-nuclear-weapons-21st-century) Maintain International Peace and Security | United Nations\n  - [5](https://en.wikipedia.org/wiki/Deterrence_theory) United Nations Conflict Prevention and Preventive Diplomacy In Action"}], 'Manipulative Wording': [{'explanation': "The passage uses loaded language to emphasize Russia's unique and sovereign role in international affairs, portraying it as a nation that stands apart from others and is not just another participant in the global system.", 'location': 'Russia has always seen itself this way: too large, too sovereign, and too independent to be just another node in someone else’s system.', 'contextualize': "- **Context:** Russia's self-perception as a sovereign and independent power is deeply rooted in its historical and geopolitical strategies. The Russian Federation's foreign policy emphasizes its role as a major global power, often positioning itself as distinct from Western systems and alliances. This perspective is reflected in its strategic documents, which highlight Russia's desire to maintain its sovereignty and independence in the face of perceived external pressures [1], [3], [4]. Russia's approach to sovereignty is often dualistic, adhering to traditional Westphalian principles while also asserting its influence in former Soviet territories [4], [7]. This self-perception is also evident in Russia's emphasis on technological and energy independence, aiming to reduce reliance on foreign technologies and resources [5], [8].\n- **Warning:** The statement may be misleading if it suggests that Russia's self-perception is universally accepted or unchallenged. While Russia views itself as a sovereign and independent power, this perspective is contested internationally, particularly in light of its actions in Ukraine and other neighboring regions, which many countries view as violations of sovereignty [2], [6]. Additionally, Russia's emphasis on sovereignty can sometimes be at odds with international norms and laws, leading to geopolitical tensions [6], [9].\n- **Sources:** \n  - [1](https://mid.ru/en/foreign_policy/fundamental_documents/1860586/) The Concept of the Foreign Policy of the Russian Federation\n  - [3](https://www.eustudies.org/conference/papers/download/824) Russia's Discourse on Identity, Sovereignty and Foreign Policy\n  - [4](https://www.tandfonline.com/doi/abs/10.1080/09668136.2016.1204985) The Uses of Sovereignty in Twenty-first Century Russian Foreign Policy\n  - [5](https://www.fpri.org/article/2022/09/understanding-russias-efforts-at-technological-sovereignty/) Understanding Russia's Efforts at Technological Sovereignty\n  - [6](https://voelkerrechtsblog.org/the-weaponisation-of-international-law-in-ukraine/) The Weaponisation of International Law in Ukraine\n  - [7](https://ir101.co.uk/wp-content/uploads/2018/05/deyermond-2016-the-uses-of-sovereignty-in-twenty-first-century-russian-foreign-policy.pdf) The Uses of Sovereignty in Twenty-first Century Russian Foreign Policy\n  - [8](https://static.rusi.org/russia-energy-security-occasional-paper-nov-23.pdf) The Securitisation of Energy: Russia's Use of Hydrocarbons in its Foreign Policy\n  - [9](https://www.cfr.org/sovereignty) Sovereignty | Council on Foreign Relations"}]} 
+
+THUS argue against the article and provide a detailed explanation, based on the detected propaganda,
+to challenge the user's assumptions. You don't need to always end with a question, you can also just state facts, but make sure to engage in a thoughtful dialogue
+
+2025-05-14 16:11:13,967 - INFO - ws_speech - Generating initial assistant response...
+2025-05-14 16:11:13,968 - INFO - ws_speech - Generating assistant response...
+2025-05-14 16:11:18,740 - INFO - httpx - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-14 16:11:19,694 - INFO - ws_speech - ASSISTANT: What are your thoughts on the current state of the international order and the role of major powers like Russia in it?
+2025-05-14 16:11:20,312 - INFO - ws_speech - Generated audio response (length: approx. 565 KB)
+2025-05-14 16:11:20,348 - ERROR - db_utils.dialogue_db - Error saving message to DynamoDB: Unable to locate credentials
+2025-05-14 16:11:20,348 - INFO - ws_speech - Initial assistant response completed
+2025-05-14 16:12:32,417 - INFO - ws_speech - Processing user audio...
+2025-05-14 16:12:32,418 - INFO - ws_speech - Processing audio input...
+2025-05-14 16:12:32,418 - INFO - ws_speech - Audio is not in valid WAV format, attempting conversion
+2025-05-14 16:12:32,418 - INFO - ws_speech - Converting WebM format to WAV
+2025-05-14 16:12:34,870 - INFO - ws_speech - Audio conversion successful
+2025-05-14 16:12:34,873 - INFO - ws_speech - Transcribing user audio...
+2025-05-14 16:12:36,375 - INFO - httpx - HTTP Request: POST https://api.openai.com/v1/audio/transcriptions "HTTP/1.1 200 OK"
+2025-05-14 16:12:36,376 - INFO - ws_speech - USER: Thank you.
+2025-05-14 16:12:36,386 - ERROR - db_utils.dialogue_db - Error saving message to DynamoDB: Unable to locate credentials
+2025-05-14 16:12:36,386 - INFO - ws_speech - Appended user message to conversation. Total messages: 3
+2025-05-14 16:12:36,386 - INFO - ws_speech - Processing user input...
+2025-05-14 16:12:36,386 - INFO - ws_speech - Generating assistant response...
+2025-05-14 16:12:45,278 - INFO - httpx - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-05-14 16:12:46,317 - INFO - ws_speech - ASSISTANT: The article presents an argument concerning the perceived erosion of the traditional international order and hints at Russia's unique role in this evolution. What are your thoughts on the argument that the notion of international order is losing its meaning and that nuclear deterrence remains the primary factor in maintaining global stability?
+2025-05-14 16:12:48,149 - INFO - ws_speech - Generated audio response (length: approx. 1490 KB)
+2025-05-14 16:12:48,244 - ERROR - db_utils.dialogue_db - Error saving message to DynamoDB: Unable to locate credentials
+2025-05-14 16:12:48,244 - INFO - ws_speech - Sent complete assistant response
+2025-05-14 16:27:49,800 - INFO - ws_speech - WebSocket disconnected for session 4c127c32-a9ea-463d-88e5-a3e366a0144a
+2025-05-14 16:27:49,818 - ERROR - db_utils.dialogue_db - Error saving session end to DynamoDB: Unable to locate credentials

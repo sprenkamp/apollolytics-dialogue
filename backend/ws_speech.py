@@ -5,6 +5,8 @@ import io
 import json
 import logging
 import os
+import sys
+import time
 import uuid
 import wave
 from typing import Dict, Any, List, AsyncGenerator
@@ -19,7 +21,7 @@ from openai import OpenAI
 from backend.prompts.system_prompts import get_prompt
 
 # Import DynamoDB utilities
-from backend.db_utils import (
+from backend.db_utils.dialogue_db import (
     initialize_db,
     save_session_init,
     save_propaganda_analysis,
@@ -33,12 +35,14 @@ from pydub import AudioSegment
 # Ensure the logs directory exists inside the working directory (/app/logs)
 os.makedirs("logs", exist_ok=True)
 
-# Configure logging to save logs to logs/app.log file
+# Configure logging to save logs to both file and console
 logging.basicConfig(
     level=logging.INFO,
-    filename="logs/app.log",
-    filemode="a",
-    format="%(asctime)s - %(levelname)s - %(name)s - %(message)s"
+    format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
+    handlers=[
+        logging.FileHandler("logs/app.log", mode="a"),
+        logging.StreamHandler()  # This will print to console
+    ]
 )
 logger = logging.getLogger(__name__)
 
@@ -99,7 +103,7 @@ def ensure_valid_wav(audio_base64: str) -> str:
 async def detect_propaganda(input_article: str) -> Dict[str, Any]:
     logger.info("Starting propaganda detection...")
     data = {
-        "model_name": "gpt-4o-mini",
+        "model_name": "gpt-4o",
         "contextualize": True,
         "text": input_article
     }
@@ -122,6 +126,7 @@ async def detect_propaganda(input_article: str) -> Dict[str, Any]:
     return results[-1] if results else {}
 
 async def chat_completion_streaming(messages: list) -> AsyncGenerator[Dict[str, Any], None]:
+    start_time = time.time()
     def blocking_stream():
         logger.info("Generating assistant response...")
         completion = client.chat.completions.create(
@@ -163,6 +168,11 @@ async def chat_completion_streaming(messages: list) -> AsyncGenerator[Dict[str, 
     
     # Send the full transcript as a special final event
     yield {"full_transcript": stream_data["full_transcript"]}
+    
+    # Calculate and return the generation time
+    generation_time = time.time() - start_time
+    logger.info("Model response generation time: %.2f seconds", generation_time)
+    yield {"timing": {"model_generation_time": generation_time}}
 
 app = FastAPI()
 
@@ -186,7 +196,11 @@ async def realtime_conversation(websocket: WebSocket):
     logger.info(f"New conversation session started: {session_id}")
     await websocket.accept()
     
-    conversation_sessions[session_id] = {"conversation": []}
+    conversation_sessions[session_id] = {
+        "conversation": [],
+        "last_response_time": None,  # Track when the last assistant response was sent
+        "last_model_generation_time": None  # Track the last model generation time
+    }
     messages = conversation_sessions[session_id]["conversation"]
     
     try:
@@ -231,20 +245,21 @@ async def realtime_conversation(websocket: WebSocket):
         logger.info(f"System prompt constructed. {system_prompt}")
         messages.append({"role": "system", "content": system_prompt})
         
-        # Add initial user message
+        # Add initial user message to conversation flow (but don't save to DB)
         initial_user_message = "Please start the conversation."
-        initial_user_msg_id = f"user_{uuid.uuid4()}"
         initial_user_content = [{"type": "text", "text": initial_user_message}]
         messages.append({"role": "user", "content": initial_user_content})
-        
-        # Save initial user message to DynamoDB
-        save_message(session_id, "user", initial_user_content, initial_user_msg_id)
         
         logger.info("Generating initial assistant response...")
         full_transcript = ""
         response_id = f"assistant_{uuid.uuid4()}"
         
         async for delta in chat_completion_streaming(messages):
+            # Check if this is the timing yield
+            if "timing" in delta:
+                conversation_sessions[session_id]["last_model_generation_time"] = delta["timing"]["model_generation_time"]
+                continue
+                
             # Check if this is the full transcript yield
             if "full_transcript" in delta:
                 full_transcript = delta["full_transcript"]
@@ -254,8 +269,11 @@ async def realtime_conversation(websocket: WebSocket):
             if "text" in delta:
                 full_transcript += delta["text"]
         
-        # Save assistant message to DynamoDB
-        save_message(session_id, "assistant", full_transcript, response_id)
+        # Save assistant message to DynamoDB with timing info
+        timing_info = {
+            "model_generation_time": conversation_sessions[session_id]["last_model_generation_time"]
+        }
+        save_message(session_id, "assistant", full_transcript, response_id, timing_info)
         
         # Send the final message with the complete transcript
         logger.info("Initial assistant response completed")
@@ -263,16 +281,31 @@ async def realtime_conversation(websocket: WebSocket):
             "type": "assistant_final", 
             "payload": {
                 "text": full_transcript,
-                "id": response_id
+                "id": response_id,
+                "timing": timing_info
             }
         })
         
+        # Update the last response time
+        conversation_sessions[session_id]["last_response_time"] = time.time()
+        
         while True:
             user_msg = await websocket.receive_json()
-            # logger.debug("Received user message: %s", user_msg)
+            
+            # Get user response time from frontend if provided
+            user_response_time = None
+            if "timing" in user_msg:
+                user_response_time = user_msg["timing"].get("user_response_time")
+            
+            # Calculate user response time if not provided by frontend
+            if not user_response_time and conversation_sessions[session_id]["last_response_time"]:
+                user_response_time = time.time() - conversation_sessions[session_id]["last_response_time"]
+                logger.info("User response time: %.2f seconds", user_response_time)
+            
             if user_msg.get("type") != "user":
                 await websocket.send_json(format_error("Invalid message type. Expected 'user'."))
                 continue
+                
             user_content = user_msg.get("content")
             if not user_content:
                 await websocket.send_json(format_error("No content provided in user message."))
@@ -281,7 +314,7 @@ async def realtime_conversation(websocket: WebSocket):
             # Generate a unique ID for this user message
             user_message_id = f"user_{uuid.uuid4()}"
             
-            # Process any audio content: convert to a valid WAV if necessary.
+            # Process any audio content
             transcript_text = None
             if isinstance(user_content, list):
                 for content_item in user_content:
@@ -328,8 +361,11 @@ async def realtime_conversation(websocket: WebSocket):
                                 await websocket.send_json(format_error(str(e)))
                                 continue
             
-            # Save the user message to DynamoDB (with transcript if available)
-            save_message(session_id, "user", user_content, user_message_id)
+            # Save the user message to DynamoDB with timing info
+            timing_info = {
+                "user_response_time": user_response_time
+            }
+            save_message(session_id, "user", user_content, user_message_id, timing_info)
             
             messages.append({"role": "user", "content": user_content})
             logger.info("Appended user message to conversation. Total messages: %d", len(messages))
@@ -340,6 +376,11 @@ async def realtime_conversation(websocket: WebSocket):
             response_id = f"assistant_{uuid.uuid4()}"
             
             async for delta in chat_completion_streaming(messages):
+                # Check if this is the timing yield
+                if "timing" in delta:
+                    conversation_sessions[session_id]["last_model_generation_time"] = delta["timing"]["model_generation_time"]
+                    continue
+                    
                 # Check if this is the full transcript yield
                 if "full_transcript" in delta:
                     full_transcript = delta["full_transcript"]
@@ -349,8 +390,11 @@ async def realtime_conversation(websocket: WebSocket):
                 if "text" in delta:
                     full_transcript += delta["text"]
             
-            # Save assistant message to DynamoDB
-            save_message(session_id, "assistant", full_transcript, response_id)
+            # Save assistant message to DynamoDB with timing info
+            timing_info = {
+                "model_generation_time": conversation_sessions[session_id]["last_model_generation_time"]
+            }
+            save_message(session_id, "assistant", full_transcript, response_id, timing_info)
             
             # Send the final message with the complete transcript
             logger.info("Sent complete assistant response")
@@ -358,9 +402,13 @@ async def realtime_conversation(websocket: WebSocket):
                 "type": "assistant_final", 
                 "payload": {
                     "text": full_transcript,
-                    "id": response_id
+                    "id": response_id,
+                    "timing": timing_info
                 }
             })
+            
+            # Update the last response time for the next user response
+            conversation_sessions[session_id]["last_response_time"] = time.time()
     
     except WebSocketDisconnect:
         logger.info(f"WebSocket disconnected for session {session_id}")

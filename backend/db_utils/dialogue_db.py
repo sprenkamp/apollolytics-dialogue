@@ -136,61 +136,36 @@ def save_propaganda_analysis(
         logger.error(f"Error saving propaganda analysis to DynamoDB: {str(e)}")
         return False
 
-def save_message(
-    session_id: str,
-    role: str,
-    message_content: Any,
-    message_id: str
-) -> bool:
+def save_message(session_id: str, role: str, content: Any, message_id: str, timing_info: Dict[str, float] = None) -> None:
     """
-    Save a single message in the conversation.
+    Save a message to DynamoDB with timing information.
     
     Args:
-        session_id: Unique identifier for the session
-        role: Either "user" or "assistant"
-        message_content: The content of the message
-        message_id: Unique identifier for this specific message
-        
-    Returns:
-        bool: True if save was successful, False otherwise
+        session_id: The session ID
+        role: The role of the message sender ('user' or 'assistant')
+        content: The message content
+        message_id: Unique ID for the message
+        timing_info: Dictionary containing timing information
+            - model_generation_time: Time taken for model to generate response (for assistant)
+            - user_response_time: Time taken for user to respond (for user)
     """
     try:
         table = dynamodb.Table(DYNAMODB_TABLE)
-        timestamp = int(time.time())
-        
-        # If message_content is complex, ensure it can be serialized
-        if isinstance(message_content, dict) or isinstance(message_content, list):
-            message_content = json.loads(json.dumps(message_content, default=str))
-            
-        # For transcript, extract it if available
-        transcript = None
-        if role == "assistant" and isinstance(message_content, str):
-            transcript = message_content
-        elif role == "user" and isinstance(message_content, list):
-            # Try to find text content in user messages
-            for content_item in message_content:
-                if content_item.get("type") == "text":
-                    transcript = content_item.get("text")
-                    break
-        
-        item = {
+        timestamp = datetime.now().isoformat()
+        message_data = {
             'session_id': session_id,
-            'timestamp': timestamp,
-            'event_type': 'message',
-            'role': role,
             'message_id': message_id,
-            'message_content': message_content,
-            'transcript': transcript,
-            'created_at': datetime.utcnow().isoformat()
+            'role': role,
+            'content': content,
+            'timestamp': timestamp,
+            'timing_info': timing_info or {}
         }
         
-        table.put_item(Item=item)
-        logger.info(f"Saved {role} message for {session_id}")
-        return True
-        
+        table.put_item(Item=message_data)
+        logger.info(f"Saved {role} message to DynamoDB: {message_id}")
     except Exception as e:
-        logger.error(f"Error saving message to DynamoDB: {str(e)}")
-        return False
+        logger.error(f"Error saving message to DynamoDB: {e}")
+        raise
 
 def save_session_end(
     session_id: str,

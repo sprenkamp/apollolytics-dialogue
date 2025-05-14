@@ -17,13 +17,13 @@ COPY . /app
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
-# Expose port 8000 to allow access to the FastAPI app
+# Expose port 8080 to allow access to the FastAPI app
 EXPOSE 8080
 
 # Default AWS configuration (use environment variables to override)
 ENV AWS_REGION=eu-north-1
 ENV DYNAMODB_TABLE=apollolytics_dialogues
-
+ENV PYTHONPATH=/app
 
 # Command to run FastAPI using Uvicorn
 CMD ["uvicorn", "backend.ws_speech:app", "--host", "0.0.0.0", "--port", "8080"]
