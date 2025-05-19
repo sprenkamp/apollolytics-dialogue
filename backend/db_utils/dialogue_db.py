@@ -5,6 +5,7 @@ import os
 import time
 from datetime import datetime
 from typing import Dict, Any, List, Optional
+from decimal import Decimal
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -31,6 +32,7 @@ def initialize_db():
     try:
         # Check if table exists
         existing_tables = [table.name for table in dynamodb.tables.all()]
+        logger.info(f"Available tables: {existing_tables}")
         
         if DYNAMODB_TABLE not in existing_tables:
             logger.info(f"Creating DynamoDB table: {DYNAMODB_TABLE}")
@@ -143,28 +145,66 @@ def save_message(session_id: str, role: str, content: Any, message_id: str, timi
     Args:
         session_id: The session ID
         role: The role of the message sender ('user' or 'assistant')
-        content: The message content
+        content: The message content (transcript text)
         message_id: Unique ID for the message
         timing_info: Dictionary containing timing information
-            - model_generation_time: Time taken for model to generate response (for assistant)
-            - user_response_time: Time taken for user to respond (for user)
+            For assistant:
+            - model_generation_time: Time taken for model to generate response
+            - model_audio_duration: Duration of the model's audio response
+            For user:
+            - thinking_time: Time from assistant response to starting recording
+            - recording_duration: Duration of recording
+            - total_response_time: Total time from assistant response to end of recording
     """
     try:
         table = dynamodb.Table(DYNAMODB_TABLE)
-        timestamp = datetime.now().isoformat()
+        timestamp = int(time.time())  # Use Unix timestamp as number
+        
+        # Convert timing_info float values to Decimal, handling None values
+        timing_info_decimal = None
+        if timing_info:
+            timing_info_decimal = {}
+            for k, v in timing_info.items():
+                if v is not None:
+                    try:
+                        timing_info_decimal[k] = Decimal(str(v))
+                    except (ValueError, TypeError):
+                        logger.warning(f"Could not convert timing value {k}: {v} to Decimal")
+        
+        # For user messages, handle different content types and filter out audio
+        if role == "user":
+            if isinstance(content, list):
+                # Find the transcript in the content and filter out audio
+                transcript = None
+                for item in content:
+                    if item.get("type") == "text":
+                        transcript = item.get("text")
+                        break
+                content = transcript or ""  # Use transcript if found, otherwise empty string
+            elif isinstance(content, str):
+                content = content  # Keep string content as is
+        
+        # Only save text content, not audio
         message_data = {
             'session_id': session_id,
             'message_id': message_id,
             'role': role,
-            'content': content,
+            'content': content,  # This will be the transcript text only
             'timestamp': timestamp,
-            'timing_info': timing_info or {}
+            'timing_info': timing_info_decimal or {},
+            'created_at': datetime.utcnow().isoformat()
         }
         
+        # Log the data being pushed to DynamoDB (excluding audio)
+        logger.info(f"Pushing to DynamoDB - Session: {session_id}, Role: {role}")
+        logger.info(f"Message content: {content}")
+        logger.info(f"Timing info: {timing_info_decimal}")
+        
         table.put_item(Item=message_data)
-        logger.info(f"Saved {role} message to DynamoDB: {message_id}")
+        logger.info(f"Successfully saved {role} message to DynamoDB: {message_id}")
     except Exception as e:
         logger.error(f"Error saving message to DynamoDB: {e}")
+        logger.error(f"Failed message data: {json.dumps(message_data, default=str) if 'message_data' in locals() else 'No message data'}")
         raise
 
 def save_session_end(

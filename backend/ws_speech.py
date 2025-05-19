@@ -61,8 +61,7 @@ def is_valid_wav(audio_base64: str) -> bool:
             with wave.open(audio_file, 'rb') as wav_file:
                 wav_file.getparams()
         return True
-    except Exception as e:
-        logger.info("Invalid WAV format detected")
+    except Exception:
         return False
 
 def ensure_valid_wav(audio_base64: str) -> str:
@@ -71,30 +70,25 @@ def ensure_valid_wav(audio_base64: str) -> str:
     If not, it tries to convert the audio (detecting if it is a WebM file)
     using pydub and returns a valid WAV file as base64.
     """
-    logger.info("Processing audio input...")
     audio_bytes = base64.b64decode(audio_base64)
     # First try to validate as WAV
     try:
         with io.BytesIO(audio_bytes) as audio_file:
             with wave.open(audio_file, 'rb') as wav_file:
                 wav_file.getparams()
-        logger.info("Audio is valid WAV format")
         return audio_base64
     except wave.Error:
-        logger.info("Audio is not in valid WAV format, attempting conversion")
+        pass
 
     # If that fails, attempt to convert. Check if the file is actually a WebM file.
     try:
         if audio_bytes.startswith(b'\x1A\x45\xDF\xA3'):
-            logger.info("Converting WebM format to WAV")
             audio = AudioSegment.from_file(io.BytesIO(audio_bytes), format="webm")
         else:
-            logger.info("Converting unknown format to WAV")
             audio = AudioSegment.from_file(io.BytesIO(audio_bytes))
         buf = io.BytesIO()
         audio.export(buf, format="wav")
         valid_bytes = buf.getvalue()
-        logger.info("Audio conversion successful")
         return base64.b64encode(valid_bytes).decode('utf-8')
     except Exception as e:
         logger.error("Audio conversion failed: %s", str(e).split('\n')[0])
@@ -138,6 +132,20 @@ async def chat_completion_streaming(messages: list) -> AsyncGenerator[Dict[str, 
         transcript = completion.choices[0].message.audio.transcript
         audio_data = completion.choices[0].message.audio.data
         audio_id = completion.choices[0].message.audio.id
+        
+        # Calculate audio duration from WAV data
+        audio_duration = None
+        try:
+            audio_bytes = base64.b64decode(audio_data)
+            with io.BytesIO(audio_bytes) as audio_file:
+                # Use pydub to calculate duration
+                audio = AudioSegment.from_file(audio_file, format="wav")
+                audio_duration = len(audio) / 1000.0  # pydub returns duration in milliseconds
+                logger.info(f"Audio duration from pydub: {audio_duration:.2f} seconds")
+        except Exception as e:
+            logger.error(f"Failed to calculate audio duration: {e}")
+            logger.error(f"Audio data length: {len(audio_bytes)} bytes")
+        
         chunk_size = 20
         text_chunks = [transcript[i:i+chunk_size] for i in range(0, len(transcript), chunk_size)]
         logger.info("ASSISTANT: %s", transcript)
@@ -145,7 +153,8 @@ async def chat_completion_streaming(messages: list) -> AsyncGenerator[Dict[str, 
             "text_chunks": text_chunks, 
             "audio": audio_data, 
             "audio_id": audio_id,
-            "full_transcript": transcript
+            "full_transcript": transcript,
+            "audio_duration": audio_duration
         }
     
     stream_data = await asyncio.to_thread(blocking_stream)
@@ -159,20 +168,28 @@ async def chat_completion_streaming(messages: list) -> AsyncGenerator[Dict[str, 
         yield {"text": chunk}
         await asyncio.sleep(0.1)
     
-    # Log audio generation without the actual encoded data
-    logger.info("Generated audio response (length: approx. %d KB)", 
-                len(stream_data["audio"]) // 1024 if stream_data["audio"] else 0)
-    
-    # Send the audio last
+    # Send the audio last without logging
     yield {"audio": stream_data["audio"], "audio_id": stream_data["audio_id"]}
     
     # Send the full transcript as a special final event
     yield {"full_transcript": stream_data["full_transcript"]}
     
-    # Calculate and return the generation time
+    # Calculate timing metrics
     generation_time = time.time() - start_time
     logger.info("Model response generation time: %.2f seconds", generation_time)
-    yield {"timing": {"model_generation_time": generation_time}}
+    if stream_data["audio_duration"]:
+        logger.info("Model audio duration: %.2f seconds", stream_data["audio_duration"])
+    
+    # Calculate total response time (from start to end of audio)
+    total_response_time = generation_time + (stream_data["audio_duration"] or 0)
+    
+    yield {
+        "timing": {
+            "model_generation_time": generation_time,  # Time taken to generate response
+            "model_audio_duration": stream_data["audio_duration"],  # Duration of audio
+            "total_response_time": total_response_time  # Total time including audio playback
+        }
+    }
 
 app = FastAPI()
 
@@ -199,7 +216,9 @@ async def realtime_conversation(websocket: WebSocket):
     conversation_sessions[session_id] = {
         "conversation": [],
         "last_response_time": None,  # Track when the last assistant response was sent
-        "last_model_generation_time": None  # Track the last model generation time
+        "last_model_generation_time": None,  # Track the last model generation time
+        "last_model_audio_duration": None,  # Track the last model audio duration
+        "last_total_response_time": None  # Track the last total response time
     }
     messages = conversation_sessions[session_id]["conversation"]
     
@@ -224,7 +243,11 @@ async def realtime_conversation(websocket: WebSocket):
         logger.info("Received article for analysis (length: %d chars)", len(article))
         
         # Save the initial session information to DynamoDB
-        save_session_init(session_id, article, dialogue_mode, origin_url)
+        try:
+            logger.info(f"DB: Saving session init - ID: {session_id}, Mode: {dialogue_mode}, Article: {len(article)} chars")
+            save_session_init(session_id, article, dialogue_mode, origin_url)
+        except Exception as e:
+            logger.error(f"DB ERROR: Failed to save session init - ID: {session_id}, Error: {str(e)}")
         
         # Get propaganda info for all modes
         propaganda_result = await detect_propaganda(article)
@@ -237,7 +260,11 @@ async def realtime_conversation(websocket: WebSocket):
         }
         
         # Save propaganda analysis results to DynamoDB
-        save_propaganda_analysis(session_id, propaganda_result)
+        try:
+            logger.info(f"DB: Saving propaganda analysis - ID: {session_id}, Results: {len(propaganda_result.get('data', {}))} categories")
+            save_propaganda_analysis(session_id, propaganda_result)
+        except Exception as e:
+            logger.error(f"DB ERROR: Failed to save propaganda analysis - ID: {session_id}, Error: {str(e)}")
         
         # Get the appropriate system prompt based on mode
         logger.info(f"Constructing system prompt for mode: {dialogue_mode}")
@@ -258,6 +285,8 @@ async def realtime_conversation(websocket: WebSocket):
             # Check if this is the timing yield
             if "timing" in delta:
                 conversation_sessions[session_id]["last_model_generation_time"] = delta["timing"]["model_generation_time"]
+                conversation_sessions[session_id]["last_model_audio_duration"] = delta["timing"].get("model_audio_duration")
+                conversation_sessions[session_id]["last_total_response_time"] = delta["timing"]["total_response_time"]
                 continue
                 
             # Check if this is the full transcript yield
@@ -271,9 +300,15 @@ async def realtime_conversation(websocket: WebSocket):
         
         # Save assistant message to DynamoDB with timing info
         timing_info = {
-            "model_generation_time": conversation_sessions[session_id]["last_model_generation_time"]
+            "model_generation_time": conversation_sessions[session_id]["last_model_generation_time"],
+            "model_audio_duration": conversation_sessions[session_id].get("last_model_audio_duration"),
+            "total_response_time": conversation_sessions[session_id]["last_total_response_time"]
         }
-        save_message(session_id, "assistant", full_transcript, response_id, timing_info)
+        try:
+            logger.info(f"DB: Saving assistant message - ID: {session_id}, Gen time: {timing_info['model_generation_time']:.2f}s, Audio duration: {timing_info.get('model_audio_duration'):.2f}s, Total: {timing_info['total_response_time']:.2f}s")
+            save_message(session_id, "assistant", full_transcript, response_id, timing_info)
+        except Exception as e:
+            logger.error(f"DB ERROR: Failed to save assistant message - ID: {session_id}, Error: {str(e)}")
         
         # Send the final message with the complete transcript
         logger.info("Initial assistant response completed")
@@ -293,14 +328,16 @@ async def realtime_conversation(websocket: WebSocket):
             user_msg = await websocket.receive_json()
             
             # Get user response time from frontend if provided
-            user_response_time = None
+            thinking_time = None
+            recording_duration = None
+            total_response_time = None
             if "timing" in user_msg:
-                user_response_time = user_msg["timing"].get("user_response_time")
-            
-            # Calculate user response time if not provided by frontend
-            if not user_response_time and conversation_sessions[session_id]["last_response_time"]:
-                user_response_time = time.time() - conversation_sessions[session_id]["last_response_time"]
-                logger.info("User response time: %.2f seconds", user_response_time)
+                timing = user_msg["timing"]
+                if isinstance(timing, dict):
+                    thinking_time = timing.get("thinking_time")  # Time from assistant response to starting recording
+                    recording_duration = timing.get("recording_duration")  # Duration of recording
+                    total_response_time = timing.get("total_response_time")  # Total time from assistant response to end of recording
+                    logger.info(f"Received timing from frontend - Thinking: {thinking_time}, Recording: {recording_duration}, Total: {total_response_time}")
             
             if user_msg.get("type") != "user":
                 await websocket.send_json(format_error("Invalid message type. Expected 'user'."))
@@ -323,7 +360,7 @@ async def realtime_conversation(websocket: WebSocket):
                         if audio_info and audio_info.get("format") == "wav":
                             try:
                                 data = audio_info.get("data")
-                                logger.info("Processing user audio...")
+                                # Process audio without logging the data
                                 audio_info["data"] = ensure_valid_wav(data)
                                 
                                 # We need to perform speech-to-text here to get the transcript
@@ -362,11 +399,23 @@ async def realtime_conversation(websocket: WebSocket):
                                 continue
             
             # Save the user message to DynamoDB with timing info
-            timing_info = {
-                "user_response_time": user_response_time
-            }
-            save_message(session_id, "user", user_content, user_message_id, timing_info)
+            timing_info = {}
+            if thinking_time is not None:
+                timing_info["thinking_time"] = thinking_time
+            if recording_duration is not None:
+                timing_info["recording_duration"] = recording_duration
+            if total_response_time is not None:
+                timing_info["total_response_time"] = total_response_time
+
+            try:
+                if timing_info:
+                    logger.info(f"DB: Saving user message - ID: {session_id}, Timing: {timing_info}")
+                # Only save the transcript text, not the audio content
+                save_message(session_id, "user", transcript_text or user_content, user_message_id, timing_info)
+            except Exception as e:
+                logger.error(f"DB ERROR: Failed to save user message - ID: {session_id}, Error: {str(e)}")
             
+            # Keep the full content (including audio) for the conversation context
             messages.append({"role": "user", "content": user_content})
             logger.info("Appended user message to conversation. Total messages: %d", len(messages))
             
@@ -379,6 +428,8 @@ async def realtime_conversation(websocket: WebSocket):
                 # Check if this is the timing yield
                 if "timing" in delta:
                     conversation_sessions[session_id]["last_model_generation_time"] = delta["timing"]["model_generation_time"]
+                    conversation_sessions[session_id]["last_model_audio_duration"] = delta["timing"].get("model_audio_duration")
+                    conversation_sessions[session_id]["last_total_response_time"] = delta["timing"]["total_response_time"]
                     continue
                     
                 # Check if this is the full transcript yield
@@ -392,9 +443,15 @@ async def realtime_conversation(websocket: WebSocket):
             
             # Save assistant message to DynamoDB with timing info
             timing_info = {
-                "model_generation_time": conversation_sessions[session_id]["last_model_generation_time"]
+                "model_generation_time": conversation_sessions[session_id]["last_model_generation_time"],
+                "model_audio_duration": conversation_sessions[session_id].get("last_model_audio_duration"),
+                "total_response_time": conversation_sessions[session_id]["last_total_response_time"]
             }
-            save_message(session_id, "assistant", full_transcript, response_id, timing_info)
+            try:
+                logger.info(f"DB: Saving assistant message - ID: {session_id}, Gen time: {timing_info['model_generation_time']:.2f}s, Audio duration: {timing_info.get('model_audio_duration'):.2f}s, Total: {timing_info['total_response_time']:.2f}s")
+                save_message(session_id, "assistant", full_transcript, response_id, timing_info)
+            except Exception as e:
+                logger.error(f"DB ERROR: Failed to save assistant message - ID: {session_id}, Error: {str(e)}")
             
             # Send the final message with the complete transcript
             logger.info("Sent complete assistant response")
@@ -413,7 +470,11 @@ async def realtime_conversation(websocket: WebSocket):
     except WebSocketDisconnect:
         logger.info(f"WebSocket disconnected for session {session_id}")
         # Save session end with normal disconnection reason
-        save_session_end(session_id, "normal_disconnect")
+        try:
+            logger.info(f"DB: Saving session end - ID: {session_id}, Reason: {reason}")
+            save_session_end(session_id, reason)
+        except Exception as e:
+            logger.error(f"DB ERROR: Failed to save session end - ID: {session_id}, Error: {str(e)}")
     except Exception as e:
         logger.exception(f"Error during realtime conversation for session {session_id}")
         # Save session end with error reason

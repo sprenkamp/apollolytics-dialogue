@@ -18,6 +18,11 @@ export default function DialogueChatConfigurable({ websocketUrl, promptConfig })
   const [audioStarted, setAudioStarted] = useState(false);
   const [pendingAssistantResponse, setPendingAssistantResponse] = useState(""); // Buffer for current assistant response until audio finishes
 
+  // Timing state
+  const [assistantResponseTime, setAssistantResponseTime] = useState(null);
+  const [recordingStartTime, setRecordingStartTime] = useState(null);
+  const [recordingEndTime, setRecordingEndTime] = useState(null);
+
   // Refs for WebSocket, recorder, and media stream
   const wsRef = useRef(null);
   const recorderRef = useRef(null);
@@ -182,6 +187,7 @@ export default function DialogueChatConfigurable({ websocketUrl, promptConfig })
       recorder.startRecording();
       setIsRecording(true);
       setRecordingStatus("Recording...");
+      setRecordingStartTime(Date.now());
     } catch (err) {
       console.error("Error accessing microphone:", err);
       alert("Could not access your microphone.");
@@ -221,6 +227,15 @@ export default function DialogueChatConfigurable({ websocketUrl, promptConfig })
         }
       ]);
 
+      // Record the end time
+      const endTime = Date.now();
+      setRecordingEndTime(endTime);
+
+      // Calculate timing metrics
+      const thinkingTime = (recordingStartTime - assistantResponseTime) / 1000; // Time from assistant response to starting recording
+      const recordingDuration = (endTime - recordingStartTime) / 1000; // Duration of recording
+      const totalResponseTime = (endTime - assistantResponseTime) / 1000; // Total time from assistant response to end of recording
+
       // Convert the blob to base64.
       const reader = new FileReader();
       reader.onload = (e) => {
@@ -236,10 +251,13 @@ export default function DialogueChatConfigurable({ websocketUrl, promptConfig })
               },
             },
           ],
+          timing: {
+            thinking_time: thinkingTime,
+            recording_duration: recordingDuration,
+            total_response_time: totalResponseTime
+          }
         };
         if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
-          // No need to mark with an ID here anymore since we're using placeholderId
-          
           wsRef.current.send(JSON.stringify(userMessage));
         } else {
           console.error("WebSocket is not open");
@@ -322,6 +340,9 @@ export default function DialogueChatConfigurable({ websocketUrl, promptConfig })
                       }
                     ]);
                   }
+                  
+                  // Update the assistant response time when audio finishes
+                  setAssistantResponseTime(Date.now());
                 }}
               />
             )}
