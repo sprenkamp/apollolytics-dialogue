@@ -32,6 +32,9 @@ from backend.db_utils.dialogue_db import (
 # Optionally install and import pydub (requires ffmpeg installed)
 from pydub import AudioSegment
 
+# Import conversation evaluation
+from backend.conversation_evaluation.evaluator import evaluate_conversation
+
 # Ensure the logs directory exists inside the working directory (/app/logs)
 os.makedirs("logs", exist_ok=True)
 
@@ -49,6 +52,7 @@ logger = logging.getLogger(__name__)
 client = OpenAI()
 
 conversation_sessions: Dict[str, dict] = {}
+text_history: Dict[str, List[Dict[str, str]]] = {}
 PROPAGANDA_WS_URL = "ws://13.48.71.178:8000/ws/analyze_propaganda"
 
 def format_error(message: str) -> Dict[str, str]:
@@ -213,12 +217,15 @@ async def realtime_conversation(websocket: WebSocket):
     logger.info(f"New conversation session started: {session_id}")
     await websocket.accept()
     
+    # Initialize text history for this session
+    text_history[session_id] = []
+    
     conversation_sessions[session_id] = {
         "conversation": [],
-        "last_response_time": None,  # Track when the last assistant response was sent
-        "last_model_generation_time": None,  # Track the last model generation time
-        "last_model_audio_duration": None,  # Track the last model audio duration
-        "last_total_response_time": None  # Track the last total response time
+        "last_response_time": None,
+        "last_model_generation_time": None,
+        "last_model_audio_duration": None,
+        "last_total_response_time": None
     }
     messages = conversation_sessions[session_id]["conversation"]
     
@@ -272,10 +279,22 @@ async def realtime_conversation(websocket: WebSocket):
         logger.info(f"System prompt constructed. {system_prompt}")
         messages.append({"role": "system", "content": system_prompt})
         
+        # Store system prompt in text history
+        text_history[session_id].append({
+            "role": "system",
+            "content": system_prompt
+        })
+        
         # Add initial user message to conversation flow (but don't save to DB)
         initial_user_message = "Please start the conversation."
         initial_user_content = [{"type": "text", "text": initial_user_message}]
         messages.append({"role": "user", "content": initial_user_content})
+        
+        # Store initial user message in text history
+        text_history[session_id].append({
+            "role": "user",
+            "content": initial_user_message
+        })
         
         logger.info("Generating initial assistant response...")
         full_transcript = ""
@@ -297,6 +316,12 @@ async def realtime_conversation(websocket: WebSocket):
             await websocket.send_json({"type": "assistant_delta", "payload": delta})
             if "text" in delta:
                 full_transcript += delta["text"]
+        
+        # Store assistant response in text history
+        text_history[session_id].append({
+            "role": "assistant",
+            "content": full_transcript
+        })
         
         # Save assistant message to DynamoDB with timing info
         timing_info = {
@@ -321,7 +346,7 @@ async def realtime_conversation(websocket: WebSocket):
             }
         })
         
-        # Update the last response time
+        # Update the last response time for the next user response
         conversation_sessions[session_id]["last_response_time"] = time.time()
         
         while True:
@@ -419,11 +444,49 @@ async def realtime_conversation(websocket: WebSocket):
             messages.append({"role": "user", "content": user_content})
             logger.info("Appended user message to conversation. Total messages: %d", len(messages))
             
+            # Store user message in text history right after receiving it
+            if transcript_text:
+                # If we have a transcript, use that
+                text_history[session_id].append({
+                    "role": "user",
+                    "content": transcript_text
+                })
+            elif isinstance(user_content, list):
+                # If it's a list (like with audio), find the text content
+                for item in user_content:
+                    if item.get("type") == "text":
+                        text_history[session_id].append({
+                            "role": "user",
+                            "content": item.get("text")
+                        })
+                        break
+            
             # Get the assistant response with transcript
             logger.info("Processing user input...")
             full_transcript = ""
             response_id = f"assistant_{uuid.uuid4()}"
             
+            # Check if conversation has stalled before generating response
+            logger.info(f"Text history for session:{session_id}:", "\n", text_history[session_id])
+            is_stalled = evaluate_conversation(text_history[session_id])
+            logger.info(f"Conversation stalled: {is_stalled}")
+            
+            if is_stalled:
+                logger.warning(f"Conversation for session {session_id} appears to be stalled")
+                # Send final message to frontend
+                await websocket.send_json({
+                    "type": "conversation_end",
+                    "payload": {
+                        "message": "Thank you for participating in our experiment. Your feedback and engagement have been valuable. The conversation will now end.",
+                        "reason": "conversation_stalled"
+                    }
+                })
+                # Clean up the session
+                del text_history[session_id]
+                del conversation_sessions[session_id]
+                return
+            
+            # If not stalled, proceed with normal assistant response
             async for delta in chat_completion_streaming(messages):
                 # Check if this is the timing yield
                 if "timing" in delta:
@@ -440,6 +503,12 @@ async def realtime_conversation(websocket: WebSocket):
                 await websocket.send_json({"type": "assistant_delta", "payload": delta})
                 if "text" in delta:
                     full_transcript += delta["text"]
+            
+            # Store assistant response in text history
+            text_history[session_id].append({
+                "role": "assistant",
+                "content": full_transcript
+            })
             
             # Save assistant message to DynamoDB with timing info
             timing_info = {
@@ -469,6 +538,12 @@ async def realtime_conversation(websocket: WebSocket):
     
     except WebSocketDisconnect:
         logger.info(f"WebSocket disconnected for session {session_id}")
+        # Log the final text history
+        logger.info(f"Text history for session {session_id}:")
+        for msg in text_history[session_id]:
+            logger.info(f"{msg['role'].upper()}: {msg['content']}")
+        # Clean up the text history
+        del text_history[session_id]
         # Save session end with normal disconnection reason
         try:
             logger.info(f"DB: Saving session end - ID: {session_id}, Reason: {reason}")
@@ -486,5 +561,5 @@ async def realtime_conversation(websocket: WebSocket):
             pass
 
 if __name__ == "__main__":
-    logger.info("Starting server on 0.0.0.0:8000")
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    logger.info("Starting server on 0.0.0.0:8080")
+    uvicorn.run(app, host="0.0.0.0", port=8080)
