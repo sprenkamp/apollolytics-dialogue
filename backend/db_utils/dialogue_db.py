@@ -65,7 +65,8 @@ def save_session_init(
     session_id: str, 
     article: str, 
     dialogue_mode: str, 
-    origin_url: Optional[str] = None
+    origin_url: Optional[str] = None,
+    prolific_id: Optional[str] = None
 ) -> bool:
     """
     Save the initial session data when a conversation starts.
@@ -75,6 +76,7 @@ def save_session_init(
         article: The article text being analyzed
         dialogue_mode: The mode of the dialogue (e.g., "critical", "positive")
         origin_url: The URL that originated the request
+        prolific_id: The Prolific ID of the participant
         
     Returns:
         bool: True if save was successful, False otherwise
@@ -90,6 +92,7 @@ def save_session_init(
             'article': article,
             'dialogue_mode': dialogue_mode,
             'origin_url': origin_url or 'unknown',
+            'prolific_id': prolific_id or 'XXX',
             'created_at': datetime.utcnow().isoformat()
         }
         

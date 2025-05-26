@@ -247,12 +247,16 @@ async def realtime_conversation(websocket: WebSocket):
         origin_url = init_msg.get("origin_url", None)
         logger.info(f"Request from origin: {origin_url}")
             
+        # Get the Prolific ID
+        prolific_id = init_msg.get("prolific_id", "XXX")
+        logger.info(f"Prolific ID: {prolific_id}")
+            
         logger.info("Received article for analysis (length: %d chars)", len(article))
         
         # Save the initial session information to DynamoDB
         try:
             logger.info(f"DB: Saving session init - ID: {session_id}, Mode: {dialogue_mode}, Article: {len(article)} chars")
-            save_session_init(session_id, article, dialogue_mode, origin_url)
+            save_session_init(session_id, article, dialogue_mode, origin_url, prolific_id)
         except Exception as e:
             logger.error(f"DB ERROR: Failed to save session init - ID: {session_id}, Error: {str(e)}")
         
@@ -481,6 +485,12 @@ async def realtime_conversation(websocket: WebSocket):
                         "reason": "conversation_stalled"
                     }
                 })
+                # Save session end with stalled reason
+                try:
+                    logger.info(f"DB: Saving session end - ID: {session_id}, Reason: conversation_stalled")
+                    save_session_end(session_id, "conversation_stalled")
+                except Exception as e:
+                    logger.error(f"DB ERROR: Failed to save session end - ID: {session_id}, Error: {str(e)}")
                 # Clean up the session
                 del text_history[session_id]
                 del conversation_sessions[session_id]
@@ -546,6 +556,7 @@ async def realtime_conversation(websocket: WebSocket):
         del text_history[session_id]
         # Save session end with normal disconnection reason
         try:
+            reason = "client_disconnected"
             logger.info(f"DB: Saving session end - ID: {session_id}, Reason: {reason}")
             save_session_end(session_id, reason)
         except Exception as e:

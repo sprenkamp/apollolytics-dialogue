@@ -1,13 +1,40 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import dynamic from 'next/dynamic';
 
-export default function DialogueChatConfigurable({ websocketUrl, promptConfig }) {
+// Dynamically import confetti to avoid SSR issues
+const ReactConfetti = dynamic(() => import('react-confetti'), {
+  ssr: false
+});
+
+export default function DialogueChatConfigurable({ websocketUrl, promptConfig, initialArticle, prolificId }) {
   // Conversation state
-  const [article, setArticle] = useState("");
+  const [article, setArticle] = useState(initialArticle || "");
   const [conversationStarted, setConversationStarted] = useState(false);
   const [assistantAudio, setAssistantAudio] = useState(null);
   const [transcript, setTranscript] = useState([]);
+  const [conversationEnded, setConversationEnded] = useState(false);
+  const [endMessage, setEndMessage] = useState("");
+  const [showConfetti, setShowConfetti] = useState(false);
+  const [showEndTranscript, setShowEndTranscript] = useState(false);
+  const [windowSize, setWindowSize] = useState({
+    width: typeof window !== 'undefined' ? window.innerWidth : 0,
+    height: typeof window !== 'undefined' ? window.innerHeight : 0
+  });
+
+  // Handle window resize
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight
+      });
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // UI state for spinners and recording controls
   const [loadingMessage, setLoadingMessage] = useState(""); // "Analyzing article..." or "Thinking..."
@@ -66,7 +93,8 @@ export default function DialogueChatConfigurable({ websocketUrl, promptConfig })
           type: "start",
           article: article,
           mode: promptConfig.mode,
-          origin_url: origin_url
+          origin_url: origin_url,
+          prolific_id: prolificId
         })
       );
     };
@@ -157,6 +185,27 @@ export default function DialogueChatConfigurable({ websocketUrl, promptConfig })
               }
             ];
           });
+        }
+      } else if (msgType === "conversation_end") {
+        console.log("Processing conversation end message:", payload);
+        // Clear all UI states
+        setConversationEnded(true);
+        setEndMessage(payload.message);
+        setLoadingMessage("");
+        setAudioFinished(false);
+        setAssistantAudio(null);
+        setIsRecording(false);
+        setRecordingStatus("");
+        setAudioStarted(false);
+        setPendingAssistantResponse("");
+        // Show confetti
+        setShowConfetti(true);
+        // Hide confetti after 5 seconds
+        setTimeout(() => setShowConfetti(false), 5000);
+        // Close the WebSocket connection
+        if (wsRef.current) {
+          console.log("Closing WebSocket connection");
+          wsRef.current.close();
         }
       }
     };
@@ -278,8 +327,15 @@ export default function DialogueChatConfigurable({ websocketUrl, promptConfig })
 
   return (
     <div className="container">
-      <h1 className="title">{promptConfig.title}</h1>
-      
+      {showConfetti && (
+        <ReactConfetti
+          width={windowSize.width}
+          height={windowSize.height}
+          recycle={false}
+          numberOfPieces={200}
+          gravity={0.3}
+        />
+      )}
       {/* Step 1: Article input */}
       {!conversationStarted ? (
         <form
@@ -289,9 +345,6 @@ export default function DialogueChatConfigurable({ websocketUrl, promptConfig })
           }}
           className="form"
         >
-          <label htmlFor="article" className="form-label">
-            {promptConfig.articlePrompt}
-          </label>
           <div className="article-input-container">
             <textarea
               id="article"
@@ -300,6 +353,7 @@ export default function DialogueChatConfigurable({ websocketUrl, promptConfig })
               className="textarea"
               rows={8}
               required
+              readOnly={!!initialArticle}
             />
           </div>
           <button type="submit" className="button">
@@ -308,73 +362,107 @@ export default function DialogueChatConfigurable({ websocketUrl, promptConfig })
         </form>
       ) : (
         <div className="conversation-container">
-          <div className="conversation">
-            {/* Step 2: Display spinner when analyzing article or thinking */}
-            {loadingMessage && (
-              <div className="spinner-container">
-                <div className="spinner"></div>
-                <p>{loadingMessage}</p>
-              </div>
-            )}
-
-            {/* Step 3: Assistant audio response */}
-            {assistantAudio && audioStarted && (
-              <audio
-                controls
-                autoPlay
-                src={assistantAudio}
-                className="audio-player"
-                onEnded={() => {
-                  // Enable recording when audio finishes
-                  setAudioFinished(true);
-                  
-                  // Add the assistant response to the transcript
-                  if (pendingAssistantResponse) {
-                    setTranscript(prev => [
-                      ...prev,
-                      {
-                        id: `assistant_${Date.now()}`,
-                        role: "assistant",
-                        content: pendingAssistantResponse,
-                        final: true
-                      }
-                    ]);
-                  }
-                  
-                  // Update the assistant response time when audio finishes
-                  setAssistantResponseTime(Date.now());
-                }}
-              />
-            )}
-
-            {/* Step 4: Recording control */}
-            {audioFinished && !isRecording && (
-              <button onClick={startRecording} className="button">
-                Record Response
+          {conversationEnded ? (
+            <div className="conversation-end">
+              <div className="end-message">{endMessage}</div>
+              <button 
+                onClick={() => setShowEndTranscript(prev => !prev)} 
+                className="transcript-toggle-button"
+              >
+                {showEndTranscript ? "Hide Transcript" : "Show Transcript"}
               </button>
-            )}
-            {isRecording && (
-              <button onClick={stopRecording} className="button recording-button">
-                Stop Recording
-              </button>
-            )}
+              {showEndTranscript && (
+                <div className="transcript-panel" ref={transcriptRef}>
+                  <h2 className="transcript-title">Conversation Transcript</h2>
+                  {transcript.length > 0 ? (
+                    <div className="transcript-messages">
+                      {transcript.map((message, index) => (
+                        <div 
+                          key={index} 
+                          className={`transcript-message ${message.role === "assistant" ? "assistant" : "user"} ${!message.final ? "pending" : ""}`}
+                        >
+                          <div className="message-role">{message.role === "assistant" ? "Assistant" : "You"}</div>
+                          <div className="message-content">{message.content}</div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="no-transcript">The conversation transcript will appear here.</p>
+                  )}
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="conversation">
+              {/* Step 2: Display spinner when analyzing article or thinking */}
+              {loadingMessage && !conversationEnded && (
+                <div className="spinner-container">
+                  <div className="spinner"></div>
+                  <p>{loadingMessage}</p>
+                </div>
+              )}
 
-            {/* Optionally, display recording status */}
-            {recordingStatus && (
-              <div className="recording-status">{recordingStatus}</div>
-            )}
-            
-            {/* Show transcript toggle button */}
-            <button 
-              onClick={() => setShowTranscript(prev => !prev)} 
-              className="transcript-toggle-button"
-            >
-              {showTranscript ? "Hide Transcript" : "Show Transcript"}
-            </button>
-          </div>
+              {/* Step 3: Assistant audio response */}
+              {assistantAudio && audioStarted && (
+                <audio
+                  controls
+                  autoPlay
+                  src={assistantAudio}
+                  className="audio-player"
+                  onEnded={() => {
+                    // Enable recording when audio finishes
+                    setAudioFinished(true);
+                    
+                    // Add the assistant response to the transcript
+                    if (pendingAssistantResponse) {
+                      setTranscript(prev => [
+                        ...prev,
+                        {
+                          id: `assistant_${Date.now()}`,
+                          role: "assistant",
+                          content: pendingAssistantResponse,
+                          final: true
+                        }
+                      ]);
+                    }
+                    
+                    // Update the assistant response time when audio finishes
+                    setAssistantResponseTime(Date.now());
+                  }}
+                />
+              )}
+
+              {/* Step 4: Recording control */}
+              {audioFinished && !isRecording && !conversationEnded && (
+                <button onClick={startRecording} className="button">
+                  Record Response
+                </button>
+              )}
+              {isRecording && !conversationEnded && (
+                <button onClick={stopRecording} className="button recording-button">
+                  Stop Recording
+                </button>
+              )}
+
+              {/* Optionally, display recording status */}
+              {recordingStatus && !conversationEnded && (
+                <div className="recording-status">{recordingStatus}</div>
+              )}
+              
+              {/* Toggle transcript visibility */}
+              {!conversationEnded && (
+                <button 
+                  onClick={() => setShowTranscript(prev => !prev)} 
+                  className="transcript-toggle-button"
+                >
+                  {showTranscript ? "Hide Transcript" : "Show Transcript"}
+                </button>
+              )}
+            </div>
+          )}
           
-          {/* Transcript panel */}
-          {showTranscript && (
+          {/* Transcript panel - only show when not ended */}
+          {showTranscript && !conversationEnded && (
             <div className="transcript-panel" ref={transcriptRef}>
               <h2 className="transcript-title">Conversation Transcript</h2>
               {transcript.length > 0 ? (

@@ -8,5 +8,10 @@ export default function NegativeConversationPage() {
   const websocketUrl = config.getWebsocketUrl();
   const promptConfig = prompts.negative;
   
-  return <DialogueChatConfigurable websocketUrl={websocketUrl} promptConfig={promptConfig} />;
+  return (
+    <div className="experiment-container">
+      <h1 className="title">{promptConfig.title}</h1>
+      <DialogueChatConfigurable websocketUrl={websocketUrl} promptConfig={promptConfig} />
+    </div>
+  );
 }
