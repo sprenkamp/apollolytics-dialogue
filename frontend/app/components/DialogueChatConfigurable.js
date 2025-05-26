@@ -48,7 +48,6 @@ export default function DialogueChatConfigurable({ websocketUrl, promptConfig, i
   // Timing state
   const [assistantResponseTime, setAssistantResponseTime] = useState(null);
   const [recordingStartTime, setRecordingStartTime] = useState(null);
-  const [recordingEndTime, setRecordingEndTime] = useState(null);
 
   // Refs for WebSocket, recorder, and media stream
   const wsRef = useRef(null);
@@ -276,14 +275,10 @@ export default function DialogueChatConfigurable({ websocketUrl, promptConfig, i
         }
       ]);
 
-      // Record the end time
-      const endTime = Date.now();
-      setRecordingEndTime(endTime);
-
       // Calculate timing metrics
       const thinkingTime = (recordingStartTime - assistantResponseTime) / 1000; // Time from assistant response to starting recording
-      const recordingDuration = (endTime - recordingStartTime) / 1000; // Duration of recording
-      const totalResponseTime = (endTime - assistantResponseTime) / 1000; // Total time from assistant response to end of recording
+      const recordingDuration = (Date.now() - recordingStartTime) / 1000; // Duration of recording
+      const totalResponseTime = (Date.now() - assistantResponseTime) / 1000; // Total time from assistant response to end of recording
 
       // Convert the blob to base64.
       const reader = new FileReader();
