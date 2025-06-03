@@ -9,6 +9,7 @@ import sys
 import time
 import uuid
 import wave
+import pathlib
 from typing import Dict, Any, List, AsyncGenerator
 
 import websockets
@@ -54,6 +55,16 @@ client = OpenAI()
 conversation_sessions: Dict[str, dict] = {}
 text_history: Dict[str, List[Dict[str, str]]] = {}
 PROPAGANDA_WS_URL = "ws://13.48.71.178:8000/ws/analyze_propaganda"
+
+# Map subpage (from origin_url) to cached propaganda result file
+EXPERIMENT_SUBPAGE_MAP = {
+    "/dialogue/positive1": "article1.json",
+    "/dialogue/positive2": "article2.json",
+    "/dialogue/positive3": "article3.json",
+    "/dialogue/negative1": "article1.json",
+    "/dialogue/negative2": "article2.json",
+    "/dialogue/negative3": "article3.json",
+}
 
 def format_error(message: str) -> Dict[str, str]:
     return {"error": message}
@@ -261,7 +272,21 @@ async def realtime_conversation(websocket: WebSocket):
             logger.error(f"DB ERROR: Failed to save session init - ID: {session_id}, Error: {str(e)}")
         
         # Get propaganda info for all modes
-        propaganda_result = await detect_propaganda(article)
+        propaganda_result = None
+        cached_file = None
+        if origin_url:
+            for subpage, filename in EXPERIMENT_SUBPAGE_MAP.items():
+                if origin_url.endswith(subpage):
+                    cached_file = filename
+                    break
+        if cached_file:
+            path = pathlib.Path(__file__).parent / "model_output" / cached_file
+            with open(path, "r", encoding="utf-8") as f:
+                propaganda_result = json.load(f)
+            logger.info(f"Loaded cached propaganda result from {cached_file} for subpage {subpage}")
+        else:
+            # Not a known experiment subpage, run detection
+            propaganda_result = await detect_propaganda(article)
         propaganda_info = {
             cat: [
                 {k: entry[k] for k in ['explanation', 'location', 'contextualize'] if k in entry}

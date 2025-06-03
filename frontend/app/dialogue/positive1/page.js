@@ -6,7 +6,7 @@ import { articles } from '../../utils/articles';
 
 const promptConfig = {
   title: "Dialogue Bot Experiment",
-  mode: "positive",
+  mode: "critical",
   articlePrompt: "Article:"
 };
 
