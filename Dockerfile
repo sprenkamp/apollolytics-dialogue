@@ -26,4 +26,4 @@ ENV DYNAMODB_TABLE=apollolytics_dialogues
 ENV PYTHONPATH=/app
 
 # Command to run FastAPI using Uvicorn with 5 workers (sufficient for 10 concurrent users)
-CMD ["uvicorn", "backend.ws_speech:app", "--host", "0.0.0.0", "--port", "8080", "--workers", "5"]
+CMD ["uvicorn", "backend.ws_speech:app", "--host", "0.0.0.0", "--port", "8080", "--workers", "2"]

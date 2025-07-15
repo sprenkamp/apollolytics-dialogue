@@ -1,0 +1,59 @@
+/Library/Developer/CommandLineTools/usr/bin/python3: can't open file 'increase.py': [Errno 1] Operation not permitted
+/Library/Developer/CommandLineTools/usr/bin/python3: can't open file '/Users/kiliansprenkamp/Desktop/code/apollolytics-dialogue/data_analysis/prolific/increase.py': [Errno 1] Operation not permitted
+/Library/Developer/CommandLineTools/usr/bin/python3: can't open file '/Users/kiliansprenkamp/Desktop/code/apollolytics-dialogue/data_analysis/prolific/increase.py': [Errno 1] Operation not permitted
+/Library/Developer/CommandLineTools/usr/bin/python3: can't open file '/Users/kiliansprenkamp/Desktop/code/apollolytics-dialogue/data_analysis/prolific/increase.py': [Errno 1] Operation not permitted
+/Library/Developer/CommandLineTools/usr/bin/python3: can't open file '/Users/kiliansprenkamp/Desktop/code/apollolytics-dialogue/data_analysis/prolific/increase.py': [Errno 1] Operation not permitted
+/Library/Developer/CommandLineTools/usr/bin/python3: can't open file '/Users/kiliansprenkamp/Desktop/code/apollolytics-dialogue/data_analysis/prolific/increase.py': [Errno 1] Operation not permitted
+/Library/Developer/CommandLineTools/usr/bin/python3: can't open file '/Users/kiliansprenkamp/Desktop/code/apollolytics-dialogue/data_analysis/prolific/increase.py': [Errno 1] Operation not permitted
+Traceback (most recent call last):
+  File "/home/ubuntu/apollolytics-dialogue/data_analysis/prolific/increase.py", line 4, in <module>
+    from dotenv import load_dotenv
+ModuleNotFoundError: No module named 'dotenv'
+Traceback (most recent call last):
+  File "/home/ubuntu/apollolytics-dialogue/data_analysis/prolific/increase.py", line 4, in <module>
+    from dotenv import load_dotenv
+ModuleNotFoundError: No module named 'dotenv'
+Traceback (most recent call last):
+  File "/home/ubuntu/apollolytics-dialogue/data_analysis/prolific/increase.py", line 4, in <module>
+    from dotenv import load_dotenv
+ModuleNotFoundError: No module named 'dotenv'
+Traceback (most recent call last):
+  File "/home/ubuntu/apollolytics-dialogue/data_analysis/prolific/increase.py", line 4, in <module>
+    from dotenv import load_dotenv
+ModuleNotFoundError: No module named 'dotenv'
+Study Status Summary:
+  Current cap: 3
+  Completed participants: 2
+  Max cap: 5
+  Increment: 1
+  Submission breakdown: {'RETURNED': 2, 'APPROVED': 2, 'AWAITING REVIEW': 1}
+
+❌ No increase needed: 2 completed < 3 current cap
+Study Status Summary:
+  Current cap: 3
+  Completed participants: 2
+  Max cap: 5
+  Increment: 1
+  Submission breakdown: {'RETURNED': 2, 'APPROVED': 2, 'AWAITING REVIEW': 1}
+
+❌ No increase needed: 2 completed < 3 current cap
+Study Status Summary:
+  Current cap: 3
+  Approved participants: 2
+  Awaiting review: 0
+  Total completed (approved + awaiting review): 2
+  Max cap: 5
+  Increment: 1
+  Submission breakdown: {'RETURNED': 2, 'APPROVED': 2, 'AWAITING REVIEW': 1}
+
+❌ No increase needed: 2 completed < 3 current cap
+Study Status Summary:
+  Current cap: 3
+  Approved participants: 2
+  Awaiting review: 0
+  Total completed (approved + awaiting review): 2
+  Max cap: 5
+  Increment: 1
+  Submission breakdown: {'RETURNED': 2, 'APPROVED': 2, 'AWAITING REVIEW': 1}
+
+❌ No increase needed: 2 completed < 3 current cap

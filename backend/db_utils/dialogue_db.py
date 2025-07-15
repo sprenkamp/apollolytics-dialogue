@@ -53,9 +53,14 @@ def initialize_db():
             
             # Wait for table to be created
             table.meta.client.get_waiter('table_exists').wait(TableName=DYNAMODB_TABLE)
-            logger.info(f"DynamoDB table created: {DYNAMODB_TABLE}")
+            logger.info(f"DynamOdb table created: {DYNAMODB_TABLE}")
         else:
             logger.info(f"DynamoDB table already exists: {DYNAMODB_TABLE}")
+        
+        # Test the connection by trying to access the table
+        table = dynamodb.Table(DYNAMODB_TABLE)
+        table.table_status  # This will raise an exception if there's a connection/permission issue
+        logger.info(f"DynamoDB connection test successful for table: {DYNAMODB_TABLE}")
             
     except Exception as e:
         logger.error(f"Error initializing DynamoDB: {str(e)}")
@@ -83,7 +88,7 @@ def save_session_init(
     """
     try:
         table = dynamodb.Table(DYNAMODB_TABLE)
-        timestamp = int(time.time())
+        timestamp = int(time.time())  # Use regular timestamp
         
         item = {
             'session_id': session_id,
@@ -96,8 +101,10 @@ def save_session_init(
             'created_at': datetime.utcnow().isoformat()
         }
         
+        logger.info(f"Attempting to save session init to DynamoDB - Session: {session_id}, Mode: {dialogue_mode}, Origin: {origin_url}, Prolific: {prolific_id}")
+        logger.info(f"Item to save: {json.dumps(item, default=str)}")
         table.put_item(Item=item)
-        logger.info(f"Saved session initialization for {session_id}")
+        logger.info(f"Successfully saved session initialization for {session_id}")
         return True
         
     except Exception as e:
@@ -120,7 +127,7 @@ def save_propaganda_analysis(
     """
     try:
         table = dynamodb.Table(DYNAMODB_TABLE)
-        timestamp = int(time.time())
+        timestamp = int(time.time()) + 1  # Add 1 second to avoid collision with session_init
         
         # Convert any non-serializable objects to strings
         serialized_result = json.loads(json.dumps(propaganda_result, default=str))
@@ -161,7 +168,7 @@ def save_message(session_id: str, role: str, content: Any, message_id: str, timi
     """
     try:
         table = dynamodb.Table(DYNAMODB_TABLE)
-        timestamp = int(time.time())  # Use Unix timestamp as number
+        timestamp = int(time.time())  # Use regular timestamp
         
         # Convert timing_info float values to Decimal, handling None values
         timing_info_decimal = None
@@ -194,6 +201,7 @@ def save_message(session_id: str, role: str, content: Any, message_id: str, timi
             'role': role,
             'content': content,  # This will be the transcript text only
             'timestamp': timestamp,
+            'event_type': 'message',  # Add event_type for consistency
             'timing_info': timing_info_decimal or {},
             'created_at': datetime.utcnow().isoformat()
         }
@@ -226,7 +234,7 @@ def save_session_end(
     """
     try:
         table = dynamodb.Table(DYNAMODB_TABLE)
-        timestamp = int(time.time())
+        timestamp = int(time.time())  # Use regular timestamp
         
         item = {
             'session_id': session_id,

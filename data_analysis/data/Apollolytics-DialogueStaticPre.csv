@@ -1,0 +1,313 @@
+StartDate,EndDate,Status,IPAddress,Progress,Duration (in seconds),Finished,RecordedDate,ResponseId,RecipientLastName,RecipientFirstName,RecipientEmail,ExternalReference,LocationLatitude,LocationLongitude,DistributionChannel,UserLanguage,Q2.1,Q3.1,Q3.2,Q3.3,Q3.4,Q4.2,Q4.3,Q4.4,Q4.5_1,Q4.7,Q4.8,Q5.1_1,Q5.1_2,Q5.1_3,Q5.1_4,Q5.1_5,Q5.1_6,Q7.1_1,Q7.2_1,Q7.3_1,Q7.4,Q7.5,Q2_First Click,Q2_Last Click,Q2_Page Submit,Q2_Click Count,Q3_1,Q4_1,Q5_1,Q6_1,Q7_1,Q8_1,Q9_1,Q9_2,Q9_3,Q9_4,Q9_5,Q9_6,Q396_First Click,Q396_Last Click,Q396_Page Submit,Q396_Click Count,Q397_1,Q398_1,Q399_1,Q400_1,Q401_1,Q402_1,Q403_1,Q403_2,Q403_3,Q403_4,Q403_5,Q403_6,Q405_First Click,Q405_Last Click,Q405_Page Submit,Q405_Click Count,Q406_1,Q407_1,Q408_1,Q409_1,Q410_1,Q411_1,Q412_1,Q412_2,Q412_3,Q412_4,Q412_5,Q412_6,IM_1.2_First Click,IM_1.2_Last Click,IM_1.2_Page Submit,IM_1.2_Click Count,IM_1.3_1,IM_1.4_1,IM_1.5_1,IM_1.6_1,IM_1.7_1,IM_1.8_1,IM_1.9,IM_1.10_1,IM_1.10_2,IM_1.10_3,IM_1.10_4,IM_1.10_5,IM_1.10_6,IM_1.11,IM_1.12,IM_1.13_First Click,IM_1.13_Last Click,IM_1.13_Page Submit,IM_1.13_Click Count,IM_1.14#1_1,IM_1.14#1_2,IM_1.14#1_3,IM_1.14#1_4,IM_1.14#1_5,IM_1.14#1_6,IM_1.14#1_7,IM_1.14#1_8,IM_1.15_First Click,IM_1.15_Last Click,IM_1.15_Page Submit,IM_1.15_Click Count,NPS.2,NPS.3,NPS.4,NPS.5_NPS_GROUP,NPS.5,NPS.6,PROLIFIC_PID
+Start Date,End Date,Response Type,IP Address,Progress,Duration (in seconds),Finished,Recorded Date,Response ID,Recipient Last Name,Recipient First Name,Recipient Email,External Data Reference,Location Latitude,Location Longitude,Distribution Channel,User Language,"Consent Form
+
+ 
+
+ 
+
+Introduction
+
+In this study, the Digital Society Initiative of the University of Zurich is researching the perceptions and experiences of digital news readers. We greatly value your participation in our research and want to ensure you that you cannot do anything wrong and there are no right or wrong answers.
+
+ 
+
+Scope and Procedure
+If you decide to take part in this study, the following activities take place:
+
+
+	You will participate in a online survey.
+	The survey will take approximately 20 minutes to complete.
+	You will interact with an AI-based Propaganda Detection Tool
+
+
+
+The following information will be collected during the study:  
+
+
+	Basic demographic information.
+	Your anonymous responses to questions about your understanding and interpretation of the news articles.
+	Your evaluation of the performance of an AI-based Propaganda Tool developed by us.
+
+Risks Associated with Participation
+Participation in the study does not involve any considerable risks that we are aware of. However, we would like to note that the study involves reading news articles about contemporary topics that can potentially cause emotional reactions. Please be aware that during this study, you may be exposed to articles that might contain misinformation or propaganda. These materials are used specifically for research purposes. We kindly request that you do not share, reproduce, or distribute any content, including articles, images, or other media, that you come across during your participation in this study. This restriction is crucial to ensure that potentially misleading or incorrect information is not propagated outside of the research context.
+
+
+
+You have the option to end your participation at any time during the study without having to provide a reason. All information you have shared with us up to this point may be stored and used for research.
+
+
+
+This experiment has been approved by the Ethics Committee of the University of Zurich.
+
+ 
+Consent
+By signing this form, you acknowledge the following statements:
+
+
+	You permit your anonymized data to be used by other researchers of the University of Zurich and the University of Lausanne for further studies and analyses.
+	You authorize the use of your anonymized data for internal or external publications, as well as scientific journals and conference proceedings.
+	You have been informed about the purpose and conditions of your study participation.
+	You are at least 18 years old.
+	You had enough time to decide to participate.
+	You agree to participate.
+
+
+
+Giving consent to this form in no way waives your legal rights or releases the researchers or institutions involved from their legal or professional responsibilities. You are free to withdraw from the study at any time.
+
+
+
+If you have any further questions about your participation in this study at a later point in time, please contact Kilian Sprenkamp (kilian.sprenkamp@uzh.ch).",Please enter your Prolific ID:,Which devices are you currently using?,"Education. Subject.
+
+
+Participants were asked the following question: What subject do you study?","First Language
+
+ 
+
+Participants were asked the following question: What is your first language?",What is your age?,What is your gender?,What is your highest level of education?,Q4.5 - Country of residence,Please indicate your occupation:,"We care about the quality of our survey data. For us to get the most accurate measures of your opinions, it is important that you provide natural / truthful answers to each question in the survey.
+
+Do you commit to providing natural / truthful answers to the questions in this survey?","Thought processes
+
+ 
+
+Please rate your degree of agreement with the following statements from 1 (strongly disagree) to 7 (strongly agree). - 1. I would prefer complex to simple problems.","Thought processes
+
+ 
+
+Please rate your degree of agreement with the following statements from 1 (strongly disagree) to 7 (strongly agree). - 2. I like to have the responsibility of handling a situation that requires a lot of thinking.","Thought processes
+
+ 
+
+Please rate your degree of agreement with the following statements from 1 (strongly disagree) to 7 (strongly agree). - 3. Thinking is not my idea of fun.","Thought processes
+
+ 
+
+Please rate your degree of agreement with the following statements from 1 (strongly disagree) to 7 (strongly agree). - 4. I would rather do something that requires little thought than something that is sure to challenge my thinking abilities.","Thought processes
+
+ 
+
+Please rate your degree of agreement with the following statements from 1 (strongly disagree) to 7 (strongly agree). - 5. I really enjoy a task that involves coming up with new solutions to problems.","Thought processes
+
+ 
+
+Please rate your degree of agreement with the following statements from 1 (strongly disagree) to 7 (strongly agree). - 6. I would prefer a task that is intellectual, difficult, and important to one that is somewhat important but does not require much thought.","Pre-Reading QuestionsYour Thinking ModeFor each of the following questions, please indicate how - Extreme left [1]:Extreme right [7]",How frequently do you read news articles?,How much do you trust the news media in general? - no trust at all [1]:complete trust [7],Which sources do you typically use to consume news? (Select all that apply),Please specify the other sources you use to consume news (if applicable):,Timing - First Click,Timing - Last Click,Timing - Page Submit,Timing - Click Count,"Post-Interaction Questionnaire 1 / 2
+
+
+Your Thinking Mode
+
+
+For each of the following questions, please indicate how you felt while reading the news articles on a scale from 1 to 7.
+
+
+
+Did you feel like your thought process was more like a... - Quick skim [1]:Slow, careful read [7]",Did you feel like you were... - Absorbing several details at once [1]:Focusing on one detail at a time [7],Did your thoughts feel more... - Spontaneous [1]:Deliberate  [7],Did your thinking felt... - Easy and automatic [1]:Like it required significant mental effort [7],Were you more likely to... - Make connections between details instinctively [1]:Apply a set of rules or criteria to evaluate details [7],Did you find yourself... - Sticking to your initial impressions [1]:Regularly updating your thoughts as you read more [7],"Post-Interaction Questionnaire 2 / 2
+
+
+
+
+News Evaluation
+
+For each of the following questions, please indicate how you felt while reading and interpreting the news articles (1 – not at all, 7 – very much). - Before reading the news article, how much knowledge did you have about the topic covered?","Post-Interaction Questionnaire 2 / 2
+
+
+
+
+News Evaluation
+
+For each of the following questions, please indicate how you felt while reading and interpreting the news articles (1 – not at all, 7 – very much). - How accurate do you find the news article?","Post-Interaction Questionnaire 2 / 2
+
+
+
+
+News Evaluation
+
+For each of the following questions, please indicate how you felt while reading and interpreting the news articles (1 – not at all, 7 – very much). - How biased do you think the news article is?","Post-Interaction Questionnaire 2 / 2
+
+
+
+
+News Evaluation
+
+For each of the following questions, please indicate how you felt while reading and interpreting the news articles (1 – not at all, 7 – very much). - How informative do you find the news article?","Post-Interaction Questionnaire 2 / 2
+
+
+
+
+News Evaluation
+
+For each of the following questions, please indicate how you felt while reading and interpreting the news articles (1 – not at all, 7 – very much). - How believable do you find the news article?","Post-Interaction Questionnaire 2 / 2
+
+
+
+
+News Evaluation
+
+For each of the following questions, please indicate how you felt while reading and interpreting the news articles (1 – not at all, 7 – very much). - How clear and well-written do you find the news article?",Timing - First Click,Timing - Last Click,Timing - Page Submit,Timing - Click Count,"Post-Interaction Questionnaire 1 / 2
+
+
+Your Thinking Mode
+
+
+For each of the following questions, please indicate how you felt while reading the news articles on a scale from 1 to 7.
+
+
+
+Did you feel like your thought process was more like a... - Quick skim [1]:Slow, careful read [7]",Did you feel like you were... - Absorbing several details at once [1]:Focusing on one detail at a time [7],Did your thoughts feel more... - Spontaneous [1]:Deliberate  [7],Did your thinking felt... - Easy and automatic [1]:Like it required significant mental effort [7],Were you more likely to... - Make connections between details instinctively [1]:Apply a set of rules or criteria to evaluate details [7],Did you find yourself... - Sticking to your initial impressions [1]:Regularly updating your thoughts as you read more [7],"Post-Interaction Questionnaire 2 / 2
+
+
+
+
+News Evaluation
+
+For each of the following questions, please indicate how you felt while reading and interpreting the news articles (1 – not at all, 7 – very much). - Before reading the news article, how much knowledge did you have about the topic covered?","Post-Interaction Questionnaire 2 / 2
+
+
+
+
+News Evaluation
+
+For each of the following questions, please indicate how you felt while reading and interpreting the news articles (1 – not at all, 7 – very much). - How accurate do you find the news article?","Post-Interaction Questionnaire 2 / 2
+
+
+
+
+News Evaluation
+
+For each of the following questions, please indicate how you felt while reading and interpreting the news articles (1 – not at all, 7 – very much). - How biased do you think the news article is?","Post-Interaction Questionnaire 2 / 2
+
+
+
+
+News Evaluation
+
+For each of the following questions, please indicate how you felt while reading and interpreting the news articles (1 – not at all, 7 – very much). - How informative do you find the news article?","Post-Interaction Questionnaire 2 / 2
+
+
+
+
+News Evaluation
+
+For each of the following questions, please indicate how you felt while reading and interpreting the news articles (1 – not at all, 7 – very much). - How believable do you find the news article?","Post-Interaction Questionnaire 2 / 2
+
+
+
+
+News Evaluation
+
+For each of the following questions, please indicate how you felt while reading and interpreting the news articles (1 – not at all, 7 – very much). - How clear and well-written do you find the news article?",Timing - First Click,Timing - Last Click,Timing - Page Submit,Timing - Click Count,"Post-Interaction Questionnaire 1 / 2
+
+
+Your Thinking Mode
+
+
+For each of the following questions, please indicate how you felt while reading the news articles on a scale from 1 to 7.
+
+
+
+Did you feel like your thought process was more like a... - Quick skim [1]:Slow, careful read [7]",Did you feel like you were... - Absorbing several details at once [1]:Focusing on one detail at a time [7],Did your thoughts feel more... - Spontaneous [1]:Deliberate  [7],Did your thinking felt... - Easy and automatic [1]:Like it required significant mental effort [7],Were you more likely to... - Make connections between details instinctively [1]:Apply a set of rules or criteria to evaluate details [7],Did you find yourself... - Sticking to your initial impressions [1]:Regularly updating your thoughts as you read more [7],"Post-Interaction Questionnaire 2 / 2
+
+
+
+
+News Evaluation
+
+For each of the following questions, please indicate how you felt while reading and interpreting the news articles (1 – not at all, 7 – very much). - Before reading the news article, how much knowledge did you have about the topic covered?","Post-Interaction Questionnaire 2 / 2
+
+
+
+
+News Evaluation
+
+For each of the following questions, please indicate how you felt while reading and interpreting the news articles (1 – not at all, 7 – very much). - How accurate do you find the news article?","Post-Interaction Questionnaire 2 / 2
+
+
+
+
+News Evaluation
+
+For each of the following questions, please indicate how you felt while reading and interpreting the news articles (1 – not at all, 7 – very much). - How biased do you think the news article is?","Post-Interaction Questionnaire 2 / 2
+
+
+
+
+News Evaluation
+
+For each of the following questions, please indicate how you felt while reading and interpreting the news articles (1 – not at all, 7 – very much). - How informative do you find the news article?","Post-Interaction Questionnaire 2 / 2
+
+
+
+
+News Evaluation
+
+For each of the following questions, please indicate how you felt while reading and interpreting the news articles (1 – not at all, 7 – very much). - How believable do you find the news article?","Post-Interaction Questionnaire 2 / 2
+
+
+
+
+News Evaluation
+
+For each of the following questions, please indicate how you felt while reading and interpreting the news articles (1 – not at all, 7 – very much). - How clear and well-written do you find the news article?",Timing - First Click,Timing - Last Click,Timing - Page Submit,Timing - Click Count,"Post-Reading Questionnaire 1 / 2
+
+
+
+Your Thinking Mode
+
+
+For each of the following questions, please indicate how you felt while reading the news articles on a scale from 1 to 7.
+
+
+
+Did you feel like your thought process was more like a... - Quick skim [1]:Slow, careful read [7]",Did you feel like you were... - Absorbing several details at once [1]:Focusing on one detail at a time [7],Did your thinking felt... - Easy and automatic [1]:Like it required significant mental effort [7],Were you more likely to... - Make connections between details instinctively [1]:Apply a set of rules or criteria to evaluate details [7],Did you find yourself... - Sticking to your initial impressions [1]:Regularly updating your thoughts as you read more [7],"While reading the article, did your thoughts feel more... - Spontaneous [1]:Deliberate  [7]",Please explain why you felt this way while reading the article. Provide specific examples or reasons for your rating.,"Post-Reading Questionnaire 2 / 2
+
+ 
+
+News Evaluation
+
+
+For each of the following questions, please indicate how you felt while reading and interpreting the news articles (1 – not at all, 7 – very much). - Before reading the news article, how much knowledge did you have about the topic covered?","Post-Reading Questionnaire 2 / 2
+
+ 
+
+News Evaluation
+
+
+For each of the following questions, please indicate how you felt while reading and interpreting the news articles (1 – not at all, 7 – very much). - How accurate do you find the news article?","Post-Reading Questionnaire 2 / 2
+
+ 
+
+News Evaluation
+
+
+For each of the following questions, please indicate how you felt while reading and interpreting the news articles (1 – not at all, 7 – very much). - How biased do you think the news article is?","Post-Reading Questionnaire 2 / 2
+
+ 
+
+News Evaluation
+
+
+For each of the following questions, please indicate how you felt while reading and interpreting the news articles (1 – not at all, 7 – very much). - How informative do you find the news article?","Post-Reading Questionnaire 2 / 2
+
+ 
+
+News Evaluation
+
+
+For each of the following questions, please indicate how you felt while reading and interpreting the news articles (1 – not at all, 7 – very much). - How much do you trust the news article?","Post-Reading Questionnaire 2 / 2
+
+ 
+
+News Evaluation
+
+
+For each of the following questions, please indicate how you felt while reading and interpreting the news articles (1 – not at all, 7 – very much). - How clear and well-written do you find the news article?",Do you think the news article is propagandistic?,Why do you think so?,Timing - First Click,Timing - Last Click,Timing - Page Submit,Timing - Click Count,"Please indicate which passages you think contain propagandistic elements and which do not. All pa... - Does it contain propagandistic elements? - Ukrainian leader Vladimir Zelensky doesn't want meaningful negotiations and only seeks to prolong the conflict, Russian first deputy envoy to the UN Dmitry Polyansky has told RT","Please indicate which passages you think contain propagandistic elements and which do not. All pa... - Does it contain propagandistic elements? - Russia proposed holding a second round of direct talks in Istanbul on June 2, but Ukraine has yet to formally commit to attending the event.","Please indicate which passages you think contain propagandistic elements and which do not. All pa... - Does it contain propagandistic elements? - “They are making every effort to convince [US President Donald Trump] that Russia isn’t interested in peace,” Polyansky said in an interview on Friday.",Please indicate which passages you think contain propagandistic elements and which do not. All pa... - Does it contain propagandistic elements? - He suggested that Ukrainian leader Vladimir Zelensky is motivated by a desire to stay in power and avoid accountability,Please indicate which passages you think contain propagandistic elements and which do not. All pa... - Does it contain propagandistic elements? - He would also be held accountable for the embezzlement of the state budget and Western aid… That’s why he wants to avert this scenario any way he can.,Please indicate which passages you think contain propagandistic elements and which do not. All pa... - Does it contain propagandistic elements? - Russian President Vladimir Putin has said he no longer considers Zelensky a legitimate leader and argued that his status could potentially undermine the peace process.,"Please indicate which passages you think contain propagandistic elements and which do not. All pa... - Does it contain propagandistic elements? - ""Everything Kiev now does and says should be analyzed through [the lens] of Ukraine wanting to prolong the war,"" the diplomat added.","Please indicate which passages you think contain propagandistic elements and which do not. All pa... - Does it contain propagandistic elements? - Russia and Ukraine held their first direct talks in three years in Istanbul on May 16, agreeing to carry out a large prisoner exchange and each present ceasefire terms.",Timing - First Click,Timing - Last Click,Timing - Page Submit,Timing - Click Count,"What, if any, improvements would you suggest for the tool?",Did the tool help you become more aware of the different propaganda techniques used in media?,What did you find most helpful about the information provided by the tool?,"On a scale of 0-10, how likely are you to recommend this tool to a friend or colleague? - Group","On a scale of 0-10, how likely are you to recommend this tool to a friend or colleague?",Do you have any other comments or feedback about the tool?,PROLIFIC_PID
+"{""ImportId"":""startDate"",""timeZone"":""Europe/Berlin""}","{""ImportId"":""endDate"",""timeZone"":""Europe/Berlin""}","{""ImportId"":""status""}","{""ImportId"":""ipAddress""}","{""ImportId"":""progress""}","{""ImportId"":""duration""}","{""ImportId"":""finished""}","{""ImportId"":""recordedDate"",""timeZone"":""Europe/Berlin""}","{""ImportId"":""_recordId""}","{""ImportId"":""recipientLastName""}","{""ImportId"":""recipientFirstName""}","{""ImportId"":""recipientEmail""}","{""ImportId"":""externalDataReference""}","{""ImportId"":""locationLatitude""}","{""ImportId"":""locationLongitude""}","{""ImportId"":""distributionChannel""}","{""ImportId"":""userLanguage""}","{""ImportId"":""QID28""}","{""ImportId"":""QID98_TEXT""}","{""ImportId"":""QID106""}","{""ImportId"":""QID107""}","{""ImportId"":""QID108""}","{""ImportId"":""QID21""}","{""ImportId"":""QID22""}","{""ImportId"":""QID42""}","{""ImportId"":""QID44_1""}","{""ImportId"":""QID1216041958""}","{""ImportId"":""QID105""}","{""ImportId"":""QID45_1""}","{""ImportId"":""QID45_2""}","{""ImportId"":""QID45_3""}","{""ImportId"":""QID45_4""}","{""ImportId"":""QID45_5""}","{""ImportId"":""QID45_6""}","{""ImportId"":""QID117_1""}","{""ImportId"":""QID119_3""}","{""ImportId"":""QID120_3""}","{""ImportId"":""QID297""}","{""ImportId"":""QID298_TEXT""}","{""ImportId"":""QID1218252771_FIRST_CLICK""}","{""ImportId"":""QID1218252771_LAST_CLICK""}","{""ImportId"":""QID1218252771_PAGE_SUBMIT""}","{""ImportId"":""QID1218252771_CLICK_COUNT""}","{""ImportId"":""QID1218252772_1""}","{""ImportId"":""QID1218252773_1""}","{""ImportId"":""QID1218252774_1""}","{""ImportId"":""QID1218252775_1""}","{""ImportId"":""QID1218252776_1""}","{""ImportId"":""QID1218252777_1""}","{""ImportId"":""QID1218252778_1""}","{""ImportId"":""QID1218252778_2""}","{""ImportId"":""QID1218252778_3""}","{""ImportId"":""QID1218252778_4""}","{""ImportId"":""QID1218252778_5""}","{""ImportId"":""QID1218252778_6""}","{""ImportId"":""QID396_FIRST_CLICK""}","{""ImportId"":""QID396_LAST_CLICK""}","{""ImportId"":""QID396_PAGE_SUBMIT""}","{""ImportId"":""QID396_CLICK_COUNT""}","{""ImportId"":""QID397_1""}","{""ImportId"":""QID398_1""}","{""ImportId"":""QID399_1""}","{""ImportId"":""QID400_1""}","{""ImportId"":""QID401_1""}","{""ImportId"":""QID402_1""}","{""ImportId"":""QID403_1""}","{""ImportId"":""QID403_2""}","{""ImportId"":""QID403_3""}","{""ImportId"":""QID403_4""}","{""ImportId"":""QID403_5""}","{""ImportId"":""QID403_6""}","{""ImportId"":""QID405_FIRST_CLICK""}","{""ImportId"":""QID405_LAST_CLICK""}","{""ImportId"":""QID405_PAGE_SUBMIT""}","{""ImportId"":""QID405_CLICK_COUNT""}","{""ImportId"":""QID406_1""}","{""ImportId"":""QID407_1""}","{""ImportId"":""QID408_1""}","{""ImportId"":""QID409_1""}","{""ImportId"":""QID410_1""}","{""ImportId"":""QID411_1""}","{""ImportId"":""QID412_1""}","{""ImportId"":""QID412_2""}","{""ImportId"":""QID412_3""}","{""ImportId"":""QID412_4""}","{""ImportId"":""QID412_5""}","{""ImportId"":""QID412_6""}","{""ImportId"":""QID300_FIRST_CLICK""}","{""ImportId"":""QID300_LAST_CLICK""}","{""ImportId"":""QID300_PAGE_SUBMIT""}","{""ImportId"":""QID300_CLICK_COUNT""}","{""ImportId"":""QID301_1""}","{""ImportId"":""QID302_1""}","{""ImportId"":""QID303_1""}","{""ImportId"":""QID304_1""}","{""ImportId"":""QID305_1""}","{""ImportId"":""QID306_1""}","{""ImportId"":""QID307_TEXT""}","{""ImportId"":""QID308_1""}","{""ImportId"":""QID308_2""}","{""ImportId"":""QID308_3""}","{""ImportId"":""QID308_4""}","{""ImportId"":""QID308_5""}","{""ImportId"":""QID308_6""}","{""ImportId"":""QID334""}","{""ImportId"":""QID335_TEXT""}","{""ImportId"":""QID339_FIRST_CLICK""}","{""ImportId"":""QID339_LAST_CLICK""}","{""ImportId"":""QID339_PAGE_SUBMIT""}","{""ImportId"":""QID339_CLICK_COUNT""}","{""ImportId"":""QID336#1_1""}","{""ImportId"":""QID336#1_2""}","{""ImportId"":""QID336#1_3""}","{""ImportId"":""QID336#1_4""}","{""ImportId"":""QID336#1_5""}","{""ImportId"":""QID336#1_6""}","{""ImportId"":""QID336#1_7""}","{""ImportId"":""QID336#1_8""}","{""ImportId"":""QID338_FIRST_CLICK""}","{""ImportId"":""QID338_LAST_CLICK""}","{""ImportId"":""QID338_PAGE_SUBMIT""}","{""ImportId"":""QID338_CLICK_COUNT""}","{""ImportId"":""QID170_TEXT""}","{""ImportId"":""QID80""}","{""ImportId"":""QID169_TEXT""}","{""ImportId"":""QID49_NPS_GROUP""}","{""ImportId"":""QID49""}","{""ImportId"":""QID50_TEXT""}","{""ImportId"":""PROLIFIC_PID""}"
+2025-06-03 16:51:06,2025-06-03 16:52:17,IP Address,89.206.81.91,1,71,False,2025-06-10 16:52:20,R_8HnulVSmHLp38jS,,,,,47.3976,8.5442,anonymous,EN,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+2025-06-03 16:52:29,2025-06-03 16:55:23,IP Address,89.206.81.91,99,174,False,2025-06-10 16:55:24,R_8GZAQap566vO4QF,,,,,47.3976,8.5442,anonymous,EN,I agree and I want to participate,sadgfh,Desktop,Other,English,65 and over,Prefer not to say,Bachelor's degree,Angola,125,"Yes, I will",4,4,4,4,4,4,5,Once a month,9,"traditional media (e.g. newspapers, TV news channels),social media platforms (e.g. Facebook, Twitter, Telegram)",,0,0,24.73,0,4,5,4,5,3,4,5,5,5,4,5,6,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,0,0,14.78,0,7,5,5,5,4,4,wasdsfghj,2,3,2,3,3,3,Yes,sag,1.028,31.846,33.667,9,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,1.028,31.846,33.667,9,asd,Yes,asd,Detractor,5,sad,
+2025-06-04 11:58:02,2025-06-04 12:00:23,IP Address,213.55.237.15,9,140,False,2025-06-11 12:00:27,R_8HzuuKVgpi9214l,,,,,47.3952,8.4925,anonymous,EN,I agree and I want to participate,test,Desktop,Other,English,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+2025-06-04 18:57:08,2025-06-04 19:20:15,IP Address,213.55.237.15,99,1387,False,2025-06-11 19:20:23,R_2hzrJ90WM9fDpvj,,,,,47.3952,8.4925,anonymous,EN,I agree and I want to participate,test,Desktop,Other,English,25 to 44,Male,Bachelor's degree,,109,"Yes, I will",4,4,4,4,4,4,4,Rarely,8,"social media platforms (e.g. Facebook, Twitter, Telegram)",,,,,,,,,,,,,,,,,,7.32,7.78,273.714,2,4,4,5,5,4,5,4,4,4,4,4,4,,,,,,,,,,,,,,,,,0,0,17.698,0,5,5,4,4,4,4,test,4,4,4,4,4,4,Yes,test,9.765,259.829,260.352,16,No,No,No,No,No,No,No,No,9.765,259.828,260.351,16,,Yes,,Detractor,5,,
+2025-07-13 16:50:46,2025-07-13 17:07:43,IP Address,194.230.148.189,100,1016,True,2025-07-13 17:07:43,R_8ipXmebJBhvZzMK,,,,,47.4021,8.5752,anonymous,EN,I agree and I want to participate,sddfs,Desktop,Other,English,45 to 64,Female,Bachelor's degree,Benin,21,"Yes, I will",6,6,5,5,6,5,7,Once a month,10,online news websites,,,,,,,,,,,,,,,,,,0,0,95.449,0,4,3,5,3,7,7,5,6,5,5,6,5,,,,,,,,,,,,,,,,,0,0,84.365,0,7,5,6,4,6,2,fdg,2,4,4,5,5,4,Yes,dfg,0.871,9.348,31.603,11,No,No,No,No,No,No,No,No,0.871,9.349,31.603,11,sdf,No,asd,Detractor,4,sdf,
+2025-07-13 17:22:32,2025-07-13 17:39:00,IP Address,209.35.90.150,100,987,True,2025-07-13 17:39:00,R_2YzDJlFTtF0t1sH,,,,,53.4809,-2.2374,anonymous,EN,I agree and I want to participate,5dbf261c3b89f23ccd3007af,Desktop,Other,English,25 to 44,Male,Bachelor's degree,United Kingdom,"Craft & Related Trades Workers – hands-on skilled trades (e.g. carpenter, plumber, electrician)","Yes, I will",4,3,5,5,4,4,2,Several times a week,8,online news websites,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,0,0,401.148,0,6,4,3,6,4,3,5,6,5,4,5,4,0,0,83.356,0,7,3,5,4,3,4,"It's difficult to say, i have my own views on the issue raised in the article, the article is very biased and against those views",6,4,7,3,1,3,Yes,because it is purely from the Kremlin perspective,1.737,67.866,69.984,17,Yes,Yes,Yes,Yes,Yes,Yes,Yes,No,1.738,67.866,69.984,17,"it seems to work well already i think, but needs to be targeted at the platforms where misinformation and propaganda are most prevalent",No,for me it wasn't useful because i know a lot about the subjects,Detractor,5,,
+2025-07-13 17:20:15,2025-07-13 17:51:49,IP Address,75.46.155.246,100,1893,True,2025-07-13 17:51:49,R_5Ce77poXYW6M37j,,,,,33.7153,-84.3312,anonymous,EN,I agree and I want to participate,676304145bbe20d1fd5d653c,Desktop,Other,English,25 to 44,Male,Bachelor's degree,United States,"Managers – people who plan and direct the work of others (e.g. department head, project manager, store manager)","Yes, I will",2,6,1,1,6,7,4,Rarely,1,"traditional media (e.g. newspapers, TV news channels),social media platforms (e.g. Facebook, Twitter, Telegram)",,,,,,,,,,,,,,,,,,76.816,88.351,131.989,2,2,1,6,2,7,2,5,6,2,5,6,6,,,,,,,,,,,,,,,,,55.184,63.043,106.702,2,3,5,2,7,1,7,This is a topic I have spent a lot of time learning about over the past few months. The rhetoric and content of the article affirmed a lot of my thoughts from said time spent learning.,5,6,2,5,5,6,No,It was almost an overkill of a statement. The tone and direct citable and credible statements were good but the quote I selected as propaganda had a feel of adding icing on top of the cake.,1.133,150.167,162.68,19,No,No,No,No,No,No,Yes,No,1.133,150.167,162.681,19,Maybe cite a little bit more or make citing a little more obvious; I think it is fine though.,Yes,To be able to clearly read and see why something was cited with well written and thought out explanations.,Passive,7,Best wishes with your research/endeavors!,
+2025-07-13 17:24:06,2025-07-13 17:54:52,IP Address,73.236.255.58,100,1845,True,2025-07-13 17:54:53,R_7YMsTrCJXGHiYEg,,,,,40.064,-80.7209,anonymous,EN,I agree and I want to participate,62b9c2f1e55fe9f17dfedc5d,Desktop,Other,English,45 to 64,Female,Bachelor's degree,United States,"Technicians & Associate Professionals – support roles requiring specialized training (e.g. lab technician, paralegal, IT support)","Yes, I will",1,1,4,4,4,4,4,Once a month,10,"traditional media (e.g. newspapers, TV news channels)",,,,,,,,,,,,,,,,,,0,0,364.181,0,5,4,4,4,5,5,3,5,1,5,5,6,,,,,,,,,,,,,,,,,146.719,146.719,147.335,1,5,3,4,3,4,4,My thoughts developed as I learned new information in the article,1,5,1,5,5,6,No,I do not see any information that brings doubt,2.447,372.624,377.761,13,Yes,No,Yes,Yes,No,No,No,No,2.447,372.624,377.761,13,I can't think of any improvement,Yes,The information was clear,Detractor,5,no,
+2025-07-13 17:24:07,2025-07-13 18:03:24,IP Address,185.69.145.232,100,2356,True,2025-07-13 18:03:25,R_85KDIAlh2Mk0VyN,,,,,51.4964,-0.1224,anonymous,EN,I agree and I want to participate,66f3f19a6de8f0b0cdf9eb45,Desktop,Other,English,18 to 24,Male,Bachelor's degree,United Kingdom,"Managers – people who plan and direct the work of others (e.g. department head, project manager, store manager)","Yes, I will",6,7,2,1,7,7,5,Once a week,10,"traditional media (e.g. newspapers, TV news channels),social media platforms (e.g. Facebook, Twitter, Telegram)",,,,,,,,,,,,,,,,,,6.838,43.385,343.735,2,7,6,5,6,7,7,1,4,6,6,5,7,,,,,,,,,,,,,,,,,0,0,387.374,0,7,7,7,2,6,6,"There's a reason why Russia is pushing for peace, though it may be true that the Ukraine President is avoiding elections. They are both trying to avoid something. Russia has an upper hand to the conflict so I see why they should be working that hard to achieve peace.",5,4,7,6,3,6,Yes,Its too one sided. Its mostly showing one point of view.,6.581,263.08,264.803,14,Yes,No,Yes,Yes,Yes,Yes,Yes,No,6.58,263.079,264.802,14,Be accurate.,Yes,It helps identify propaganda.,Passive,8,,
+2025-07-13 17:31:38,2025-07-13 18:21:21,IP Address,85.255.237.55,100,2982,True,2025-07-13 18:21:21,R_8xMjblGEAfD1y4r,,,,,51.4964,-0.1224,anonymous,EN,I agree and I want to participate,66f2e478619ff9c3df3385ad,Desktop,Other,English,25 to 44,Female,Bachelor's degree,United Kingdom,"Managers – people who plan and direct the work of others (e.g. department head, project manager, store manager)","Yes, I will",7,7,2,1,6,3,6,Several times a week,10,"traditional media (e.g. newspapers, TV news channels),social media platforms (e.g. Facebook, Twitter, Telegram)",,62.047,341.564,343.821,3,7,7,6,3,2,6,1,5,5,7,6,7,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,0,0,87.708,0,7,7,7,7,7,5,I had to read the article slowly and understand everything. Without the tool I had to start questioning every statement.,7,5,6,7,5,7,Yes,"It seems slightly exaggerated. ",3.057,204.365,205.534,14,Yes,No,Yes,Yes,Yes,Yes,Yes,No,3.057,204.365,205.534,14,Its okay.,Yes,It identified the propaganda so I didn't have to overthink.,Promoter,9,I'd like to have it.,

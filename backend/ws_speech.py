@@ -106,11 +106,11 @@ def ensure_valid_wav(audio_base64: str) -> str:
         valid_bytes = buf.getvalue()
         return base64.b64encode(valid_bytes).decode('utf-8')
     except Exception as e:
-        logger.error("Audio conversion failed: %s", str(e).split('\n')[0])
+        # logger.error("Audio conversion failed: %s", str(e).split('\n')[0])
         raise ValueError("Audio conversion failed") from e
 
 async def detect_propaganda(input_article: str) -> Dict[str, Any]:
-    logger.info("Starting propaganda detection...")
+    # logger.info("Starting propaganda detection...")
     data = {
         "model_name": "gpt-4o",
         "contextualize": True,
@@ -119,25 +119,27 @@ async def detect_propaganda(input_article: str) -> Dict[str, Any]:
     results: List[Dict[str, Any]] = []
     try:
         async with websockets.connect(PROPAGANDA_WS_URL) as websocket:
-            logger.info("Connected to propaganda detection service")
+            # logger.info("Connected to propaganda detection service")
             await websocket.send(json.dumps(data))
             async for message in websocket:
                 try:
                     result = json.loads(message)
                     results.append(result)
-                    logger.info("Received propaganda detection result")
+                    # logger.info("Received propaganda detection result")
                 except json.JSONDecodeError:
-                    logger.error("Received invalid JSON from propaganda service")
+                    # logger.error("Received invalid JSON from propaganda service")
+                    pass
     except websockets.exceptions.ConnectionClosed as e:
-        logger.error("Propaganda service connection closed")
+        # logger.error("Propaganda service connection closed")
+        pass
     
-    logger.info("Propaganda detection completed")
+    # logger.info("Propaganda detection completed")
     return results[-1] if results else {}
 
 async def chat_completion_streaming(messages: list) -> AsyncGenerator[Dict[str, Any], None]:
     start_time = time.time()
     def blocking_stream():
-        logger.info("Generating assistant response...")
+        # logger.info("Generating assistant response...")
         completion = client.chat.completions.create(
             model="gpt-4o-audio-preview",
             modalities=["text", "audio"],
@@ -191,9 +193,10 @@ async def chat_completion_streaming(messages: list) -> AsyncGenerator[Dict[str, 
     
     # Calculate timing metrics
     generation_time = time.time() - start_time
-    logger.info("Model response generation time: %.2f seconds", generation_time)
+    # logger.info("Model response generation time: %.2f seconds", generation_time)
     if stream_data["audio_duration"]:
-        logger.info("Model audio duration: %.2f seconds", stream_data["audio_duration"])
+        # logger.info("Model audio duration: %.2f seconds", stream_data["audio_duration"])
+        pass
     
     # Calculate total response time (from start to end of audio)
     total_response_time = generation_time + (stream_data["audio_duration"] or 0)
@@ -267,7 +270,11 @@ async def realtime_conversation(websocket: WebSocket):
         # Save the initial session information to DynamoDB
         try:
             logger.info(f"DB: Saving session init - ID: {session_id}, Mode: {dialogue_mode}, Article: {len(article)} chars")
-            save_session_init(session_id, article, dialogue_mode, origin_url, prolific_id)
+            success = save_session_init(session_id, article, dialogue_mode, origin_url, prolific_id)
+            if success:
+                logger.info(f"DB: Successfully saved session init - ID: {session_id}")
+            else:
+                logger.error(f"DB ERROR: save_session_init returned False - ID: {session_id}")
         except Exception as e:
             logger.error(f"DB ERROR: Failed to save session init - ID: {session_id}, Error: {str(e)}")
         
@@ -305,7 +312,7 @@ async def realtime_conversation(websocket: WebSocket):
         # Get the appropriate system prompt based on mode
         logger.info(f"Constructing system prompt for mode: {dialogue_mode}")
         system_prompt = get_prompt(dialogue_mode, article, propaganda_info)
-        logger.info(f"System prompt constructed. {system_prompt}")
+        # logger.info(f"System prompt constructed. {system_prompt}")
         messages.append({"role": "system", "content": system_prompt})
         
         # Store system prompt in text history
