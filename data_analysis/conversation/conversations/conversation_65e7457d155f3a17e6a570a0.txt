@@ -1,0 +1,7 @@
+Session ID: 57729bf4-45dc-4b02-b88b-47ab733f98aa
+Dialogue Mode: supportive
+Prolific ID: 65e7457d155f3a17e6a570a0
+URL: https://apollolytics-dialogue.vercel.app/dialogue/negative1
+--------------------------------------------------
+
+assistant: Germany has recently deployed a permanent military brigade abroad for the first time since World War II. This move, stationing troops in Lithuania, is seen as more symbolic than strategic. It shows how Germany is trying to appear strong and relevant despite not fully understanding the deeper consequences. What do you think is the main reason behind this sudden show of militarism?

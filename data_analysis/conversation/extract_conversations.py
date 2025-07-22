@@ -1,0 +1,197 @@
+import pandas as pd
+import os
+import numpy as np
+
+def extract_conversations(df, output_dir='data_analysis/conversation/conversations/'):
+    """
+    Extract conversations for each prolific ID and save them to files.
+    
+    Args:
+        df (pd.DataFrame): DataFrame with conversation data
+        output_dir (str): Directory to save conversation files
+    """
+    # Create output directory if it doesn't exist
+    os.makedirs(output_dir, exist_ok=True)
+    
+    # Debug: Check data structure
+    print(f"DataFrame shape: {df.shape}")
+    print(f"Columns: {df.columns.tolist()}")
+    print(f"Event types: {df['event_type'].value_counts()}")
+    print(f"Unique sessions: {df['session_id'].nunique()}")
+    print(f"Unique prolific IDs: {df['prolific_id'].nunique()}")
+    
+    # Filter for message events only and sort by session and timestamp
+    messages_df = df[df['event_type'] == 'message'].copy()
+    print(f"Message events: {len(messages_df)}")
+    
+    if len(messages_df) == 0:
+        print("No message events found!")
+        return {}
+    
+    messages_df = messages_df.sort_values(['session_id', 'timestamp'])
+    
+    # Debug: Check message data
+    print(f"Message roles: {messages_df['role'].value_counts()}")
+    print(f"Messages with content: {messages_df['content'].notna().sum()}")
+    
+    # Group by session_id to process each conversation
+    conversations = {}
+    
+    for session_id, session_data in messages_df.groupby('session_id'):
+        print(f"\nProcessing session: {session_id}")
+        
+        # Get session metadata from the first row
+        prolific_id = session_data['prolific_id'].iloc[0]
+        dialogue_mode = session_data['dialogue_mode'].iloc[0]
+        origin_url = session_data['origin_url'].iloc[0]
+        article = session_data['article'].iloc[0]
+        
+        print(f"  Prolific ID: {prolific_id}")
+        print(f"  Dialogue Mode: {dialogue_mode}")
+        print(f"  Messages in session: {len(session_data)}")
+        
+        if pd.isna(prolific_id):
+            print(f"  Skipping session {session_id} - no prolific_id")
+            continue
+            
+        # Build conversation text
+        conversation_lines = []
+        conversation_lines.append(f"Session ID: {session_id}")
+        conversation_lines.append(f"Dialogue Mode: {dialogue_mode}")
+        conversation_lines.append(f"Prolific ID: {prolific_id}")
+        conversation_lines.append(f"URL: {origin_url}")
+        # conversation_lines.append(f"Article: {article}")
+        conversation_lines.append("-" * 50)
+        conversation_lines.append("")
+        
+        message_count = 0
+        for _, row in session_data.iterrows():
+            role = row['role']
+            content = row['content']
+            
+            if pd.notna(content) and pd.notna(role):
+                conversation_lines.append(f"{role}: {content}")
+                conversation_lines.append("")
+                message_count += 1
+        
+        print(f"  Valid messages: {message_count}")
+        
+        # Join all lines
+        conversation_text = "\n".join(conversation_lines)
+        
+        # Store by prolific_id (in case multiple sessions per prolific_id)
+        if prolific_id not in conversations:
+            conversations[prolific_id] = []
+        conversations[prolific_id].append(conversation_text)
+    
+    # Save conversations to files
+    saved_count = 0
+    for prolific_id, conversation_list in conversations.items():
+        filename = f"{output_dir}/conversation_{prolific_id}.txt"
+        
+        # If multiple sessions for same prolific_id, combine them
+        if len(conversation_list) > 1:
+            combined_text = "\n\n" + "="*80 + "\n\n".join(conversation_list)
+        else:
+            combined_text = conversation_list[0]
+        
+        with open(filename, 'w', encoding='utf-8') as f:
+            f.write(combined_text)
+        
+        print(f"Saved conversation for prolific_id {prolific_id} to {filename}")
+        saved_count += 1
+    
+    print(f"\nTotal conversations saved: {saved_count}")
+    return conversations
+
+def get_conversation_stats(df):
+    """
+    Get statistics about conversations.
+    """
+    messages_df = df[df['event_type'] == 'message'].copy()
+    
+    if len(messages_df) == 0:
+        print("No message events found for statistics!")
+        return
+    
+    # Count messages per session
+    messages_per_session = messages_df.groupby('session_id').size()
+    
+    # Count sessions per prolific_id
+    sessions_per_prolific = messages_df.groupby('prolific_id')['session_id'].nunique()
+    
+    print("Conversation Statistics:")
+    print(f"Total sessions: {len(messages_per_session)}")
+    print(f"Total prolific IDs: {len(sessions_per_prolific)}")
+    print(f"Average messages per session: {messages_per_session.mean():.2f}")
+    print(f"Median messages per session: {messages_per_session.median():.2f}")
+    print(f"Min messages per session: {messages_per_session.min()}")
+    print(f"Max messages per session: {messages_per_session.max()}")
+    print(f"Average sessions per prolific ID: {sessions_per_prolific.mean():.2f}")
+    
+    # Show distribution
+    print("\nMessages per session distribution:")
+    print(messages_per_session.value_counts().sort_index())
+
+# Example usage with your real data
+if __name__ == "__main__":
+    # Load your DynamoDB data
+    import boto3
+    import os
+    from datetime import datetime
+    from dotenv import load_dotenv
+
+    # Load environment variables from .env file (if it exists)
+    load_dotenv()
+
+    # Initialize DynamoDB client
+    aws_region = os.getenv('AWS_REGION', 'eu-north-1')
+    endpoint_url = os.getenv('AWS_ENDPOINT_URL')
+    DYNAMODB_TABLE = os.getenv('DYNAMODB_TABLE', 'apollolytics_dialogues')
+
+    if endpoint_url:
+        dynamodb = boto3.resource('dynamodb', region_name=aws_region, endpoint_url=endpoint_url)
+    else:
+        dynamodb = boto3.resource('dynamodb', region_name=aws_region)
+
+    # Get the table
+    table = dynamodb.Table(DYNAMODB_TABLE)
+
+    # Scan the table to get all items
+    response = table.scan()
+    items = response['Items']
+
+    # Handle pagination if there are more results
+    while 'LastEvaluatedKey' in response:
+        response = table.scan(ExclusiveStartKey=response['LastEvaluatedKey'])
+        items.extend(response['Items'])
+
+    # Convert to DataFrame
+    df = pd.DataFrame(items)
+
+    # Convert timestamp to datetime for better analysis
+    df['timestamp'] = pd.to_numeric(df['timestamp'], errors='coerce')
+    df['datetime'] = pd.to_datetime(df['timestamp'], unit='s')
+
+    # Sort by session_id and timestamp
+    df = df.sort_values(['session_id', 'timestamp'])
+
+    # Filter for valid prolific IDs (24 characters)
+    session_ids = df[df.prolific_id.str.len() == 24].session_id
+    df = df[df.session_id.isin(session_ids)]
+    
+    # Remove columns with only NaN values
+    df = df.dropna(axis=1, how='all')
+    print(df.columns)
+    # Forward fill session-specific columns within each session
+    session_columns = ['dialogue_mode', 'origin_url', 'article', 'prolific_id']
+    df[session_columns] = df.groupby('session_id')[session_columns].ffill()
+
+    print("Data loaded and processed!")
+    print(f"DataFrame shape: {df.shape}")
+    
+    # Get conversation statistics
+    get_conversation_stats(df)
+    
+    # Extract and save conversations
+    conversations = extract_conversations(df, 'data_analysis/conversation/conversations/') 

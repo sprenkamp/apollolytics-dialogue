@@ -1,0 +1,9 @@
+Session ID: 229c4bd3-ae63-4a22-8c28-15c844a077b7
+Dialogue Mode: supportive
+Prolific ID: 676688afcec3cd778dfbb863
+URL: https://apollolytics-dialogue.vercel.app/dialogue/negative3
+--------------------------------------------------
+
+assistant: Certainly. Let's begin by discussing the tragic incident off the Greek coast where more than 500 people lost their lives as a direct result of certain migration policies. This event shows how Europe’s approach to migration has not only become harsher, but also more dangerous for vulnerable people. How do you feel about Europe’s current direction on this?
+
+user: Avis? Avis, where are you? Where are you? Avis? I don't know where you are.
