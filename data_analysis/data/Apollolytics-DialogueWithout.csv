@@ -1,0 +1,336 @@
+StartDate,EndDate,Status,IPAddress,Progress,Duration (in seconds),Finished,RecordedDate,ResponseId,RecipientLastName,RecipientFirstName,RecipientEmail,ExternalReference,LocationLatitude,LocationLongitude,DistributionChannel,UserLanguage,Q2.1,Q3.1,Q3.2,Q3.3,Q3.4,Q4.2,Q4.3,Q4.4,Q4.5_1,Q415,Q4.8,Q5.1_1,Q5.1_2,Q5.1_3,Q5.1_4,Q5.1_5,Q5.1_6,Q7.1_1,Q7.2_1,Q7.3_1,Q7.4,Q7.5,Q2_First Click,Q2_Last Click,Q2_Page Submit,Q2_Click Count,Q3_1,Q4_1,Q5_1,Q6_1,Q7_1,Q8_1,Q9_1,Q9_2,Q9_3,Q9_4,Q9_5,Q9_6,Q396_First Click,Q396_Last Click,Q396_Page Submit,Q396_Click Count,Q397_1,Q398_1,Q399_1,Q400_1,Q401_1,Q402_1,Q403_1,Q403_2,Q403_3,Q403_4,Q403_5,Q403_6,Q405_First Click,Q405_Last Click,Q405_Page Submit,Q405_Click Count,Q406_1,Q407_1,Q408_1,Q409_1,Q410_1,Q411_1,Q412_1,Q412_2,Q412_3,Q412_4,Q412_5,Q412_6,IM_1.2_First Click,IM_1.2_Last Click,IM_1.2_Page Submit,IM_1.2_Click Count,IM_1.3_1,IM_1.4_1,IM_1.5_1,IM_1.6_1,IM_1.7_1,IM_1.8_1,IM_1.9,IM_1.10_1,IM_1.10_2,IM_1.10_3,IM_1.10_4,IM_1.10_5,IM_1.10_6,IM_1.11,IM_1.12,IM_1.13_First Click,IM_1.13_Last Click,IM_1.13_Page Submit,IM_1.13_Click Count,IM_1.14#1_1,IM_1.14#1_2,IM_1.14#1_3,IM_1.14#1_4,IM_1.14#1_5,IM_1.14#1_6,IM_1.14#1_7,IM_1.14#1_8,IM_1.15_First Click,IM_1.15_Last Click,IM_1.15_Page Submit,IM_1.15_Click Count,PROLIFIC_PID
+Start Date,End Date,Response Type,IP Address,Progress,Duration (in seconds),Finished,Recorded Date,Response ID,Recipient Last Name,Recipient First Name,Recipient Email,External Data Reference,Location Latitude,Location Longitude,Distribution Channel,User Language,"Consent Form
+
+
+
+ 
+
+Introduction
+
+In this study, the Digital Society Initiative of the University of Zurich is researching the perceptions and experiences of digital news readers. We greatly value your participation in our research and want to ensure you that you cannot do anything wrong and there are no right or wrong answers.
+
+ 
+
+Scope and Procedure
+If you decide to take part in this study, the following activities take place:
+
+
+	You will participate in an online survey.
+	The survey will take approximately 20 minutes to complete.
+	You will interact with propaganda.
+
+
+
+The following information will be collected during the study:  
+
+
+	Basic demographic information.
+	Your anonymous responses to questions about your understanding and interpretation of the news articles.
+
+
+
+
+Risks Associated with Participation
+Participation in the study does not involve any considerable risks that we are aware of. However, we would like to note that the study involves reading news articles about contemporary topics that can potentially cause emotional reactions. Please be aware that during this study, you may be exposed to articles that might contain misinformation or propaganda. These materials are used specifically for research purposes. We kindly request that you do not share, reproduce, or distribute any content, including articles, images, or other media, that you come across during your participation in this study. This restriction is crucial to ensure that potentially misleading or incorrect information is not propagated outside of the research context.
+
+
+
+You have the option to end your participation at any time during the study without having to provide a reason. All information you have shared with us up to this point may be stored and used for research.
+
+
+
+This experiment has been approved by the Ethics Committee of the University of Zurich.
+
+ 
+Consent
+By signing this form, you acknowledge the following statements:
+
+
+	You permit your anonymized data to be used by other researchers of the University of Zurich and the University of Lausanne for further studies and analyses.
+	You authorize the use of your anonymized data for internal or external publications, as well as scientific journals and conference proceedings.
+	You have been informed about the purpose and conditions of your study participation.
+	You are at least 18 years old.
+	You had enough time to decide to participate.
+	You agree to participate.
+
+
+
+Giving consent to this form in no way waives your legal rights or releases the researchers or institutions involved from their legal or professional responsibilities. You are free to withdraw from the study at any time.
+
+
+
+If you have any further questions about your participation in this study at a later point in time, please contact Kilian Sprenkamp (kilian.sprenkamp@uzh.ch).",Please enter your Prolific ID:,Which devices are you currently using?,"Education. Subject.
+
+
+Participants were asked the following question: What subject do you study?","First Language
+
+ 
+
+Participants were asked the following question: What is your first language?",What is your age?,What is your gender?,What is your highest level of education?,What country do you reside in? - Country of residence,Click to write the question text:,"We care about the quality of our survey data. For us to get the most accurate measures of your opinions, it is important that you provide natural / truthful answers to each question in the survey.
+
+Do you commit to providing natural / truthful answers to the questions in this survey?","Thought processes
+
+ 
+
+Please rate your degree of agreement with the following statements from 1 (strongly disagree) to 7 (strongly agree). - 1. I would prefer complex to simple problems.","Thought processes
+
+ 
+
+Please rate your degree of agreement with the following statements from 1 (strongly disagree) to 7 (strongly agree). - 2. I like to have the responsibility of handling a situation that requires a lot of thinking.","Thought processes
+
+ 
+
+Please rate your degree of agreement with the following statements from 1 (strongly disagree) to 7 (strongly agree). - 3. Thinking is not my idea of fun.","Thought processes
+
+ 
+
+Please rate your degree of agreement with the following statements from 1 (strongly disagree) to 7 (strongly agree). - 4. I would rather do something that requires little thought than something that is sure to challenge my thinking abilities.","Thought processes
+
+ 
+
+Please rate your degree of agreement with the following statements from 1 (strongly disagree) to 7 (strongly agree). - 5. I really enjoy a task that involves coming up with new solutions to problems.","Thought processes
+
+ 
+
+Please rate your degree of agreement with the following statements from 1 (strongly disagree) to 7 (strongly agree). - 6. I would prefer a task that is intellectual, difficult, and important to one that is somewhat important but does not require much thought.","Pre-Reading QuestionsYour Thinking ModeFor each of the following questions, please indicate how - Extreme left [1]:Extreme right [7]",How frequently do you read news articles?,How much do you trust the news media in general? - no trust at all [1]:complete trust [7],Which sources do you typically use to consume news? (Select all that apply),Please specify the other sources you use to consume news (if applicable):,Timing - First Click,Timing - Last Click,Timing - Page Submit,Timing - Click Count,"Post-Interaction Questionnaire 1 / 2
+
+
+Your Thinking Mode
+
+
+For each of the following questions, please indicate how you felt while reading the news articles on a scale from 1 to 7.
+
+
+
+Did you feel like your thought process was more like a... - Quick skim [1]:Slow, careful read [7]",Did you feel like you were... - Absorbing several details at once [1]:Focusing on one detail at a time [7],Did your thoughts feel more... - Spontaneous [1]:Deliberate  [7],Did your thinking felt... - Easy and automatic [1]:Like it required significant mental effort [7],Were you more likely to... - Make connections between details instinctively [1]:Apply a set of rules or criteria to evaluate details [7],Did you find yourself... - Sticking to your initial impressions [1]:Regularly updating your thoughts as you read more [7],"Post-Interaction Questionnaire 2 / 2
+
+
+
+
+News Evaluation
+
+For each of the following questions, please indicate how you felt while reading and interpreting the news articles (1 – not at all, 7 – very much). - Before reading the news article, how much knowledge did you have about the topic covered?","Post-Interaction Questionnaire 2 / 2
+
+
+
+
+News Evaluation
+
+For each of the following questions, please indicate how you felt while reading and interpreting the news articles (1 – not at all, 7 – very much). - How accurate do you find the news article?","Post-Interaction Questionnaire 2 / 2
+
+
+
+
+News Evaluation
+
+For each of the following questions, please indicate how you felt while reading and interpreting the news articles (1 – not at all, 7 – very much). - How biased do you think the news article is?","Post-Interaction Questionnaire 2 / 2
+
+
+
+
+News Evaluation
+
+For each of the following questions, please indicate how you felt while reading and interpreting the news articles (1 – not at all, 7 – very much). - How informative do you find the news article?","Post-Interaction Questionnaire 2 / 2
+
+
+
+
+News Evaluation
+
+For each of the following questions, please indicate how you felt while reading and interpreting the news articles (1 – not at all, 7 – very much). - How believable do you find the news article?","Post-Interaction Questionnaire 2 / 2
+
+
+
+
+News Evaluation
+
+For each of the following questions, please indicate how you felt while reading and interpreting the news articles (1 – not at all, 7 – very much). - How clear and well-written do you find the news article?",Timing - First Click,Timing - Last Click,Timing - Page Submit,Timing - Click Count,"Post-Interaction Questionnaire 1 / 2
+
+
+Your Thinking Mode
+
+
+For each of the following questions, please indicate how you felt while reading the news articles on a scale from 1 to 7.
+
+
+
+Did you feel like your thought process was more like a... - Quick skim [1]:Slow, careful read [7]",Did you feel like you were... - Absorbing several details at once [1]:Focusing on one detail at a time [7],Did your thoughts feel more... - Spontaneous [1]:Deliberate  [7],Did your thinking felt... - Easy and automatic [1]:Like it required significant mental effort [7],Were you more likely to... - Make connections between details instinctively [1]:Apply a set of rules or criteria to evaluate details [7],Did you find yourself... - Sticking to your initial impressions [1]:Regularly updating your thoughts as you read more [7],"Post-Interaction Questionnaire 2 / 2
+
+
+
+
+News Evaluation
+
+For each of the following questions, please indicate how you felt while reading and interpreting the news articles (1 – not at all, 7 – very much). - Before reading the news article, how much knowledge did you have about the topic covered?","Post-Interaction Questionnaire 2 / 2
+
+
+
+
+News Evaluation
+
+For each of the following questions, please indicate how you felt while reading and interpreting the news articles (1 – not at all, 7 – very much). - How accurate do you find the news article?","Post-Interaction Questionnaire 2 / 2
+
+
+
+
+News Evaluation
+
+For each of the following questions, please indicate how you felt while reading and interpreting the news articles (1 – not at all, 7 – very much). - How biased do you think the news article is?","Post-Interaction Questionnaire 2 / 2
+
+
+
+
+News Evaluation
+
+For each of the following questions, please indicate how you felt while reading and interpreting the news articles (1 – not at all, 7 – very much). - How informative do you find the news article?","Post-Interaction Questionnaire 2 / 2
+
+
+
+
+News Evaluation
+
+For each of the following questions, please indicate how you felt while reading and interpreting the news articles (1 – not at all, 7 – very much). - How believable do you find the news article?","Post-Interaction Questionnaire 2 / 2
+
+
+
+
+News Evaluation
+
+For each of the following questions, please indicate how you felt while reading and interpreting the news articles (1 – not at all, 7 – very much). - How clear and well-written do you find the news article?",Timing - First Click,Timing - Last Click,Timing - Page Submit,Timing - Click Count,"Post-Interaction Questionnaire 1 / 2
+
+
+Your Thinking Mode
+
+
+For each of the following questions, please indicate how you felt while reading the news articles on a scale from 1 to 7.
+
+
+
+Did you feel like your thought process was more like a... - Quick skim [1]:Slow, careful read [7]",Did you feel like you were... - Absorbing several details at once [1]:Focusing on one detail at a time [7],Did your thoughts feel more... - Spontaneous [1]:Deliberate  [7],Did your thinking felt... - Easy and automatic [1]:Like it required significant mental effort [7],Were you more likely to... - Make connections between details instinctively [1]:Apply a set of rules or criteria to evaluate details [7],Did you find yourself... - Sticking to your initial impressions [1]:Regularly updating your thoughts as you read more [7],"Post-Interaction Questionnaire 2 / 2
+
+
+
+
+News Evaluation
+
+For each of the following questions, please indicate how you felt while reading and interpreting the news articles (1 – not at all, 7 – very much). - Before reading the news article, how much knowledge did you have about the topic covered?","Post-Interaction Questionnaire 2 / 2
+
+
+
+
+News Evaluation
+
+For each of the following questions, please indicate how you felt while reading and interpreting the news articles (1 – not at all, 7 – very much). - How accurate do you find the news article?","Post-Interaction Questionnaire 2 / 2
+
+
+
+
+News Evaluation
+
+For each of the following questions, please indicate how you felt while reading and interpreting the news articles (1 – not at all, 7 – very much). - How biased do you think the news article is?","Post-Interaction Questionnaire 2 / 2
+
+
+
+
+News Evaluation
+
+For each of the following questions, please indicate how you felt while reading and interpreting the news articles (1 – not at all, 7 – very much). - How informative do you find the news article?","Post-Interaction Questionnaire 2 / 2
+
+
+
+
+News Evaluation
+
+For each of the following questions, please indicate how you felt while reading and interpreting the news articles (1 – not at all, 7 – very much). - How believable do you find the news article?","Post-Interaction Questionnaire 2 / 2
+
+
+
+
+News Evaluation
+
+For each of the following questions, please indicate how you felt while reading and interpreting the news articles (1 – not at all, 7 – very much). - How clear and well-written do you find the news article?",Timing - First Click,Timing - Last Click,Timing - Page Submit,Timing - Click Count,"Post-Reading Questionnaire 1 / 2
+
+
+
+Your Thinking Mode
+
+
+For each of the following questions, please indicate how you felt while reading the news articles on a scale from 1 to 7.
+
+
+
+Did you feel like your thought process was more like a... - Quick skim [1]:Slow, careful read [7]",Did you feel like you were... - Absorbing several details at once [1]:Focusing on one detail at a time [7],Did your thinking felt... - Easy and automatic [1]:Like it required significant mental effort [7],Were you more likely to... - Make connections between details instinctively [1]:Apply a set of rules or criteria to evaluate details [7],Did you find yourself... - Sticking to your initial impressions [1]:Regularly updating your thoughts as you read more [7],"While reading the article, did your thoughts feel more... - Spontaneous [1]:Deliberate  [7]",Please explain why you felt this way while reading the article. Provide specific examples or reasons for your rating.,"Post-Reading Questionnaire 2 / 2
+
+ 
+
+News Evaluation
+
+
+For each of the following questions, please indicate how you felt while reading and interpreting the news articles (1 – not at all, 7 – very much). - Before reading the news article, how much knowledge did you have about the topic covered?","Post-Reading Questionnaire 2 / 2
+
+ 
+
+News Evaluation
+
+
+For each of the following questions, please indicate how you felt while reading and interpreting the news articles (1 – not at all, 7 – very much). - How accurate do you find the news article?","Post-Reading Questionnaire 2 / 2
+
+ 
+
+News Evaluation
+
+
+For each of the following questions, please indicate how you felt while reading and interpreting the news articles (1 – not at all, 7 – very much). - How biased do you think the news article is?","Post-Reading Questionnaire 2 / 2
+
+ 
+
+News Evaluation
+
+
+For each of the following questions, please indicate how you felt while reading and interpreting the news articles (1 – not at all, 7 – very much). - How informative do you find the news article?","Post-Reading Questionnaire 2 / 2
+
+ 
+
+News Evaluation
+
+
+For each of the following questions, please indicate how you felt while reading and interpreting the news articles (1 – not at all, 7 – very much). - How much do you trust the news article?","Post-Reading Questionnaire 2 / 2
+
+ 
+
+News Evaluation
+
+
+For each of the following questions, please indicate how you felt while reading and interpreting the news articles (1 – not at all, 7 – very much). - How clear and well-written do you find the news article?",Do you think the news article is propagandistic?,Why do you think so?,Timing - First Click,Timing - Last Click,Timing - Page Submit,Timing - Click Count,"Please indicate which passages you think contain propagandistic elements and which do not. All pa... - Does it contain propagandistic elements? - Ukrainian leader Vladimir Zelensky doesn't want meaningful negotiations and only seeks to prolong the conflict, Russian first deputy envoy to the UN Dmitry Polyansky has told RT","Please indicate which passages you think contain propagandistic elements and which do not. All pa... - Does it contain propagandistic elements? - Russia proposed holding a second round of direct talks in Istanbul on June 2, but Ukraine has yet to formally commit to attending the event.","Please indicate which passages you think contain propagandistic elements and which do not. All pa... - Does it contain propagandistic elements? - “They are making every effort to convince [US President Donald Trump] that Russia isn’t interested in peace,” Polyansky said in an interview on Friday.",Please indicate which passages you think contain propagandistic elements and which do not. All pa... - Does it contain propagandistic elements? - He suggested that Ukrainian leader Vladimir Zelensky is motivated by a desire to stay in power and avoid accountability,Please indicate which passages you think contain propagandistic elements and which do not. All pa... - Does it contain propagandistic elements? - He would also be held accountable for the embezzlement of the state budget and Western aid… That’s why he wants to avert this scenario any way he can.,Please indicate which passages you think contain propagandistic elements and which do not. All pa... - Does it contain propagandistic elements? - Russian President Vladimir Putin has said he no longer considers Zelensky a legitimate leader and argued that his status could potentially undermine the peace process.,"Please indicate which passages you think contain propagandistic elements and which do not. All pa... - Does it contain propagandistic elements? - ""Everything Kiev now does and says should be analyzed through [the lens] of Ukraine wanting to prolong the war,"" the diplomat added.","Please indicate which passages you think contain propagandistic elements and which do not. All pa... - Does it contain propagandistic elements? - Russia and Ukraine held their first direct talks in three years in Istanbul on May 16, agreeing to carry out a large prisoner exchange and each present ceasefire terms.",Timing - First Click,Timing - Last Click,Timing - Page Submit,Timing - Click Count,PROLIFIC_PID
+"{""ImportId"":""startDate"",""timeZone"":""Europe/Berlin""}","{""ImportId"":""endDate"",""timeZone"":""Europe/Berlin""}","{""ImportId"":""status""}","{""ImportId"":""ipAddress""}","{""ImportId"":""progress""}","{""ImportId"":""duration""}","{""ImportId"":""finished""}","{""ImportId"":""recordedDate"",""timeZone"":""Europe/Berlin""}","{""ImportId"":""_recordId""}","{""ImportId"":""recipientLastName""}","{""ImportId"":""recipientFirstName""}","{""ImportId"":""recipientEmail""}","{""ImportId"":""externalDataReference""}","{""ImportId"":""locationLatitude""}","{""ImportId"":""locationLongitude""}","{""ImportId"":""distributionChannel""}","{""ImportId"":""userLanguage""}","{""ImportId"":""QID28""}","{""ImportId"":""QID98_TEXT""}","{""ImportId"":""QID106""}","{""ImportId"":""QID107""}","{""ImportId"":""QID108""}","{""ImportId"":""QID21""}","{""ImportId"":""QID22""}","{""ImportId"":""QID42""}","{""ImportId"":""QID44_1""}","{""ImportId"":""QID415""}","{""ImportId"":""QID105""}","{""ImportId"":""QID45_1""}","{""ImportId"":""QID45_2""}","{""ImportId"":""QID45_3""}","{""ImportId"":""QID45_4""}","{""ImportId"":""QID45_5""}","{""ImportId"":""QID45_6""}","{""ImportId"":""QID117_1""}","{""ImportId"":""QID119_3""}","{""ImportId"":""QID120_3""}","{""ImportId"":""QID297""}","{""ImportId"":""QID298_TEXT""}","{""ImportId"":""QID1218252771_FIRST_CLICK""}","{""ImportId"":""QID1218252771_LAST_CLICK""}","{""ImportId"":""QID1218252771_PAGE_SUBMIT""}","{""ImportId"":""QID1218252771_CLICK_COUNT""}","{""ImportId"":""QID1218252772_1""}","{""ImportId"":""QID1218252773_1""}","{""ImportId"":""QID1218252774_1""}","{""ImportId"":""QID1218252775_1""}","{""ImportId"":""QID1218252776_1""}","{""ImportId"":""QID1218252777_1""}","{""ImportId"":""QID1218252778_1""}","{""ImportId"":""QID1218252778_2""}","{""ImportId"":""QID1218252778_3""}","{""ImportId"":""QID1218252778_4""}","{""ImportId"":""QID1218252778_5""}","{""ImportId"":""QID1218252778_6""}","{""ImportId"":""QID396_FIRST_CLICK""}","{""ImportId"":""QID396_LAST_CLICK""}","{""ImportId"":""QID396_PAGE_SUBMIT""}","{""ImportId"":""QID396_CLICK_COUNT""}","{""ImportId"":""QID397_1""}","{""ImportId"":""QID398_1""}","{""ImportId"":""QID399_1""}","{""ImportId"":""QID400_1""}","{""ImportId"":""QID401_1""}","{""ImportId"":""QID402_1""}","{""ImportId"":""QID403_1""}","{""ImportId"":""QID403_2""}","{""ImportId"":""QID403_3""}","{""ImportId"":""QID403_4""}","{""ImportId"":""QID403_5""}","{""ImportId"":""QID403_6""}","{""ImportId"":""QID405_FIRST_CLICK""}","{""ImportId"":""QID405_LAST_CLICK""}","{""ImportId"":""QID405_PAGE_SUBMIT""}","{""ImportId"":""QID405_CLICK_COUNT""}","{""ImportId"":""QID406_1""}","{""ImportId"":""QID407_1""}","{""ImportId"":""QID408_1""}","{""ImportId"":""QID409_1""}","{""ImportId"":""QID410_1""}","{""ImportId"":""QID411_1""}","{""ImportId"":""QID412_1""}","{""ImportId"":""QID412_2""}","{""ImportId"":""QID412_3""}","{""ImportId"":""QID412_4""}","{""ImportId"":""QID412_5""}","{""ImportId"":""QID412_6""}","{""ImportId"":""QID300_FIRST_CLICK""}","{""ImportId"":""QID300_LAST_CLICK""}","{""ImportId"":""QID300_PAGE_SUBMIT""}","{""ImportId"":""QID300_CLICK_COUNT""}","{""ImportId"":""QID301_1""}","{""ImportId"":""QID302_1""}","{""ImportId"":""QID303_1""}","{""ImportId"":""QID304_1""}","{""ImportId"":""QID305_1""}","{""ImportId"":""QID306_1""}","{""ImportId"":""QID307_TEXT""}","{""ImportId"":""QID308_1""}","{""ImportId"":""QID308_2""}","{""ImportId"":""QID308_3""}","{""ImportId"":""QID308_4""}","{""ImportId"":""QID308_5""}","{""ImportId"":""QID308_6""}","{""ImportId"":""QID334""}","{""ImportId"":""QID335_TEXT""}","{""ImportId"":""QID339_FIRST_CLICK""}","{""ImportId"":""QID339_LAST_CLICK""}","{""ImportId"":""QID339_PAGE_SUBMIT""}","{""ImportId"":""QID339_CLICK_COUNT""}","{""ImportId"":""QID336#1_1""}","{""ImportId"":""QID336#1_2""}","{""ImportId"":""QID336#1_3""}","{""ImportId"":""QID336#1_4""}","{""ImportId"":""QID336#1_5""}","{""ImportId"":""QID336#1_6""}","{""ImportId"":""QID336#1_7""}","{""ImportId"":""QID336#1_8""}","{""ImportId"":""QID338_FIRST_CLICK""}","{""ImportId"":""QID338_LAST_CLICK""}","{""ImportId"":""QID338_PAGE_SUBMIT""}","{""ImportId"":""QID338_CLICK_COUNT""}","{""ImportId"":""PROLIFIC_PID""}"
+2025-08-19 17:04:21,2025-08-19 17:04:42,IP Address,89.206.81.202,100,21,True,2025-08-19 17:04:43,R_8wpfrPIAmp3iQ8W,,,,,47.3976,8.5442,anonymous,EN,I agree and I want to participate,sdf,Desktop,Communication and/or Media,English,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+2025-08-19 17:06:51,2025-08-19 17:07:09,IP Address,89.206.81.202,100,17,True,2025-08-19 17:07:09,R_2mEptIRT0lGweo9,,,,,47.3976,8.5442,anonymous,EN,I agree and I want to participate,dsfg,Desktop,Politics,English,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+2025-08-19 17:25:01,2025-08-19 17:25:23,IP Address,74.102.197.139,100,22,True,2025-08-19 17:25:23,R_7lJ6sXAk6YSbZaF,,,,,40.7947,-74.4876,anonymous,EN,I agree and I want to participate,60e9fd8a2f52070be49cf317,Desktop,Politics,English,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+2025-08-19 17:24:47,2025-08-19 17:25:23,IP Address,45.43.133.14,100,36,True,2025-08-19 17:25:24,R_3n3p9fvDBH1cPoZ,,,,,37.751,-97.822,anonymous,EN,I agree and I want to participate,67842c60c9cba1e154a69bbd,Desktop,Communication and/or Media,English,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+2025-08-19 17:26:35,2025-08-19 17:27:03,IP Address,46.110.121.197,100,27,True,2025-08-19 17:27:03,R_62kMb5uDOB6L6Wq,,,,,41.8847,-88.3028,anonymous,EN,I agree and I want to participate,67abd57a8bc907775a0d58fa,Desktop,Politics,English,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+2025-08-19 17:35:06,2025-08-19 17:36:36,IP Address,174.206.55.58,100,89,True,2025-08-19 17:36:36,R_50Jd5xFXSPeKGB1,,,,,37.2555,-80.0531,anonymous,EN,I agree and I want to participate,58462977d2be990001174ae3,Desktop,Communication and/or Media,English,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+2025-08-19 17:26:38,2025-08-19 17:37:16,IP Address,69.194.186.72,100,637,True,2025-08-19 17:37:16,R_6Eskwn7dpNqiLdC,,,,,32.4644,-93.7207,anonymous,EN,I agree and I want to participate,631fdedf78d4f7b0a6b985ad,Desktop,Other,English,25 to 44,Male,Master's degree,United States,"Professionals – highly-skilled, degree-level work (e.g. doctor, lawyer, engineer, teacher, accountant)","Yes, I will",7,7,1,1,7,7,1,Multiple times a day,9,"online news websites,social media platforms (e.g. Facebook, Twitter, Telegram)",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,3.637,92.476,118.6,5,7,7,7,4,4,4,4,6,3,6,7,7,0,0,88.225,0,7,7,4,4,4,4,"It's a bit of both. I was deliberately reading and paying attention to the article about Zelinsky, taking in each detail one at a time. But I also had spontaneous thoughts. When iit got to the part about Trump calling Zelinsky ""a dictator without elections,"" I couldn't help but think about how Trump has ""joked"" about going to war to avoid elections himself!",5,5,6,6,6,6,Yes,"The article frames Zelinsky as unreasonable and a warmonger, and clearly takes Russia's side in the conflict. The article has a very pro-Russia slant to it that comes through in the writing, since it covers the thoughts of a Russian diplomat.",1.322,50.253,68.399,3,Yes,No,Yes,Yes,Yes,Yes,Yes,No,1.322,50.253,68.399,3,
+2025-08-19 17:36:32,2025-08-19 17:38:00,IP Address,70.226.123.140,100,87,True,2025-08-19 17:38:00,R_7IRJcyslTUCY4wU,,,,,38.6706,-90.3705,anonymous,EN,I agree and I want to participate,5ac4c730f69e940001d977e1,Desktop,Politics,English,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+2025-08-19 17:39:17,2025-08-19 17:39:45,IP Address,99.14.165.165,100,27,True,2025-08-19 17:39:45,R_1EsB561AFmnC28N,,,,,30.3668,-81.5873,anonymous,EN,I agree and I want to participate,675a64a99571ac3d874a9f70,Desktop,Communication and/or Media,Other,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+2025-08-19 17:24:38,2025-08-19 17:41:26,IP Address,73.171.167.142,100,1008,True,2025-08-19 17:41:26,R_1v8rK2Ex542GH4J,,,,,30.1223,-81.3627,anonymous,EN,I agree and I want to participate,5d8a1d20d1afcb0019d7390b,Desktop,Other,English,65 and over,Male,Master's degree,United States,"Technicians & Associate Professionals – support roles requiring specialized training (e.g. lab technician, paralegal, IT support)","Yes, I will",2,1,6,6,1,1,7,Several times a week,1,online news websites,,,,,,,,,,,,,,,,,,0,0,211.92,0,6,5,6,7,5,4,4,5,2,5,6,6,,,,,,,,,,,,,,,,,0,0,96.36,0,6,5,5,6,5,5,"I know about this. I have friends in the Ukraine who are getting bombed. This was a typical Russian propaganda article which has very little truth to it.  If the Russians want to get rid of Zelensky, stop the bombing, sign a piece treaty and let the people of the Ukraine vote for their next president. Ukrainians bomb military targets. Russians bomb hospitals and then bomb the people coming in to clean up the damage and save the victims.  ",7,1,7,1,1,1,Yes,Just read my last answer.  The Russians are sick and perverted liars.  And they have been evil for a long time. Just find out what happened after WWII ended and they came in and had a rape-fest with German women to make more future Russians.  They are pigs and have been pigs for a long time.  I could go on for days.,1.508,178.361,179.394,10,Yes,Yes,No,No,Yes,Yes,Yes,No,1.508,178.362,179.394,10,
+2025-08-19 17:26:08,2025-08-19 17:42:06,IP Address,172.59.10.130,100,957,True,2025-08-19 17:42:06,R_7r1C4c2VMpsjRoE,,,,,41.3186,-72.9302,anonymous,EN,I agree and I want to participate,66ccf16c299b596f56830f1e,Desktop,Other,English,45 to 64,Female,Master's degree,United States,"Professionals – highly-skilled, degree-level work (e.g. doctor, lawyer, engineer, teacher, accountant)","Yes, I will",3,3,5,5,4,2,3,Once a day,7,"traditional media (e.g. newspapers, TV news channels),online news websites",,124.606,242.896,243.749,4,6,3,4,5,4,4,1,3,6,3,3,3,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,57.101,57.101,97.212,1,6,4,4,4,3,4,"The article presented information that appeared biased in one direction in favor of Russia. It provided no proof only assertions with no apparent merit. ",4,2,6,2,2,2,Yes,The article provided no concrete proof of its assertions. For example the propagandistic elements include: Everything Kiev now does and says should be analyzed through the lens of Ukraine wanting to prolong the war and It is absolutely clear Ukraine isn't interested in negotiation.,1.953,240.401,241.595,16,Yes,No,Yes,Yes,Yes,No,Yes,No,1.953,240.401,241.595,16,
+2025-08-19 17:28:52,2025-08-19 17:42:37,IP Address,136.35.220.250,100,824,True,2025-08-19 17:42:37,R_1geG2olrdIgUhRd,,,,,39.2102,-94.6372,anonymous,EN,I agree and I want to participate,5e7a2ccd69a7770604dfb352,Desktop,Other,English,45 to 64,Female,Bachelor's degree,United States,,"Yes, I will",7,7,1,1,7,7,1,Once a day,11,online news websites,,,,,,,,,,,,,,,,,,100.4,100.4,130.241,1,7,2,3,6,4,5,4,2,6,4,5,3,,,,,,,,,,,,,,,,,0,0,92.457,0,6,1,3,3,4,3,"I just processed the info as I read it. I allowed myself to react emotionally to the news article and I progressed through the story. Although I had preconcieved views about the subject matter prior to reading it, I didn't read it with the intent to exclude new ideas as I learned more.",4,6,2,5,6,6,No,"I changed my mind from the previous page after recondiering...yes, I do believe the article contains propoganda. I first said no, it was not, because it was just simply stating facts. But I think that if it was really not biased in favor of Russia, the creators of the article would have areached out to the Ukrianian government for comment, so they could at least state their response. The article does not appear to have done so, which is why I now have recondisered and think it is indeeded a propraganda piece.",1.194,213.998,215.197,22,Yes,Yes,Yes,Yes,Yes,Yes,Yes,No,1.194,213.998,215.197,22,
+2025-08-19 17:32:17,2025-08-19 17:44:03,IP Address,66.234.196.242,100,705,True,2025-08-19 17:44:03,R_30MHgoEtHFKkLTz,,,,,37.948,-122.0608,anonymous,EN,I agree and I want to participate,676f2ff678d74407b518207d,Desktop,Other,English,25 to 44,Male,Master's degree,United States,"Professionals – highly-skilled, degree-level work (e.g. doctor, lawyer, engineer, teacher, accountant)","Yes, I will",5,5,5,3,5,5,4,Once a day,10,"traditional media (e.g. newspapers, TV news channels),online news websites",,0,0,142.754,0,5,4,5,4,4,5,2,2,7,2,1,2,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,0,0,144.995,0,5,5,4,5,4,5,"I was thinking about the article and the details that were mentioned, so it was mostly a deliberate process going from line to line, paragraph to paragraph.",3,5,3,5,5,6,No,"The article mostly didn't have a clear point of view or opinion, but was reporting the facts of the matter. The only propagandistic elements are quotes from one side of the conflict. This is in clear contrast to the first article.",0.8,86.758,87.463,21,Yes,No,Yes,Yes,Yes,No,Yes,No,0.8,86.758,87.463,21,
+2025-08-19 17:30:04,2025-08-19 17:44:54,IP Address,67.7.101.170,100,889,True,2025-08-19 17:44:55,R_502envFqYbvXxOV,,,,,31.848,-81.602,anonymous,EN,I agree and I want to participate,6628141ef03d907d9b2ff86d,Desktop,Other,English,25 to 44,Male,Bachelor's degree,United States,"Professionals – highly-skilled, degree-level work (e.g. doctor, lawyer, engineer, teacher, accountant)","Yes, I will",6,6,2,2,6,6,5,Several times a week,7,"traditional media (e.g. newspapers, TV news channels),online news websites,social media platforms (e.g. Facebook, Twitter, Telegram)",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,0,0,113.029,0,6,6,6,5,3,6,5,4,6,5,4,5,0,0,165.162,0,5,6,5,6,6,6,It felt like a hit piece on Ukraine and biased throughout. As if Ukraine was to blame so I just kept looking for more details as I went along to confirm what I believed as a article not rooted in the facts but speculation.,4,2,7,3,2,2,Yes,Because it is throwing accusations of Zelensky not wanting to end the war due to elections needing to be held. It is not rooted in facts but speculative statements and opinions.,9.269,102.445,104.578,10,Yes,Yes,Yes,Yes,Yes,Yes,Yes,No,9.269,102.445,104.578,10,
+2025-08-19 17:45:16,2025-08-19 17:47:28,IP Address,89.23.92.73,100,132,True,2025-08-19 17:47:28,R_5OdoSk5vdawznnX,,,,,40.7126,-74.0066,anonymous,EN,I agree and I want to participate,682c3f62f2680e9a67130379,Desktop,Politics,English,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+2025-08-19 17:35:31,2025-08-19 17:49:18,IP Address,31.52.117.220,100,827,True,2025-08-19 17:49:18,R_2o5qnQk9g9M6vtL,,,,,51.497,0.0685,anonymous,EN,I agree and I want to participate,6413bde82572af834c41ba64,Desktop,Other,English,18 to 24,Male,Bachelor's degree,United Kingdom,"Technicians & Associate Professionals – support roles requiring specialized training (e.g. lab technician, paralegal, IT support)","Yes, I will",7,6,1,1,7,7,5,Several times a week,8,"online news websites,social media platforms (e.g. Facebook, Twitter, Telegram),news apps",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,7.482,7.482,313.311,1,6,1,5,7,1,7,7,3,7,4,4,5,0,0,95.551,0,7,6,2,1,1,7,"whilst reading this article i was trying to maintain my original view on the matter, whilst still acknowledging the russians point of view. This article was clearly written in favour of russia. i support ukraine and so for that my thoughts were not spontaneous, i was deliberate with how i was interpreting the passaeg",7,3,7,5,2,4,Yes,"i believe its favouring russia as it states that ukraine wants to prolong the war.. they didnt even start it. it also mentions how they dont believe zelensky is a legitimate leader anymore. ",1.054,112.42,114.535,10,Yes,No,Yes,Yes,Yes,Yes,Yes,No,1.054,112.42,114.535,10,
+2025-08-19 17:27:45,2025-08-19 17:49:49,IP Address,31.54.161.117,100,1324,True,2025-08-19 17:49:49,R_8snCPy7UZMBA7VT,,,,,51.3427,-2.9694,anonymous,EN,I agree and I want to participate,66847cc7c67232fae11af5b3,Desktop,Other,English,25 to 44,Male,Bachelor's degree,United Kingdom,"Professionals – highly-skilled, degree-level work (e.g. doctor, lawyer, engineer, teacher, accountant)","Yes, I will",5,4,3,3,5,5,5,Several times a week,9,"online news websites,social media platforms (e.g. Facebook, Twitter, Telegram)",,156.401,156.401,273.954,1,5,6,3,5,3,6,2,5,3,6,5,5,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,7.076,7.076,252.896,1,4,5,4,3,6,5,"The article said how Zelensky is basically the one not coming to an agreement with Russia, but I personally find this to be false. Given that Ukraine was invaded and hudreds of thousands of people have been killed and/or injured because of it, Zelensky is doing what he can to protect his country and his citizens without bowing down and out to Russia. It may come across as being non conforming, but in reality he's being protective.",5,2,6,4,2,4,Yes,I think it's trying to paint Zelensky as a man who doesn't care about his country and someone who will side step conversations for the sake of being difficult. This sounds like an idea the Russians would promote seeing as they've been dishonest with their own citizens and saying Ukraine made the war up and it was all fake news. To say Ukraine aren't taking this seriously is ridiculous.,1.112,329.936,332.5,12,Yes,Yes,Yes,Yes,Yes,Yes,Yes,No,1.111,329.935,332.499,12,
+2025-08-19 17:31:52,2025-08-19 17:51:40,IP Address,24.130.75.186,100,1187,True,2025-08-19 17:51:40,R_1nHMjkN3HdyXfAC,,,,,37.7652,-122.1579,anonymous,EN,I agree and I want to participate,66294177a2d171c3a831f21a,Desktop,Other,English,45 to 64,Female,Bachelor's degree,United States,"Clerical Support Workers – office and admin tasks (e.g. receptionist, data entry clerk, office assistant)","Yes, I will",1,1,7,7,4,1,3,Several times a week,7,"traditional media (e.g. newspapers, TV news channels),online news websites,social media platforms (e.g. Facebook, Twitter, Telegram)",,0,0,360.145,0,7,4,7,4,1,4,4,5,4,5,5,5,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,0,0,104.847,0,7,4,4,1,1,7,My thoughts felt deliberate because I was frustrated by what I was reading due to the false statements given by Polyansky about Zelensky.,5,1,7,1,1,4,Yes,"The article was Pro-Russian propaganda, painting Zelensky as a dictator refusing to give up his role as President of Ukraine.",1.805,202.048,204.009,12,Yes,Yes,Yes,Yes,Yes,Yes,Yes,No,1.805,202.048,204.009,12,
+2025-08-19 17:26:54,2025-08-19 17:52:23,IP Address,67.174.180.174,100,1529,True,2025-08-19 17:52:24,R_5uHAyv2dtqZaW5u,,,,,38.9129,-104.7794,anonymous,EN,I agree and I want to participate,675c6db4887ccdd0d3d15534,Desktop,Other,English,25 to 44,Female,Bachelor's degree,United States,,"Yes, I will",3,2,6,5,3,3,2,Multiple times a day,10,"traditional media (e.g. newspapers, TV news channels),online news websites,social media platforms (e.g. Facebook, Twitter, Telegram)",,,,,,,,,,,,,,,,,,0,0,398.001,0,5,2,6,7,2,7,2,2,6,6,3,5,,,,,,,,,,,,,,,,,0,0,73.752,0,5,3,7,3,6,7,"I wanted to review the facts presented in the article and assess the veracity of its claims.  I kept in mind that the article could be propaganda and biased against Vladimir Vlinsky.  I immediately suspected that the allegations made in the article may not be factual since it only presented one side of the argument.  ",3,3,7,5,2,5,Yes,"It only presented the Russian side of the conflict.  It portrays Putin as a leader ready to negotiate, and that it is Zelensky's refusal to negotiate that is prolonging the war.  ",2.261,218.12,220.764,14,Yes,No,Yes,Yes,Yes,Yes,Yes,No,2.261,218.12,220.764,14,
+2025-08-19 17:38:34,2025-08-19 17:52:44,IP Address,86.128.82.9,100,849,True,2025-08-19 17:52:44,R_8uUiYfDEpoySyS8,,,,,52.0618,1.156,anonymous,EN,I agree and I want to participate,5ef528c2a0603b16a793423d,Desktop,Other,English,45 to 64,Female,Bachelor's degree,United Kingdom,"Professionals – highly-skilled, degree-level work (e.g. doctor, lawyer, engineer, teacher, accountant)","Yes, I will",2,5,1,6,2,4,4,Multiple times a day,11,"traditional media (e.g. newspapers, TV news channels),news apps",,,,,,,,,,,,,,,,,,0,0,198.943,0,6,3,5,6,4,5,4,3,6,4,3,3,,,,,,,,,,,,,,,,,0,0,98.502,0,6,2,5,3,1,5,i wanted to take in who was saying what  and if that made sense with previous parts of the information so was deliberate in my process,6,1,7,2,1,3,Yes,as it was bias to one side and did not fit with the knowledge of the situation i already had,2.444,159.644,161.628,13,Yes,Yes,Yes,Yes,Yes,Yes,Yes,No,2.444,159.645,161.628,13,
+2025-08-19 17:42:53,2025-08-19 17:54:45,IP Address,2.101.177.205,100,712,True,2025-08-19 17:54:46,R_8qg3nCfyZhdleut,,,,,52.2167,-0.2667,anonymous,EN,I agree and I want to participate,5c5d306d935f3500016f64ac,Desktop,Other,English,45 to 64,Female,Bachelor's degree,United Kingdom,"Managers – people who plan and direct the work of others (e.g. department head, project manager, store manager)","Yes, I will",3,4,3,4,6,5,4,Multiple times a day,10,"traditional media (e.g. newspapers, TV news channels),online news websites,social media platforms (e.g. Facebook, Twitter, Telegram),news apps",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,0,0,213.958,0,7,7,7,2,4,5,5,5,7,4,3,5,0,0,72.605,0,7,7,3,2,1,4,"I found the article completely biased towards Russia and it was obviously fake news. ",6,1,7,1,1,3,Yes,As it was obviously fake and went against anything that had been said before.,2.942,108.116,109.872,10,Yes,Yes,Yes,Yes,Yes,Yes,Yes,No,2.942,108.116,109.872,10,
+2025-08-19 17:37:33,2025-08-19 17:54:53,IP Address,208.66.211.6,100,1039,True,2025-08-19 17:54:54,R_7nlR5K6h2R3w9Zn,,,,,41.2925,-82.219,anonymous,EN,I agree and I want to participate,663aa6420a964c2a7740b9d7,Desktop,Other,English,25 to 44,Female,Bachelor's degree,United States,"Managers – people who plan and direct the work of others (e.g. department head, project manager, store manager)","Yes, I will",6,6,2,2,6,6,4,Several times a week,10,"traditional media (e.g. newspapers, TV news channels),online news websites,social media platforms (e.g. Facebook, Twitter, Telegram),news apps",,,,,,,,,,,,,,,,,,5.483,5.483,6.337,1,5,4,4,5,6,5,5,5,5,4,4,4,,,,,,,,,,,,,,,,,240.936,249.134,249.951,3,5,5,5,5,4,5,"It was kind of slow to read. ",5,5,5,5,4,5,,,40.093,57.094,57.955,13,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,40.093,57.094,57.955,13,
+2025-08-19 17:41:02,2025-08-19 17:56:42,IP Address,81.111.99.171,100,940,True,2025-08-19 17:56:43,R_2zOtLZ64edKb7be,,,,,51.6528,-3.0306,anonymous,EN,I agree and I want to participate,57cef329f7bcd90001f24f40,Desktop,Other,English,25 to 44,Female,Bachelor's degree,United Kingdom,"Technicians & Associate Professionals – support roles requiring specialized training (e.g. lab technician, paralegal, IT support)","Yes, I will",6,6,2,2,7,6,2,Once a day,9,"online news websites,social media platforms (e.g. Facebook, Twitter, Telegram)",,0,0,238.841,0,7,6,6,3,2,6,2,4,4,6,5,6,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,0,0,136.752,0,3,4,3,2,2,2,"Thoughts seemed to manifest easily. The article was an easy read with not a lot of difficult language or complex sentence structure. The article felt quite one-sided. ",5,2,7,3,2,3,Yes,"Seems very heavily swayed in favour of Russia. Lots of accusations towards Zelensky and his apparent determination to stay in power by delaying elections - ""...Zelensky is motivated by a desire to stay in power and avoid accountability."" There is nothing in the article from the Ukrainian perspective. ",1.333,151.108,152.552,22,Yes,No,Yes,Yes,Yes,Yes,Yes,No,1.333,151.108,152.552,22,
+2025-08-19 17:38:42,2025-08-19 17:57:47,IP Address,90.240.222.110,100,1144,True,2025-08-19 17:57:47,R_84jheAjQYcj0pw5,,,,,52.2265,-2.2246,anonymous,EN,I agree and I want to participate,5e5f8c16394d082c15a4e93a,Desktop,Other,English,65 and over,Male,Master's degree,United Kingdom,"Professionals – highly-skilled, degree-level work (e.g. doctor, lawyer, engineer, teacher, accountant)","Yes, I will",5,6,2,2,4,5,3,Once a day,9,"traditional media (e.g. newspapers, TV news channels),news apps",,,,,,,,,,,,,,,,,,0,0,395.404,0,5,2,3,6,3,5,3,3,5,4,4,4,,,,,,,,,,,,,,,,,0,0,100.309,0,4,5,3,3,4,3,"Because it appeared to be rhetoric as opposed to fact. I was already aware of the stories to some degree, and the stories appeared to push a certain viewpoint. ",5,4,6,2,1,1,Yes,It was all one sided without facts just opinions of one party.,2.651,134.954,151.341,11,Yes,No,Yes,Yes,Yes,Yes,Yes,No,2.652,134.954,151.341,11,
+2025-08-19 17:27:03,2025-08-19 17:57:58,IP Address,209.16.65.117,100,1854,True,2025-08-19 17:57:58,R_5PAIE0jaYVtI0pE,,,,,30.4187,-90.0555,anonymous,EN,I agree and I want to participate,67f078a4424ed89739827b18,Desktop,Other,English,45 to 64,Male,Bachelor's degree,United States,"Technicians & Associate Professionals – support roles requiring specialized training (e.g. lab technician, paralegal, IT support)","Yes, I will",4,4,5,5,5,3,5,Multiple times a day,8,online news websites,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,57.872,57.872,620.595,1,6,2,5,2,2,1,5,2,6,2,2,3,0,0,127.577,0,6,2,2,3,2,2,In this type of news article it is apparent that the author is trying to sway opinion in their favor and after every sentence I feel like I have to readapt to whatever technique they are using in that particular sentence in order to reframe a topic into something that better shows their side. Thus spontaneous.,5,3,6,4,3,3,Yes,"I think the article contains a lot of propaganda because many statements try to state things as facts that are clearly opinion, like that the Ukrainian leader only seeks to prolong the conflict simply because he hasn't agreed to terms yet.",62.178,155.17,276.253,9,Yes,No,Yes,Yes,Yes,Yes,Yes,No,62.178,155.17,276.253,9,
+2025-08-19 17:27:52,2025-08-19 17:58:40,IP Address,67.173.12.26,100,1847,True,2025-08-19 17:58:41,R_6EW3nLGdfMGtbJp,,,,,41.85,-87.7165,anonymous,EN,I agree and I want to participate,5e34325430e5263f0bebb32d,Desktop,Other,English,65 and over,Male,Associate degree,United States,,"Yes, I will",7,7,1,1,6,7,2,Several times a week,7,online news websites,,0,0,268.928,0,6,2,7,5,1,5,3,4,7,5,4,5,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,0,0,100.081,0,1,7,1,1,1,7,"The article was clearly highly biased, especially coming out of Russia.  After hearing the first couple of lies I was disinterested.",6,1,7,1,1,5,Yes,They only presented one very slanted side view.  It lacked details and supporting facts.,2.2,106.707,107.959,10,Yes,No,Yes,Yes,Yes,Yes,Yes,No,2.2,106.707,107.959,10,
+2025-08-19 17:37:21,2025-08-19 18:00:19,IP Address,50.99.136.243,100,1377,True,2025-08-19 18:00:20,R_7jdeTX15eiwdUMy,,,,,53.4144,-113.416,anonymous,EN,I agree and I want to participate,66797a447bfcb47256846ed2,Desktop,Other,English,45 to 64,Male,Bachelor's degree,Canada,"Managers – people who plan and direct the work of others (e.g. department head, project manager, store manager)","Yes, I will",5,5,3,3,5,6,5,Multiple times a day,10,"online news websites,social media platforms (e.g. Facebook, Twitter, Telegram),news apps",,0,0,253.768,0,6,4,5,4,3,3,1,4,7,3,4,4,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,0,0,149.255,0,6,4,5,4,2,6,I found myself more deliberate On my thoughts because I've formed my opinion on the Ukraine Russian War and further articles like this aren't changing how I feel,2,4,7,3,4,3,Yes,I think all articles like this at this point are propaganda on both sides so therefore I find myself ignoring them completely now Ish,38.066,148.953,153.995,9,Yes,Yes,Yes,Yes,Yes,Yes,Yes,No,38.066,148.953,153.995,9,
+2025-08-19 17:40:53,2025-08-19 18:03:59,IP Address,145.40.159.112,100,1385,True,2025-08-19 18:03:59,R_2jcutMAkWwvZVNQ,,,,,50.9321,-1.3892,anonymous,EN,I agree and I want to participate,5c4a061161db8c00015e4fb0,Desktop,Other,English,45 to 64,Female,Bachelor's degree,United Kingdom,"Managers – people who plan and direct the work of others (e.g. department head, project manager, store manager)","Yes, I will",6,6,1,1,7,6,6,Multiple times a day,8,"traditional media (e.g. newspapers, TV news channels),online news websites,social media platforms (e.g. Facebook, Twitter, Telegram)",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,2.866,82.07,112.234,5,7,4,5,6,2,2,6,7,1,6,6,7,31.941,145.191,146.011,2,7,6,6,4,1,6,"I already had thoughts and feelings on the above article, which are deliberate as the facts are already there and have been all along.
+Putin is smart and knows what he is doing, plus he is incorporating elements of economic liberalism, a lack of transparency in governance, plus corruption. My thoughts also felt more deliberate because  I was actively engaging with the text, rather than passively absorbing it I was. focusing on specific details, questioning the information presented and critically evaluating the content.",7,6,1,7,6,7,Yes,"I feel this way about the article as i think it was trying to manipulate the public opinion rather than providing objective information.
+There was also a selective Presentation of Facts which i really did not like.",74.438,210.526,215.554,22,Yes,No,No,Yes,Yes,Yes,Yes,Yes,74.44,210.526,215.554,22,
+2025-08-19 17:56:44,2025-08-19 18:29:57,IP Address,51.19.198.83,100,1992,True,2025-08-19 18:29:58,R_2PzcRWrJ4dDNXUp,,,,,51.4889,-0.2318,anonymous,EN,I agree and I want to participate,646346fe4c7507b84b11a28a,Desktop,Other,English,45 to 64,Male,Doctorate degree,United Kingdom,"Managers – people who plan and direct the work of others (e.g. department head, project manager, store manager)","Yes, I will",5,5,3,4,5,5,5,Several times a week,10,"traditional media (e.g. newspapers, TV news channels),online news websites",,,,,,,,,,,,,,,,,,35.484,450.875,453.271,7,7,7,6,5,5,6,3,4,5,5,5,3,,,,,,,,,,,,,,,,,194.949,215.728,216.6,3,7,7,4,6,6,5,"I've beenn following the war with interest, and and think that both sides are less than perfect. For that reason I am inclined to be sceptical of many claims from all sides. Also, all claims are about people who have an agenda (and most likely, a bias) to promote their own interests, sometimes at the expense of truth.",4,5,4,5,5,6,No,"It didn't promote one side more than the other. Most / all comments were provided with coounter claims, e.g. reasons for there having been no presidential election.",3.461,338.405,340.001,19,Yes,No,Yes,Yes,Yes,No,Yes,No,3.46,338.404,340.001,19,

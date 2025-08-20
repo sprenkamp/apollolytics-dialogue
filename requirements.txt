@@ -19,3 +19,4 @@ seaborn
 tqdm
 jupyter
 ipykernel
+python-docx

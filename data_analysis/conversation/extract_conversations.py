@@ -1,17 +1,26 @@
 import pandas as pd
 import os
 import numpy as np
+import sys
+sys.path.append('data_analysis/helper')
+from clean_data import get_prolific_ids_with_few_user_turns
+from docx import Document
 
-def extract_conversations(df, output_dir='data_analysis/conversation/conversations/'):
+def extract_conversations(df, output_dir='data_analysis/conversation/conversations/', min_user_turns=3):
     """
     Extract conversations for each prolific ID and save them to files.
     
     Args:
         df (pd.DataFrame): DataFrame with conversation data
         output_dir (str): Directory to save conversation files
+        min_user_turns (int): Minimum number of user turns required (default: 3)
     """
     # Create output directory if it doesn't exist
     os.makedirs(output_dir, exist_ok=True)
+    
+    # Get prolific IDs with few user turns to exclude them
+    prolific_ids_to_exclude = get_prolific_ids_with_few_user_turns(min_user_turns)
+    print(f"Will exclude {len(prolific_ids_to_exclude)} prolific IDs with fewer than {min_user_turns} user turns")
     
     # Debug: Check data structure
     print(f"DataFrame shape: {df.shape}")
@@ -79,29 +88,55 @@ def extract_conversations(df, output_dir='data_analysis/conversation/conversatio
         # Join all lines
         conversation_text = "\n".join(conversation_lines)
         
-        # Store by prolific_id (in case multiple sessions per prolific_id)
-        if prolific_id not in conversations:
-            conversations[prolific_id] = []
-        conversations[prolific_id].append(conversation_text)
+        # Store by dialogue_mode and prolific_id
+        if dialogue_mode not in conversations:
+            conversations[dialogue_mode] = {}
+        if prolific_id not in conversations[dialogue_mode]:
+            conversations[dialogue_mode][prolific_id] = []
+        conversations[dialogue_mode][prolific_id].append(conversation_text)
     
     # Save conversations to files
     saved_count = 0
-    for prolific_id, conversation_list in conversations.items():
-        filename = f"{output_dir}/conversation_{prolific_id}.txt"
+    excluded_count = 0
+    for dialogue_mode, prolific_conversations in conversations.items():
+        # Create directory for this dialogue mode
+        mode_dir = os.path.join(output_dir, dialogue_mode)
+        os.makedirs(mode_dir, exist_ok=True)
         
-        # If multiple sessions for same prolific_id, combine them
-        if len(conversation_list) > 1:
-            combined_text = "\n\n" + "="*80 + "\n\n".join(conversation_list)
-        else:
-            combined_text = conversation_list[0]
-        
-        with open(filename, 'w', encoding='utf-8') as f:
-            f.write(combined_text)
-        
-        print(f"Saved conversation for prolific_id {prolific_id} to {filename}")
-        saved_count += 1
+        for prolific_id, conversation_list in prolific_conversations.items():
+            # Skip prolific IDs with few user turns
+            if prolific_id in prolific_ids_to_exclude:
+                excluded_count += 1
+                print(f"Skipping prolific_id {prolific_id} (mode: {dialogue_mode}) - too few user turns")
+                continue
+                
+            filename = f"{mode_dir}/conversation_{prolific_id}.docx"
+            
+            # If multiple sessions for same prolific_id, combine them
+            if len(conversation_list) > 1:
+                combined_text = "\n\n" + "="*80 + "\n\n".join(conversation_list)
+            else:
+                combined_text = conversation_list[0]
+            
+            # Create a new Word document
+            doc = Document()
+            
+            # Split the text into lines and add to document
+            lines = combined_text.split('\n')
+            for line in lines:
+                if line.strip():  # Only add non-empty lines
+                    doc.add_paragraph(line)
+                else:
+                    doc.add_paragraph()  # Add empty paragraph for spacing
+            
+            # Save the document
+            doc.save(filename)
+            
+            print(f"Saved conversation for prolific_id {prolific_id} (mode: {dialogue_mode}) to {filename}")
+            saved_count += 1
     
     print(f"\nTotal conversations saved: {saved_count}")
+    print(f"Total conversations excluded: {excluded_count}")
     return conversations
 
 def get_conversation_stats(df):
@@ -194,4 +229,4 @@ if __name__ == "__main__":
     get_conversation_stats(df)
     
     # Extract and save conversations
-    conversations = extract_conversations(df, 'data_analysis/conversation/conversations/') 
+    conversations = extract_conversations(df, 'data_analysis/conversation/conversations/', min_user_turns=3) 
